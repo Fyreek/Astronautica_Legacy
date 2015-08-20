@@ -33,7 +33,7 @@ class GameViewController: UIViewController {
 		scene.size = skView.bounds.size
 		
 		skView.presentScene(scene)
-		
+        
 	}
 	
 	override func shouldAutorotate() -> Bool {

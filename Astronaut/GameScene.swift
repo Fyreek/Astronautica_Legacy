@@ -109,6 +109,7 @@ class GameScene: SKScene {
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
+        scene.playSceneActive = true
 		skView.presentScene(scene)
 		
 	}

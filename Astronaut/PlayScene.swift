@@ -17,7 +17,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var endOfScreenRight = CGFloat()
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
-	
+    
+    var playSceneActive = false
+    
 	var highScore:Int = 0
 	
 	var gameSpeed:Float = 1.3
@@ -46,6 +48,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var startEnemy:Int = 3
 	
 	var timer = NSTimer()
+    var timerPause = NSTimer()
 	var countDown = 3
 	var countDownText = SKLabelNode(text: "3")
 	enum ColliderType:UInt32 {
@@ -204,8 +207,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func updateTimer() {
 		
-		hero.guy.removeActionForKey("movingA")
-		
 		if countDown > 0 {
 			
 			if hero.guy.position.y != 0 {
@@ -217,10 +218,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			countDown--
 			countDownText.text = String(countDown)
 			
-			
 		} else {
 			
-			//hero.guy.hidden = false
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -337,6 +336,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
+        self.playSceneActive = false
 		skView.presentScene(scene)
 		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
@@ -364,16 +364,45 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		//Spiel fortsetzen.
 		
 		if !gameOver {
-			
-			gamePaused = false
-			gamePlay.hidden = true
-			gamePlay.alpha = 0
-			gamePause.hidden = false
-			hero.guy.paused = false
+            
+            countDownText.hidden = false
+            gamePlay.hidden = true
+            countDownRunning = true
+            timerPause = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
+            
+            //gamePaused = false
+			//gamePlay.hidden = true
+			//gamePlay.alpha = 0
+			//gamePause.hidden = false
+			//hero.guy.paused = false
 			
 		}
 	}
 	
+    func updateTimerPause() {
+    
+        if countDown > 0 {
+            
+            countDown--
+            countDownText.text = String(countDown)
+            
+        } else {
+            
+            countDown = 3
+            countDownText.text = String(countDown)
+            countDownText.hidden = true
+            timerPause.invalidate()
+            countDownRunning = false
+            gamePaused = false
+            gamePlay.hidden = true
+            gamePlay.alpha = 0
+            gamePause.hidden = false
+            hero.guy.paused = false
+            
+        }
+        
+    }
+    
 	func heroMovement() {
 		
 		var duration = (abs(hero.guy.position.y - touchLocation)) / 100
@@ -430,9 +459,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				}
 				
 			} else if self.nodeAtPoint(location) == self.gamePlay {
-				
-				resumeGame()
-				
+                if !countDownRunning {
+                    resumeGame()
+                }
 			}
 		}
 	}
@@ -481,10 +510,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				}
 			} else {
 				
-				
-				//rotate enemy
-				//var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
-				//enemy.guy.zRotation -= CGFloat(degreeRotation)
 				if enemy.guy.name == "enemySatellite" {
 					
 					enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + sin(enemy.angle / 2) * enemy.range)
