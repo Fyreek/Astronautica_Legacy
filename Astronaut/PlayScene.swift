@@ -33,7 +33,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	let bg = SKSpriteNode(imageNamed: "bg")
 	let bg2 = SKSpriteNode(imageNamed: "bg")
-	
+    
 	var score = 0
 	var scoreLabel = SKLabelNode()
 	var refresh = SKSpriteNode(imageNamed: "refresh")
@@ -483,8 +483,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				
 				
 				//rotate enemy
-				var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
-				enemy.guy.zRotation -= CGFloat(degreeRotation)
+				//var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+				//enemy.guy.zRotation -= CGFloat(degreeRotation)
 				if enemy.guy.name == "enemySatellite" {
 					
 					enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + sin(enemy.angle / 2) * enemy.range)
@@ -495,15 +495,31 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         if hero.guy.position.y > enemy.guy.position.y {
 						
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
-						
+                            enemy.rotationSpeed = 0
+                            
                         } else if hero.guy.position.y < enemy.guy.position.y {
 						
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 1)
-						
+                            enemy.rotationSpeed = 1
+                            
                         }
+                    } else {
+                        if enemy.rotationSpeed == 0 {
+                        
+                            enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
+                            
+                        } else if enemy.rotationSpeed == 1 {
+                        
+                            enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 1 )
+                            
+                        }
+                    
                     }
 				} else if enemy.guy.name == "enemyAsteroid" {
 					
+                    var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+                    enemy.guy.zRotation -= CGFloat(degreeRotation)
+                    
 					enemy.angle = 0
 					if hero.guy.position.y > enemy.guy.position.y {
 						
