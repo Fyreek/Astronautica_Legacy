@@ -1,0 +1,432 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		81E445261B8667D900BC86B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E445251B8667D900BC86B2 /* AppDelegate.swift */; };
+		81E445281B8667D900BC86B2 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 81E445271B8667D900BC86B2 /* GameScene.sks */; };
+		81E4452A1B8667D900BC86B2 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E445291B8667D900BC86B2 /* GameScene.swift */; };
+		81E4452C1B8667D900BC86B2 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4452B1B8667D900BC86B2 /* GameViewController.swift */; };
+		81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81E4452D1B8667D900BC86B2 /* Main.storyboard */; };
+		81E445311B8667D900BC86B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E445301B8667D900BC86B2 /* Images.xcassets */; };
+		81E445341B8667D900BC86B2 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 81E445321B8667D900BC86B2 /* LaunchScreen.xib */; };
+		81E445401B8667D900BC86B2 /* AstronautTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4453F1B8667D900BC86B2 /* AstronautTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		81E4453A1B8667D900BC86B2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 81E445181B8667D900BC86B2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 81E4451F1B8667D900BC86B2;
+			remoteInfo = Astronaut;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		81E445201B8667D900BC86B2 /* Astronaut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Astronaut.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E445241B8667D900BC86B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81E445251B8667D900BC86B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		81E445271B8667D900BC86B2 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
+		81E445291B8667D900BC86B2 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		81E4452B1B8667D900BC86B2 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		81E4452E1B8667D900BC86B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		81E445301B8667D900BC86B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		81E445331B8667D900BC86B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		81E445391B8667D900BC86B2 /* AstronautTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstronautTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		81E4453E1B8667D900BC86B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81E4453F1B8667D900BC86B2 /* AstronautTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AstronautTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		81E4451D1B8667D900BC86B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E445361B8667D900BC86B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		81E445171B8667D900BC86B2 = {
+			isa = PBXGroup;
+			children = (
+				81E445221B8667D900BC86B2 /* Astronaut */,
+				81E4453C1B8667D900BC86B2 /* AstronautTests */,
+				81E445211B8667D900BC86B2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		81E445211B8667D900BC86B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				81E445201B8667D900BC86B2 /* Astronaut.app */,
+				81E445391B8667D900BC86B2 /* AstronautTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		81E445221B8667D900BC86B2 /* Astronaut */ = {
+			isa = PBXGroup;
+			children = (
+				81E445251B8667D900BC86B2 /* AppDelegate.swift */,
+				81E445271B8667D900BC86B2 /* GameScene.sks */,
+				81E445291B8667D900BC86B2 /* GameScene.swift */,
+				81E4452B1B8667D900BC86B2 /* GameViewController.swift */,
+				81E4452D1B8667D900BC86B2 /* Main.storyboard */,
+				81E445301B8667D900BC86B2 /* Images.xcassets */,
+				81E445321B8667D900BC86B2 /* LaunchScreen.xib */,
+				81E445231B8667D900BC86B2 /* Supporting Files */,
+			);
+			path = Astronaut;
+			sourceTree = "<group>";
+		};
+		81E445231B8667D900BC86B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				81E445241B8667D900BC86B2 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		81E4453C1B8667D900BC86B2 /* AstronautTests */ = {
+			isa = PBXGroup;
+			children = (
+				81E4453F1B8667D900BC86B2 /* AstronautTests.swift */,
+				81E4453D1B8667D900BC86B2 /* Supporting Files */,
+			);
+			path = AstronautTests;
+			sourceTree = "<group>";
+		};
+		81E4453D1B8667D900BC86B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				81E4453E1B8667D900BC86B2 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		81E4451F1B8667D900BC86B2 /* Astronaut */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81E445431B8667D900BC86B2 /* Build configuration list for PBXNativeTarget "Astronaut" */;
+			buildPhases = (
+				81E4451C1B8667D900BC86B2 /* Sources */,
+				81E4451D1B8667D900BC86B2 /* Frameworks */,
+				81E4451E1B8667D900BC86B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Astronaut;
+			productName = Astronaut;
+			productReference = 81E445201B8667D900BC86B2 /* Astronaut.app */;
+			productType = "com.apple.product-type.application";
+		};
+		81E445381B8667D900BC86B2 /* AstronautTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81E445461B8667D900BC86B2 /* Build configuration list for PBXNativeTarget "AstronautTests" */;
+			buildPhases = (
+				81E445351B8667D900BC86B2 /* Sources */,
+				81E445361B8667D900BC86B2 /* Frameworks */,
+				81E445371B8667D900BC86B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81E4453B1B8667D900BC86B2 /* PBXTargetDependency */,
+			);
+			name = AstronautTests;
+			productName = AstronautTests;
+			productReference = 81E445391B8667D900BC86B2 /* AstronautTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81E445181B8667D900BC86B2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = YaLu;
+				TargetAttributes = {
+					81E4451F1B8667D900BC86B2 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					81E445381B8667D900BC86B2 = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = 81E4451F1B8667D900BC86B2;
+					};
+				};
+			};
+			buildConfigurationList = 81E4451B1B8667D900BC86B2 /* Build configuration list for PBXProject "Astronaut" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 81E445171B8667D900BC86B2;
+			productRefGroup = 81E445211B8667D900BC86B2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				81E4451F1B8667D900BC86B2 /* Astronaut */,
+				81E445381B8667D900BC86B2 /* AstronautTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		81E4451E1B8667D900BC86B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E445341B8667D900BC86B2 /* LaunchScreen.xib in Resources */,
+				81E445311B8667D900BC86B2 /* Images.xcassets in Resources */,
+				81E445281B8667D900BC86B2 /* GameScene.sks in Resources */,
+				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E445371B8667D900BC86B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		81E4451C1B8667D900BC86B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E4452A1B8667D900BC86B2 /* GameScene.swift in Sources */,
+				81E4452C1B8667D900BC86B2 /* GameViewController.swift in Sources */,
+				81E445261B8667D900BC86B2 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81E445351B8667D900BC86B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E445401B8667D900BC86B2 /* AstronautTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		81E4453B1B8667D900BC86B2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 81E4451F1B8667D900BC86B2 /* Astronaut */;
+			targetProxy = 81E4453A1B8667D900BC86B2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		81E4452D1B8667D900BC86B2 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81E4452E1B8667D900BC86B2 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		81E445321B8667D900BC86B2 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				81E445331B8667D900BC86B2 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		81E445411B8667D900BC86B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		81E445421B8667D900BC86B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		81E445441B8667D900BC86B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Astronaut/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		81E445451B8667D900BC86B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Astronaut/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		81E445471B8667D900BC86B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = AstronautTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Astronaut.app/Astronaut";
+			};
+			name = Debug;
+		};
+		81E445481B8667D900BC86B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = AstronautTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Astronaut.app/Astronaut";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		81E4451B1B8667D900BC86B2 /* Build configuration list for PBXProject "Astronaut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E445411B8667D900BC86B2 /* Debug */,
+				81E445421B8667D900BC86B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81E445431B8667D900BC86B2 /* Build configuration list for PBXNativeTarget "Astronaut" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E445441B8667D900BC86B2 /* Debug */,
+				81E445451B8667D900BC86B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		81E445461B8667D900BC86B2 /* Build configuration list for PBXNativeTarget "AstronautTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81E445471B8667D900BC86B2 /* Debug */,
+				81E445481B8667D900BC86B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 81E445181B8667D900BC86B2 /* Project object */;
+}
