@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-class BadGuy {
+class Enemy {
 	
 	var speed:Float = 0.0
 	var guy:SKSpriteNode

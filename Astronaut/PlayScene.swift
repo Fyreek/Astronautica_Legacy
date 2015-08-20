@@ -13,7 +13,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var touchLocation = CGFloat()
 	var gameOver = true
 	var gameStarted = false
-	var badGuys:[BadGuy] = []
+	var enemys:[Enemy] = []
 	var endOfScreenRight = CGFloat()
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
@@ -22,12 +22,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	var gameSpeed:Float = 1.3
 	var gameProgress:Int = 0
-	var totalSpeedEnemy1:CGFloat = 1.0
-	var totalSpeedEnemy2:CGFloat = 1.5
-	var totalSpeedEnemy3:CGFloat = 3.0
-	var normalSpeedEnemy1:CGFloat = 0.5
-	var normalSpeedEnemy2:CGFloat = 1
-	var normalSpeedEnemy3:CGFloat = 2
+	var totalSpeedenemyAsteroid:CGFloat = 1.0
+	var totalSpeedenemySatellite:CGFloat = 1.5
+	var totalSpeedenemyRocket:CGFloat = 3.0
+	var normalSpeedenemyAsteroid:CGFloat = 0.5
+	var normalSpeedenemySatellite:CGFloat = 1
+	var normalSpeedenemyRocket:CGFloat = 2
 	
 	var countDownRunning = false
 	
@@ -51,7 +51,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	enum ColliderType:UInt32 {
 		
 		case Hero = 1
-		case BadGuy = 2
+		case Enemy = 2
 		
 	}
 	
@@ -59,8 +59,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") Reset Highscore on start!
 		
 		self.physicsWorld.contactDelegate = self
-		endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "enemy1").size.width / 2)
-		endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "enemy1").size.width / 2)
+		endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "enemyAsteroid").size.width / 2)
+		endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "enemyAsteroid").size.width / 2)
 		
 		addChild(bg)
 		addheroPlayer()
@@ -177,23 +177,23 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scoreLabel.text = "0"
 		gameProgress = 0
 		gameSpeed = 1
-		totalSpeedEnemy1 = normalSpeedEnemy1
-		totalSpeedEnemy2 = normalSpeedEnemy2
-		totalSpeedEnemy3 = normalSpeedEnemy3
+		totalSpeedenemyAsteroid = normalSpeedenemyAsteroid
+		totalSpeedenemySatellite = normalSpeedenemySatellite
+		totalSpeedenemyRocket = normalSpeedenemyRocket
 		
-		for badGuy in badGuys {
+		for enemy in enemys {
 			
-			resetBadGuy(badGuy.guy, yPos: badGuy.yPos)
-			badGuy.guy.hidden = true
+			resetEnemy(enemy.guy, yPos: enemy.yPos)
+			enemy.guy.hidden = true
 			
 		}
 		
-		badGuys.removeAll(keepCapacity: false)
-		addBadGuys()
+		enemys.removeAll(keepCapacity: false)
+		addEnemys()
 		
 		for var i = 1; i < startEnemy; i++ {
 			
-			self.addBadGuys()
+			self.addEnemys()
 			
 		}
 		
@@ -241,8 +241,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		heroPlayer.physicsBody!.affectedByGravity = false
 		heroPlayer.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
-		heroPlayer.physicsBody!.contactTestBitMask = ColliderType.BadGuy.rawValue
-		heroPlayer.physicsBody!.collisionBitMask = ColliderType.BadGuy.rawValue
+		heroPlayer.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
+		heroPlayer.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue
 		
 		let heroParticles = SKEmitterNode(fileNamed: "HitParticle.sks")
 		heroParticles.hidden = true
@@ -252,7 +252,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
-	func addBadGuys() {
+	func addEnemys() {
 		var number:Int = Int(arc4random_uniform(11))
 		var upDown:Int = Int(arc4random_uniform(2))
 		var heightNumber:Int = Int((self.size.height / 2) - 15)
@@ -262,57 +262,57 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		//println("oben Unten: " + String(upDown))
 		//println("number: " + String(number))
 		
-		//number = 0
+		//number = 10
 		
 		println(number)
 		
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4{
 			if upDown == 0  {
-				addBadGuy(named: "enemy1", speed: Float(normalSpeedEnemy1) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom)
+				addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom)
 			} else if upDown == 1 {
-				addBadGuy(named: "enemy1", speed: Float(normalSpeedEnemy1) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom)
+				addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom)
 			}
 			
 			
 		} else if number == 5 || number == 6 || number == 7 || number == 8 || number == 9 {
 			if upDown == 0 {
-				addBadGuy(named: "enemy2", speed: Float(normalSpeedEnemy2) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0)
+				addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0)
 			} else if upDown == 1 {
-				addBadGuy(named: "enemy2", speed: Float(normalSpeedEnemy2) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0)
+				addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0)
 			}
 		} else if number == 10 {
 			if upDown == 0 {
-				addBadGuy(named: "enemy3", speed: Float(normalSpeedEnemy3) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0)
+				addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0)
 			} else if upDown == 1 {
-				addBadGuy(named: "enemy3", speed: Float(normalSpeedEnemy3) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0)
+				addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0)
 			}
 		}
 		
 	}
 	
-	func addBadGuy(#named: String, speed:Float, yPos: CGFloat, rotationSpeed:CGFloat) {
+	func addEnemy(#named: String, speed:Float, yPos: CGFloat, rotationSpeed:CGFloat) {
 		
-		var badGuyNode = SKSpriteNode(imageNamed: named)
+		var enemyNode = SKSpriteNode(imageNamed: named)
 		
-		badGuyNode.physicsBody = SKPhysicsBody(circleOfRadius: badGuyNode.size.width / 2)
-		badGuyNode.physicsBody!.affectedByGravity = false
-		badGuyNode.physicsBody!.categoryBitMask = ColliderType.BadGuy.rawValue
-		badGuyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-		badGuyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
+		enemyNode.physicsBody = SKPhysicsBody(circleOfRadius: enemyNode.size.width / 2)
+		enemyNode.physicsBody!.affectedByGravity = false
+		enemyNode.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
+		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
+		enemyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
 		
-		var badGuy = BadGuy(speed: speed, guy: badGuyNode, rotationSpeed: rotationSpeed)
-		badGuys.append(badGuy)
-		badGuy.guy.name = named
-		resetBadGuy(badGuyNode, yPos: yPos)
-		badGuy.yPos = badGuyNode.position.y
-		addChild(badGuyNode)
+		var enemy = Enemy(speed: speed, guy: enemyNode, rotationSpeed: rotationSpeed)
+		enemys.append(enemy)
+		enemy.guy.name = named
+		resetEnemy(enemyNode, yPos: yPos)
+		enemy.yPos = enemyNode.position.y
+		addChild(enemyNode)
 		
 	}
 	
-	func resetBadGuy(badGuyNode:SKSpriteNode, yPos: CGFloat) {
+	func resetEnemy(enemyNode:SKSpriteNode, yPos: CGFloat) {
 		
-		badGuyNode.position.x = endOfScreenRight
-		badGuyNode.position.y = yPos
+		enemyNode.position.x = endOfScreenRight
+		enemyNode.position.y = yPos
 		
 	}
 	
@@ -442,7 +442,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gamePaused {
 			if !gameOver {
 				
-				updateBadGuysPosition()
+				updateEnemysPosition()
 				
 			}
 			
@@ -467,71 +467,71 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
-	func updateBadGuysPosition(){
+	func updateEnemysPosition(){
 		
-		for badGuy in badGuys {
+		for enemy in enemys {
 			
-			if !badGuy.moving {
+			if !enemy.moving {
 				
-				badGuy.currentFrame++
-				if badGuy.currentFrame > badGuy.randomFrame{
+				enemy.currentFrame++
+				if enemy.currentFrame > enemy.randomFrame{
 					
-					badGuy.moving = true
+					enemy.moving = true
 					
 				}
 			} else {
 				
 				
 				//rotate enemy
-				var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(badGuy.rotationSpeed)
-				badGuy.guy.zRotation -= CGFloat(degreeRotation)
-				if badGuy.guy.name == "enemy2" {
+				var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+				enemy.guy.zRotation -= CGFloat(degreeRotation)
+				if enemy.guy.name == "enemySatellite" {
 					
-					badGuy.guy.position.y = CGFloat(Double(badGuy.guy.position.y) + sin(badGuy.angle / 2) * badGuy.range)
-					badGuy.angle += hero.speed
+					enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + sin(enemy.angle / 2) * enemy.range)
+					enemy.angle += hero.speed
 					
-				} else if badGuy.guy.name == "enemy3" {
+				} else if enemy.guy.name == "enemyRocket" {
+                    if enemy.guy.position.x >= hero.guy.position.y {
+                        if hero.guy.position.y > enemy.guy.position.y {
+						
+                            enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
+						
+                        } else if hero.guy.position.y < enemy.guy.position.y {
+						
+                            enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 1)
+						
+                        }
+                    }
+				} else if enemy.guy.name == "enemyAsteroid" {
 					
-					if hero.guy.position.y > badGuy.guy.position.y {
+					enemy.angle = 0
+					if hero.guy.position.y > enemy.guy.position.y {
 						
-						badGuy.guy.position.y = CGFloat(Double(badGuy.guy.position.y) + 1 )
+						enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 0.05 )
 						
-					} else if hero.guy.position.y < badGuy.guy.position.y {
+					} else if hero.guy.position.y < enemy.guy.position.y {
 						
-						badGuy.guy.position.y = CGFloat(Double(badGuy.guy.position.y) - 1)
+						enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 0.05)
 						
 					}
 					
-				} else if badGuy.guy.name == "enemy1" {
-					
-					badGuy.angle = 0
-					if hero.guy.position.y > badGuy.guy.position.y {
-						
-						badGuy.guy.position.y = CGFloat(Double(badGuy.guy.position.y) + 0.05 )
-						
-					} else if hero.guy.position.y < badGuy.guy.position.y {
-						
-						badGuy.guy.position.y = CGFloat(Double(badGuy.guy.position.y) - 0.05)
-						
-					}
-					
-					//badGuy.guy.position.y = CGFloat(Double(badGuy.guy.position.y) + hero.speed)
+					//enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + hero.speed)
 					
 				}
 				
-				//badGuy.angle += hero.speed
-				if badGuy.guy.position.x > endOfScreenLeft{
+				//enemy.angle += hero.speed
+				if enemy.guy.position.x > endOfScreenLeft{
 					
-					badGuy.guy.position.x -= CGFloat(badGuy.speed)
+					enemy.guy.position.x -= CGFloat(enemy.speed)
 					
 				} else {
 					
-					if badGuy.guy.name == "enemy1" {
-						badGuy.guy.speed = totalSpeedEnemy1
-					} else if badGuy.guy.name == "enemy2" {
-						badGuy.guy.speed = totalSpeedEnemy2
-					} else if badGuy.guy.name == "enemy3" {
-						badGuy.guy.speed = totalSpeedEnemy3
+					if enemy.guy.name == "enemyAsteroid" {
+						enemy.guy.speed = totalSpeedenemyAsteroid
+					} else if enemy.guy.name == "enemySatellite" {
+						enemy.guy.speed = totalSpeedenemySatellite
+					} else if enemy.guy.name == "enemyRocket" {
+						enemy.guy.speed = totalSpeedenemyRocket
 					}
 					
 					var upDown:Int = Int(arc4random_uniform(2))
@@ -539,24 +539,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 					
 					if upDown == 0 {
-						badGuy.guy.position.y = CGFloat(-(height))
+						enemy.guy.position.y = CGFloat(-(height))
 					} else if upDown == 1 {
-						badGuy.guy.position.y = CGFloat(height)
+						enemy.guy.position.y = CGFloat(height)
 					}
-					if badGuy.guy.name == "enemy3" {
+					if enemy.guy.name == "enemyRocket" {
 						
-						badGuy.guy.removeFromParent()
-						badGuy.moving = false
-						badGuy.guy.hidden = true
-						badGuy.guy.position.x = self.size.width + 200
+						enemy.guy.removeFromParent()
+						enemy.moving = false
+						enemy.guy.hidden = true
+						enemy.guy.position.x = self.size.width + 200
 						
 					} else {
 						
-						badGuy.guy.position.x = endOfScreenRight
-						badGuy.currentFrame = 0
-						badGuy.setRandomFrame()
-						badGuy.moving = false
-						badGuy.range += 0.1
+						enemy.guy.position.x = endOfScreenRight
+						enemy.currentFrame = 0
+						enemy.setRandomFrame()
+						enemy.moving = false
+						enemy.range += 0.1
 						
 					}
 					
@@ -576,9 +576,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		if score % 5 == 0 {
 			
-			totalSpeedEnemy1 = totalSpeedEnemy1 + 0.1
-			totalSpeedEnemy2 = totalSpeedEnemy2 + 0.1
-			totalSpeedEnemy3 = totalSpeedEnemy3 + 0.1
+			totalSpeedenemyAsteroid = totalSpeedenemyAsteroid + 0.1
+			totalSpeedenemySatellite = totalSpeedenemySatellite + 0.1
+			totalSpeedenemyRocket = totalSpeedenemyRocket + 0.1
 			
 			gameProgress++
 			gameSpeed = gameSpeed + 0.1 // vielleicht eigentlich 0.2
@@ -587,7 +587,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
 		} else if score % 3 == 0 {
 			
-			addBadGuys()
+			addEnemys()
 			
 		}
 	}
