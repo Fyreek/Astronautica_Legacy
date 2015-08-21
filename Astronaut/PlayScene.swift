@@ -441,17 +441,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         touchingScreen = false
     }
     
-	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-		/* Called when a touch begins */
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        funcTouches(touches, withEvent: event)
+    }
+    
+    func funcTouches(touches: Set<NSObject>, withEvent event: UIEvent) {
+    
         
         let buttonPressAnim = SKAction.sequence([buttonPressDark, buttonPressLight])
-
+        
         for touch: AnyObject in touches {
             touchLocation = touch.locationInNode(self).y
             let location = touch.locationInNode(self)
             if !gamePaused {
                 if gameOver {
-					
+                    
                     if self.nodeAtPoint(location) == self.refresh {
                         if gameOver {
                             self.refresh.runAction(buttonPressAnim){
@@ -461,29 +465,29 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
                         if gameOver {
-							self.menu.runAction(buttonPressAnim){
+                            self.menu.runAction(buttonPressAnim){
                                 self.showMenu()
                                 self.gameStarted = false
                             }
                         }
-						
+                        
                     }
-					
-                
+                    
+                    
                 } else if !gameOver {
-					
+                    
                     if self.nodeAtPoint(location) == self.gamePause {
-						self.gamePause.runAction(buttonPressAnim){
+                        self.gamePause.runAction(buttonPressAnim){
                             self.pauseGame()
                         }
                     } else {
-                    
+                        
                         self.heroMovement()
+                        
+                    }
                     
-					}
-					
-				}
-				
+                }
+                
             } else if self.nodeAtPoint(location) == self.gamePlay {
                 if !countDownRunning {
                     self.gamePlay.runAction(buttonPressAnim){
@@ -497,7 +501,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
             }
-		}
+        }
+    }
+    
+	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+							
+        funcTouches(touches, withEvent: event)
+        
     }
 
 	override func update(currentTime: CFTimeInterval) {
