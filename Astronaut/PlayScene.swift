@@ -172,8 +172,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero.guy.removeAllActions()
 		
 		hero.guy.position.y = 0
-		//hero.guy.position.x = -(self.size.width/2)/3
-		hero.guy.position.x = 0
+		hero.guy.position.x = -(self.size.width/2)/3
+		//hero.guy.position.x = 0
 		hero.guy.name = "kevin"
 		
 		refresh.runAction(SKAction.fadeOutWithDuration(1.0))
