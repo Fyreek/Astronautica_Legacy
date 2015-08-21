@@ -45,8 +45,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePause = SKSpriteNode(imageNamed: "gamePause")
 	var gamePlay = SKSpriteNode(imageNamed: "gamePlay")
     var menuPause = SKSpriteNode(imageNamed: "menuPause")
-	
-	var startEnemy:Int = 3
+    
+    var startEnemy:Int = 3
 	
     var touchingScreen = false
     var touchYPosition:CGFloat = 0
@@ -158,6 +158,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero.emit = true
 		refresh.hidden = false
 		refresh.runAction(SKAction.fadeInWithDuration(1.0))
+        refresh.zPosition = 1.1
+        menu.zPosition = 1.1
 		menu.hidden = false
 		menu.runAction(SKAction.fadeInWithDuration(1.0))
 		
@@ -187,6 +189,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = false
 		hero.guy.removeAllActions()
 		
+        refresh.zPosition = 0.9
+        menu.zPosition = 0.9
+        
 		hero.guy.position.y = 0
 		hero.guy.position.x = -(self.size.width/2)/3
 		hero.guy.name = "kevin"
@@ -275,6 +280,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		var heightNumber:Int = Int((self.size.height / 2) - 15)
 		var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 		var rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
+        var rotationDirection:Int = Int(arc4random_uniform(2))
 		
 		//number = 10
 		
@@ -282,29 +288,29 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4{
 			if upDown == 0  {
-				addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom)
+                addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection)
 			} else if upDown == 1 {
-				addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom)
+                addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection)
 			}
 			
 			
 		} else if number == 5 || number == 6 || number == 7 || number == 8 || number == 9 {
 			if upDown == 0 {
-				addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0)
+                addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection)
 			} else if upDown == 1 {
-				addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0)
+                addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection)
 			}
 		} else if number == 10 {
 			if upDown == 0 {
-				addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0)
+                addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection)
 			} else if upDown == 1 {
-				addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0)
+                addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection)
 			}
 		}
 		
 	}
 	
-	func addEnemy(#named: String, speed:Float, yPos: CGFloat, rotationSpeed:CGFloat) {
+    func addEnemy(#named: String, speed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int) {
 		
 		var enemyNode = SKSpriteNode(imageNamed: named)
 		
@@ -314,7 +320,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
 		enemyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
 		
-		var enemy = Enemy(speed: speed, guy: enemyNode, rotationSpeed: rotationSpeed)
+        var enemy = Enemy(speed: speed, guy: enemyNode, rotationSpeed: rotationSpeed, rotationDirection: rotationDirection)
 		enemys.append(enemy)
 		enemy.guy.name = named
 		resetEnemy(enemyNode, yPos: yPos)
@@ -364,8 +370,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			gamePaused = true
 			gamePlay.hidden = false
 			gamePlay.alpha = 1
+            gamePlay.zPosition = 1.1
             menuPause.hidden = false
             menuPause.alpha = 1
+            menuPause.zPosition = 1.1
 			gamePause.hidden = true
 			hero.guy.paused = true
 			
@@ -380,6 +388,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             countDownText.hidden = false
             gamePlay.hidden = true
+            gamePlay.zPosition = 0.9
+            menuPause.zPosition = 0.9
             menuPause.hidden = true
             countDownRunning = true
             timerPause = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
@@ -433,7 +443,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		/* Called when a touch begins */
         
         let buttonPressAnim = SKAction.sequence([buttonPressDark, buttonPressLight])
-            
+
         for touch: AnyObject in touches {
             touchLocation = touch.locationInNode(self).y
             let location = touch.locationInNode(self)
@@ -538,6 +548,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					
 				} else if enemy.guy.name == "enemyRocket" {
                     if enemy.guy.position.x >= hero.guy.position.x + 100 {
+                        print("Enemy Pos: ")
+                        println(enemy.guy.position.y)
+                        print("Hero Pos: ")
+                        println(hero.guy.position.y)
                         if hero.guy.position.y > enemy.guy.position.y {
 						
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
@@ -562,10 +576,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     
                     }
 				} else if enemy.guy.name == "enemyAsteroid" {
-					
-                    var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
-                    enemy.guy.zRotation -= CGFloat(degreeRotation)
                     
+                    var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+                    if enemy.rotationDirection == 0 {
+                         enemy.guy.zRotation -= CGFloat(degreeRotation)
+                    } else {
+                         enemy.guy.zRotation += CGFloat(degreeRotation)
+                    }
+                   
 					enemy.angle = 0
 					if hero.guy.position.y > enemy.guy.position.y {
 						
@@ -576,8 +594,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 0.05)
 						
 					}
-					
-					
 				}
 				
 				if enemy.guy.position.x > endOfScreenLeft{
@@ -585,7 +601,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					enemy.guy.position.x -= CGFloat(enemy.speed)
 					
 				} else {
-					
+                    
 					if enemy.guy.name == "enemyAsteroid" {
 						enemy.guy.speed = totalSpeedenemyAsteroid
 					} else if enemy.guy.name == "enemySatellite" {
