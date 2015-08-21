@@ -160,6 +160,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		refresh.runAction(SKAction.fadeInWithDuration(1.0))
         refresh.zPosition = 1.1
         menu.zPosition = 1.1
+        gamePlay.zPosition = 0.9
+        menuPause.zPosition = 0.9
 		menu.hidden = false
 		menu.runAction(SKAction.fadeInWithDuration(1.0))
 		
@@ -281,36 +283,37 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 		var rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
         var rotationDirection:Int = Int(arc4random_uniform(2))
+        var preLocation:CGFloat = 0
 		
-		//number = 10
+		number = 10
 		
 		println(number)
 		
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4{
 			if upDown == 0  {
-                addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection)
+                addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation)
 			} else if upDown == 1 {
-                addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection)
+                addEnemy(named: "enemyAsteroid", speed: Float(normalSpeedenemyAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation)
 			}
 			
 			
 		} else if number == 5 || number == 6 || number == 7 || number == 8 || number == 9 {
 			if upDown == 0 {
-                addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection)
+                addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation)
 			} else if upDown == 1 {
-                addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection)
+                addEnemy(named: "enemySatellite", speed: Float(normalSpeedenemySatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation)
 			}
 		} else if number == 10 {
 			if upDown == 0 {
-                addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection)
+                addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation)
 			} else if upDown == 1 {
-                addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection)
+                addEnemy(named: "enemyRocket", speed: Float(normalSpeedenemyRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation)
 			}
 		}
 		
 	}
 	
-    func addEnemy(#named: String, speed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int) {
+    func addEnemy(#named: String, speed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat) {
 		
 		var enemyNode = SKSpriteNode(imageNamed: named)
 		
@@ -320,7 +323,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
 		enemyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
 		
-        var enemy = Enemy(speed: speed, guy: enemyNode, rotationSpeed: rotationSpeed, rotationDirection: rotationDirection)
+        var enemy = Enemy(speed: speed, guy: enemyNode, rotationSpeed: rotationSpeed, rotationDirection: rotationDirection, preLocation: preLocation)
 		enemys.append(enemy)
 		enemy.guy.name = named
 		resetEnemy(enemyNode, yPos: yPos)
@@ -540,7 +543,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					
 				}
 			} else {
-				
+                
 				if enemy.guy.name == "enemySatellite" {
 					
 					enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + sin(enemy.angle / 2) * enemy.range)
@@ -552,18 +555,31 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         println(enemy.guy.position.y)
                         print("Hero Pos: ")
                         println(hero.guy.position.y)
+                        
                         if hero.guy.position.y > enemy.guy.position.y {
 						
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
                             enemy.rotationSpeed = 0
+                            //enemy.guy.zRotation = -45
+                            enemy.preLocation = enemy.guy.position.y
                             
                         } else if hero.guy.position.y < enemy.guy.position.y {
 						
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 1)
                             enemy.rotationSpeed = 1
+                            //enemy.guy.zRotation = 45
+                            enemy.preLocation = enemy.guy.position.y
+                            
+                        } else {
+                        
+                            //enemy.guy.runAction(SKAction.rotateToAngle(0, duration: 1))
                             
                         }
                     } else {
+                        
+                        var testLocation:CGFloat = CGFloat(abs(Int(hero.guy.position.y - enemy.guy.position.y)))
+                        println(testLocation)
+                        
                         if enemy.rotationSpeed == 0 {
                         
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
@@ -572,6 +588,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) - 1 )
                             
+                        } else {
+                        
+                            enemy.guy.position.y = CGFloat(enemy.guy.position.y)
+                        
                         }
                     
                     }

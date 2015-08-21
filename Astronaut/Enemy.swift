@@ -20,13 +20,15 @@ class Enemy {
 	var range = 1.2
 	var yPos = CGFloat()
     var rotationDirection:Int = 0
+    var preLocation:CGFloat = 0
 	
-    init(speed:Float, guy:SKSpriteNode, rotationSpeed:CGFloat, rotationDirection:Int) {
+    init(speed:Float, guy:SKSpriteNode, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat) {
 		
 		self.speed = speed
 		self.guy = guy
 		self.rotationSpeed = rotationSpeed
         self.rotationDirection = rotationDirection
+        self.preLocation = preLocation
 		self.setRandomFrame()
 		
 		
