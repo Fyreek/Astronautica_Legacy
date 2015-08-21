@@ -10,11 +10,11 @@ import SpriteKit
 
 class GameScene: SKScene {
 	
-	var startGameButton = SKSpriteNode(imageNamed: "buttontest")
+	var startGameButton = SKSpriteNode(imageNamed: "RectButton25")
 	var startGameLabel = SKLabelNode(text: "Start Game")
 	var nameLabel = SKLabelNode(text: "Astronautica")
-	var menuOptionButton = SKSpriteNode(imageNamed: "menuOption")
-	var menuHSButton = SKSpriteNode(imageNamed: "menuHighScore")
+	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton20")
+	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardButton20")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
 	let bg = SKSpriteNode(imageNamed: "Background188")
 	var highScore:Int = 0
