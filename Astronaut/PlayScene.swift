@@ -24,12 +24,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	var gameSpeed:Float = 1.3
 	var gameProgress:Int = 0
-	var totalSpeedenemyAsteroid:CGFloat = 1.0
-	var totalSpeedenemySatellite:CGFloat = 1.5
-	var totalSpeedenemyRocket:CGFloat = 3.0
-	var normalSpeedenemyAsteroid:CGFloat = 0.5
-	var normalSpeedenemySatellite:CGFloat = 1
-	var normalSpeedenemyRocket:CGFloat = 2
+	var totalSpeedenemyAsteroid:CGFloat = 1.5
+	var totalSpeedenemySatellite:CGFloat = 2
+	var totalSpeedenemyRocket:CGFloat = 3
+	var normalSpeedenemyAsteroid:CGFloat = 1.5
+	var normalSpeedenemySatellite:CGFloat = 2
+	var normalSpeedenemyRocket:CGFloat = 3
 	
 	var countDownRunning = false
 	
