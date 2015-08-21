@@ -2,16 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "Asteroid16.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "background2.png"
+      "filename" : "Asteroid16@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "Asteroid16@3x.png"
     }
   ],
   "info" : {

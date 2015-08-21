@@ -12,11 +12,11 @@ class GameScene: SKScene {
 	
 	var startGameButton = SKSpriteNode(imageNamed: "buttontest")
 	var startGameLabel = SKLabelNode(text: "Start Game")
-	var nameLabel = SKLabelNode(text: "Dodge the Evil")
+	var nameLabel = SKLabelNode(text: "Astronautica")
 	var menuOptionButton = SKSpriteNode(imageNamed: "menuOption")
 	var menuHSButton = SKSpriteNode(imageNamed: "menuHighScore")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
-	let bg = SKSpriteNode(imageNamed: "bg")
+	let bg = SKSpriteNode(imageNamed: "Background188")
 	var highScore:Int = 0
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0.2, duration: 0.2)

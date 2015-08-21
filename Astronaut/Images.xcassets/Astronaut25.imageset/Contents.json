@@ -3,16 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "paul2.png"
+      "filename" : "Astronaut25.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Missile8.png"
+      "filename" : "Astronaut25@2x.png"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "3x",
+      "filename" : "Astronaut25@3x.png"
     }
   ],
   "info" : {
