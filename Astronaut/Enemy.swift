@@ -19,12 +19,14 @@ class Enemy {
 	var angle = 0.0
 	var range = 1.2
 	var yPos = CGFloat()
+    var rotationDirection:Int = 0
 	
-	init(speed:Float, guy:SKSpriteNode, rotationSpeed:CGFloat) {
+    init(speed:Float, guy:SKSpriteNode, rotationSpeed:CGFloat, rotationDirection:Int) {
 		
 		self.speed = speed
 		self.guy = guy
 		self.rotationSpeed = rotationSpeed
+        self.rotationDirection = rotationDirection
 		self.setRandomFrame()
 		
 		
