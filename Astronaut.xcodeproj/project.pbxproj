@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8143166E1B8730B4008A3C81 /* GameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8143166D1B8730B4008A3C81 /* GameCenter.swift */; };
+		814316701B873162008A3C81 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8143166F1B873162008A3C81 /* GameKit.framework */; };
 		81E445261B8667D900BC86B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E445251B8667D900BC86B2 /* AppDelegate.swift */; };
 		81E445281B8667D900BC86B2 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 81E445271B8667D900BC86B2 /* GameScene.sks */; };
 		81E4452A1B8667D900BC86B2 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E445291B8667D900BC86B2 /* GameScene.swift */; };
@@ -33,6 +35,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8143166D1B8730B4008A3C81 /* GameCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenter.swift; sourceTree = "<group>"; };
+		8143166F1B873162008A3C81 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		81E445201B8667D900BC86B2 /* Astronaut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Astronaut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81E445241B8667D900BC86B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81E445251B8667D900BC86B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				814316701B873162008A3C81 /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +114,8 @@
 		81E445231B8667D900BC86B2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				8143166F1B873162008A3C81 /* GameKit.framework */,
+				8143166D1B8730B4008A3C81 /* GameCenter.swift */,
 				D9AB40601B866F590010A8C2 /* spark.png */,
 				D9AB405F1B866F590010A8C2 /* HitParticle.sks */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
@@ -183,6 +190,11 @@
 					81E4451F1B8667D900BC86B2 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = ZA57B2W688;
+						SystemCapabilities = {
+							com.apple.GameCenter = {
+								enabled = 1;
+							};
+						};
 					};
 					81E445381B8667D900BC86B2 = {
 						CreatedOnToolsVersion = 6.4;
@@ -242,6 +254,7 @@
 				81E4452A1B8667D900BC86B2 /* GameScene.swift in Sources */,
 				81E4452C1B8667D900BC86B2 /* GameViewController.swift in Sources */,
 				81E445261B8667D900BC86B2 /* AppDelegate.swift in Sources */,
+				8143166E1B8730B4008A3C81 /* GameCenter.swift in Sources */,
 				81E445501B86689100BC86B2 /* Hero.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -370,10 +383,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -382,10 +397,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

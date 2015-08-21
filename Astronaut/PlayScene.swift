@@ -149,6 +149,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
 			NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
 			NSUserDefaults.standardUserDefaults().synchronize()
+			//submit score to GameCenter
+			EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
 			
 			totalScore.hidden = false
 			totalScore.text = ("New Highscore: ") + String(score) + (" points!")

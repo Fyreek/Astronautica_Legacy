@@ -11,11 +11,13 @@ import SpriteKit
 
 
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, EasyGameCenterDelegate {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		// Init Easy Game Center
+		EasyGameCenter.sharedInstance(self)
 		
 		let scene = GameScene()
 		

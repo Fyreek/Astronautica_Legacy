@@ -99,6 +99,13 @@ class GameScene: SKScene {
 				showPlayScene()
 			}
 		}
+		
+		for touch: AnyObject in touches {
+			let location = touch.locationInNode(self)
+			if self.nodeAtPoint(location) == self.menuHSButton {
+				EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+			}
+		}
 	}
 	
 	func showPlayScene() {
