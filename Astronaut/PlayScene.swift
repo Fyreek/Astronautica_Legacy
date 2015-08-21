@@ -44,6 +44,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	var gamePause = SKSpriteNode(imageNamed: "gamePause")
 	var gamePlay = SKSpriteNode(imageNamed: "gamePlay")
+    var menuPause = SKSpriteNode(imageNamed: "menuPause")
 	
 	var startEnemy:Int = 3
 	
@@ -92,8 +93,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		gamePause.position.x = -(self.size.width / 2) + 40
 		
 		gamePlay.position.y = 0
-		gamePlay.position.x = 0
-		
+		gamePlay.position.x = -(self.size.width / 8)
+        
+        menuPause.position.y = 0
+        menuPause.position.x = self.size.width / 8
+        
 		totalScore.position.x = 0
 		totalScore.position.y = self.size.height / 8
 		
@@ -103,6 +107,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		addChild(menu)
 		addChild(gamePause)
 		addChild(gamePlay)
+        addChild(menuPause)
 		addChild(countDownText)
 		
 		countDownText.hidden = true
@@ -116,6 +121,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		gamePlay.zPosition = 1.1
 		gamePlay.alpha = 0
 		
+        menuPause.name = "menuPause"
+        menuPause.hidden = true
+        menuPause.zPosition = 1.1
+        menuPause.alpha = 0
+        
 		gamePause.name = "gamePause"
 		gamePause.hidden = true
 		gamePause.zPosition = 1.1
@@ -361,6 +371,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			gamePaused = true
 			gamePlay.hidden = false
 			gamePlay.alpha = 1
+            menuPause.hidden = false
+            menuPause.alpha = 1
 			gamePause.hidden = true
 			hero.guy.paused = true
 			
@@ -375,6 +387,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             countDownText.hidden = false
             gamePlay.hidden = true
+            menuPause.hidden = true
             countDownRunning = true
             timerPause = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
             
@@ -403,6 +416,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             countDownRunning = false
             gamePaused = false
             gamePlay.hidden = true
+            menuPause.hidden = true
+            menuPause.alpha = 0
             gamePlay.alpha = 0
             gamePause.hidden = false
             hero.guy.paused = false
@@ -475,7 +490,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if !countDownRunning {
                     resumeGame()
                 }
-			}
+            } else if self.nodeAtPoint(location) == self.menuPause {
+                if !countDownRunning {
+                    showMenu()
+                }
+            }
 		}
 	}
     
