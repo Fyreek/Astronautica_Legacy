@@ -47,6 +47,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	var startEnemy:Int = 3
 	
+    var touchingScreen = false
+    var touchYPosition:CGFloat = 0
+    
 	var timer = NSTimer()
     var timerPause = NSTimer()
 	var countDown = 3
@@ -71,11 +74,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		
 		scoreLabel = SKLabelNode(text: "0")
-		scoreLabel.fontColor = UIColor.blackColor()
+		scoreLabel.fontColor = UIColor.whiteColor()
 		scoreLabel.position.y = (self.size.height / 2) - 40
 		scoreLabel.position.x = -(self.size.width / 2) + 40
 		
-		countDownText.fontColor = UIColor.blackColor()
+		countDownText.fontColor = UIColor.whiteColor()
 		countDownText.setScale(2.0)
 		countDownText.position.y = (self.size.height / 8)
 		
@@ -119,7 +122,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		gamePause.alpha = 0
 		
 		totalScore.name = "totaScore"
-		totalScore.fontColor = UIColor.blackColor()
+		totalScore.fontColor = UIColor.whiteColor()
 		totalScore.hidden = true
 		totalScore.zPosition = 1.1
 		totalScore.alpha = 0
@@ -333,6 +336,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func showMenu() {
 		
+        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Up, duration: 1.0)
+        
 		var scene = GameScene(size: self.size)
 		let skView = self.view as SKView!
 		skView.ignoresSiblingOrder = true
@@ -340,7 +345,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
         self.playSceneActive = false
-		skView.presentScene(scene)
+        skView.presentScene(scene, transition: transition)
 		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		scene.highScoreLabel.text = "Highscore: " + String(highScore)
@@ -407,7 +412,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
 	func heroMovement() {
-		
+        
 		var duration = (abs(hero.guy.position.y - touchLocation)) / hero.speed
 		
 		//println(duration)
@@ -416,11 +421,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		moveAction.timingMode = SKActionTimingMode.EaseOut
 		hero.guy.runAction(moveAction, withKey: "movingA")
+        
 	}
 	
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesEnded(touches, withEvent: event)
+        touchingScreen = false
+    }
+    
 	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
 		/* Called when a touch begins */
-		
+        
 		for touch: AnyObject in touches {
 			touchLocation = touch.locationInNode(self).y
 			let location = touch.locationInNode(self)
@@ -440,8 +451,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 							
 							showMenu()
 							gameStarted = false
-							
-						}
+                
+                        }
 						
 					}
 					
@@ -451,11 +462,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					if self.nodeAtPoint(location) == self.gamePause {
 						
 						pauseGame()
-						
+                        
 					} else {
-						
-						heroMovement()
-						//println("hero movement")
+                        
+                        heroMovement()
 						
 					}
 					
@@ -468,14 +478,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			}
 		}
 	}
-	
+    
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
 		if !gamePaused {
 			if !gameOver {
 				
 				updateEnemysPosition()
-				
 			}
 			
 			updateHeroEmitter()

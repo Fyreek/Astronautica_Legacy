@@ -33,7 +33,7 @@ class GameScene: SKScene {
 		nameLabel.position.y = (self.size.height / 3)
 		nameLabel.zPosition = 1.1
 		nameLabel.setScale(1.5)
-		nameLabel.fontColor = UIColor.blackColor()
+		nameLabel.fontColor = UIColor.whiteColor()
 		
 		addChild(startGameNormalButton)
 		startGameNormalButton.name = "startGameNormalButton"
@@ -71,7 +71,7 @@ class GameScene: SKScene {
 		highScoreLabel.position.y = -(self.size.height / 3)
 		highScoreLabel.zPosition = 1.1
 		highScoreLabel.setScale(0.6)
-		highScoreLabel.fontColor = UIColor.blackColor()
+		highScoreLabel.fontColor = UIColor.whiteColor()
 		
 		addChild(menuOptionButton)
 		menuOptionButton.name = "menuOptionButton"
@@ -94,30 +94,33 @@ class GameScene: SKScene {
 		for touch: AnyObject in touches {
 			let location = touch.locationInNode(self)
 			if self.nodeAtPoint(location) == self.startGameNormalButton {
+                
 				showPlayScene()
+                
 			} else if self.nodeAtPoint(location) == self.startGameNormalLabel {
+                
 				showPlayScene()
-			}
-		}
-		
-		for touch: AnyObject in touches {
-			let location = touch.locationInNode(self)
-			if self.nodeAtPoint(location) == self.menuHSButton {
-				EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
-			}
-		}
+                
+            } else if self.nodeAtPoint(location) == self.menuHSButton {
+                
+                EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                
+            }
+        }
 	}
 	
 	func showPlayScene() {
-		
-		var scene = PlayScene(size: self.size)
+        
+        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Down, duration: 1.0)
+        
+        var scene = PlayScene(size: self.size)
 		let skView = self.view as SKView!
 		skView.ignoresSiblingOrder = true
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
         scene.playSceneActive = true
-		skView.presentScene(scene)
+        skView.presentScene(scene, transition: transition)
 		
 	}
 	
