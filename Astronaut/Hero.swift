@@ -11,7 +11,8 @@ import SpriteKit
 class Hero {
 	
 	var guy:SKSpriteNode
-	var speed = 0.1
+	var speed: CGFloat = 75
+	var pace = 0.1
 	var emit = false
 	var emitFrameCount = 0
 	var maxEmitFrameCount = 20

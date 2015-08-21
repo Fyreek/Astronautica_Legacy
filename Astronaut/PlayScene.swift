@@ -170,6 +170,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero.guy.removeAllActions()
 		
 		hero.guy.position.y = 0
+		//hero.guy.position.x = -(self.size.width/2)/3
 		hero.guy.position.x = 0
 		hero.guy.name = "kevin"
 		
@@ -227,7 +228,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			timer.invalidate()
 			countDownRunning = false
 			gamePause.hidden = false
-			gamePause.alpha = 0.5
+			gamePause.alpha = 1
 			
 		}
 	}
@@ -261,7 +262,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		//println("oben Unten: " + String(upDown))
 		//println("number: " + String(number))
 		
-		//number = 10
+		//number = 2
 		
 		println(number)
 		
@@ -405,7 +406,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func heroMovement() {
 		
-		var duration = (abs(hero.guy.position.y - touchLocation)) / 100
+		var duration = (abs(hero.guy.position.y - touchLocation)) / hero.speed
 		
 		//println(duration)
 		
@@ -513,7 +514,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				if enemy.guy.name == "enemySatellite" {
 					
 					enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + sin(enemy.angle / 2) * enemy.range)
-					enemy.angle += hero.speed
+					enemy.angle += hero.pace
 					
 				} else if enemy.guy.name == "enemyRocket" {
                     if enemy.guy.position.x >= hero.guy.position.y {
