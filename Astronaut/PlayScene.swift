@@ -51,6 +51,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var touchingScreen = false
     var touchYPosition:CGFloat = 0
     
+    let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
+    let buttonPressLight = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0.2, duration: 0.2)
+    
 	var timer = NSTimer()
     var timerPause = NSTimer()
 	var countDown = 3
@@ -84,10 +87,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.position.y = (self.size.height / 8)
 		
 		refresh.position.y = 0
-		refresh.position.x = -(self.size.width / 8) // - 400
+		refresh.position.x = -(self.size.width / 8)
 		
 		menu.position.y = 0
-		menu.position.x = (self.size.width / 8) // + 400
+		menu.position.x = (self.size.width / 8)
 		
 		gamePause.position.y = -(self.size.height / 2) + 40
 		gamePause.position.x = -(self.size.width / 2) + 40
@@ -186,7 +189,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		hero.guy.position.y = 0
 		hero.guy.position.x = -(self.size.width/2)/3
-		//hero.guy.position.x = 0
 		hero.guy.name = "kevin"
 		
 		refresh.runAction(SKAction.fadeOutWithDuration(1.0))
@@ -273,11 +275,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		var heightNumber:Int = Int((self.size.height / 2) - 15)
 		var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 		var rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
-		//println("Hoehe: " + String(height))
-		//println("oben Unten: " + String(upDown))
-		//println("number: " + String(number))
 		
-		//number = 2
+		//number = 10
 		
 		println(number)
 		
@@ -338,12 +337,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
-	func startGameItems() {
-		
-		//Spiel mit Items starten.
-		
-	}
-	
 	func showMenu() {
 		
         let transition = SKTransition.revealWithDirection(SKTransitionDirection.Up, duration: 1.0)
@@ -390,13 +383,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             menuPause.hidden = true
             countDownRunning = true
             timerPause = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
-            
-            //gamePaused = false
-			//gamePlay.hidden = true
-			//gamePlay.alpha = 0
-			//gamePause.hidden = false
-			//hero.guy.paused = false
-			
+
 		}
 	}
 	
@@ -430,8 +417,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		var duration = (abs(hero.guy.position.y - touchLocation)) / hero.speed
 		
-		//println(duration)
-		
 		let moveAction = SKAction.moveToY(touchLocation, duration: NSTimeInterval(duration))
 		
 		moveAction.timingMode = SKActionTimingMode.EaseOut
@@ -447,57 +432,62 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
 		/* Called when a touch begins */
         
-		for touch: AnyObject in touches {
-			touchLocation = touch.locationInNode(self).y
-			let location = touch.locationInNode(self)
-			if !gamePaused {
-				if gameOver {
+        let buttonPressAnim = SKAction.sequence([buttonPressDark, buttonPressLight])
+            
+        for touch: AnyObject in touches {
+            touchLocation = touch.locationInNode(self).y
+            let location = touch.locationInNode(self)
+            if !gamePaused {
+                if gameOver {
 					
-					if self.nodeAtPoint(location) == self.refresh {
-						if gameOver {
-							
-							reloadGame()
-							countDownRunning = true
-							//println("restart")
-							
-						}
-					} else if self.nodeAtPoint(location) == self.menu {
-						if gameOver {
-							
-							showMenu()
-							gameStarted = false
-                
+                    if self.nodeAtPoint(location) == self.refresh {
+                        if gameOver {
+                            self.refresh.runAction(buttonPressAnim){
+                                self.reloadGame()
+                                self.countDownRunning = true
+                            }
+                        }
+                    } else if self.nodeAtPoint(location) == self.menu {
+                        if gameOver {
+							self.menu.runAction(buttonPressAnim){
+                                self.showMenu()
+                                self.gameStarted = false
+                            }
                         }
 						
-					}
+                    }
 					
+                
+                } else if !gameOver {
 					
-				} else if !gameOver {
-					
-					if self.nodeAtPoint(location) == self.gamePause {
-						
-						pauseGame()
-                        
-					} else {
-                        
-                        heroMovement()
-						
+                    if self.nodeAtPoint(location) == self.gamePause {
+						self.gamePause.runAction(buttonPressAnim){
+                            self.pauseGame()
+                        }
+                    } else {
+                    
+                        self.heroMovement()
+                    
 					}
 					
 				}
 				
-			} else if self.nodeAtPoint(location) == self.gamePlay {
+            } else if self.nodeAtPoint(location) == self.gamePlay {
                 if !countDownRunning {
-                    resumeGame()
+                    self.gamePlay.runAction(buttonPressAnim){
+                        self.resumeGame()
+                    }
                 }
             } else if self.nodeAtPoint(location) == self.menuPause {
                 if !countDownRunning {
-                    showMenu()
+                    self.menuPause.runAction(buttonPressAnim){
+                        self.showMenu()
+                    }
                 }
             }
 		}
-	}
-    
+    }
+
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
 		if !gamePaused {
@@ -547,7 +537,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					enemy.angle += hero.pace
 					
 				} else if enemy.guy.name == "enemyRocket" {
-                    if enemy.guy.position.x >= hero.guy.position.y {
+                    if enemy.guy.position.x >= hero.guy.position.x + 100 {
                         if hero.guy.position.y > enemy.guy.position.y {
 						
                             enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + 1 )
@@ -587,11 +577,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						
 					}
 					
-					//enemy.guy.position.y = CGFloat(Double(enemy.guy.position.y) + hero.speed)
 					
 				}
 				
-				//enemy.angle += hero.speed
 				if enemy.guy.position.x > endOfScreenLeft{
 					
 					enemy.guy.position.x -= CGFloat(enemy.speed)
@@ -653,8 +641,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			totalSpeedenemyRocket = totalSpeedenemyRocket + 0.1
 			
 			gameProgress++
-			gameSpeed = gameSpeed + 0.1 // vielleicht eigentlich 0.2
-			//println(gameProgress)
+			gameSpeed = gameSpeed + 0.1
 			
 			
 		} else if score % 3 == 0 {
