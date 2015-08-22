@@ -457,16 +457,20 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     
                     if self.nodeAtPoint(location) == self.refresh {
                         if gameOver {
-                            self.refresh.runAction(buttonPressAnim){
-                                self.reloadGame()
-                                self.countDownRunning = true
+                            if !countDownRunning {
+                                self.refresh.runAction(buttonPressAnim){
+                                    self.reloadGame()
+                                    self.countDownRunning = true
+                                }
                             }
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
                         if gameOver {
-                            self.menu.runAction(buttonPressAnim){
-                                self.showMenu()
-                                self.gameStarted = false
+                            if !countDownRunning {
+                                self.menu.runAction(buttonPressAnim){
+                                    self.showMenu()
+                                    self.gameStarted = false
+                                }
                             }
                         }
                         
