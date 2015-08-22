@@ -260,7 +260,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		let heroPlayer = SKSpriteNode(imageNamed: "Astronaut25")
 		
-		heroPlayer.physicsBody = SKPhysicsBody(texture: heroPlayer.texture, alphaThreshold: 0.75, size: heroPlayer.size)
+		heroPlayer.physicsBody = SKPhysicsBody(texture: heroPlayer.texture, alphaThreshold: 0, size: heroPlayer.size)
 		heroPlayer.physicsBody!.affectedByGravity = false
 		heroPlayer.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
 		heroPlayer.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
@@ -315,7 +315,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		var enemyNode = SKSpriteNode(imageNamed: named)
 		
-		enemyNode.physicsBody = SKPhysicsBody(texture: enemyNode.texture, alphaThreshold: 0.75, size: enemyNode.size)
+		enemyNode.physicsBody = SKPhysicsBody(texture: enemyNode.texture, alphaThreshold: 0, size: enemyNode.size)
 		enemyNode.physicsBody!.affectedByGravity = false
 		enemyNode.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
 		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
