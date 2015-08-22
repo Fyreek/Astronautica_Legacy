@@ -17,6 +17,7 @@ class Hero {
 	var emitFrameCount = 0
 	var maxEmitFrameCount = 20
 	var particles:SKEmitterNode
+	//var heroAtlas = SKTextureAtlas(named: "hero.atlas")
 	
 	init(guy:SKSpriteNode, particles:SKEmitterNode){
 		self.guy = guy
