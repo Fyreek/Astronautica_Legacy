@@ -22,6 +22,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	var highScore:Int = 0
 	
+    var explosionAnimationFrames = [SKTexture]()
+    
 	var gameSpeed:Float = 1.3
 	var gameProgress:Int = 0
 	var totalSpeedenemyAsteroid:CGFloat = 1.5
@@ -76,6 +78,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		
+        let explosionAtlas = SKTextureAtlas(named: "explosion")
+        
+        let numImages = explosionAtlas.textureNames.count
+        for var i=1; i<(numImages + 3) / 3; i++ {
+        
+            let explosionTextureName = "explosion32-\(i)"
+            explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
+        
+        }
+        
+        for var j=0; j<explosionAnimationFrames.count; j++ {
+        
+            println(explosionAnimationFrames[j])
+            
+        }
+        
+        println(explosionAnimationFrames.count)
+        
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel.fontColor = UIColor.whiteColor()
 		scoreLabel.position.y = (self.size.height / 2) - 40
@@ -148,6 +168,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
+    func openGameOverMenu() {
+    
+        refresh.hidden = false
+        refresh.runAction(SKAction.fadeInWithDuration(1.0))
+        refresh.zPosition = 1.1
+        menu.zPosition = 1.1
+        gamePlay.zPosition = 0.9
+        menuPause.zPosition = 0.9
+        menu.hidden = false
+        menu.runAction(SKAction.fadeInWithDuration(1.0))
+        
+    }
+    
 	func didBeginContact(contact: SKPhysicsContact) {
 		
 		gameOver = true
@@ -155,14 +188,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero.guy.removeAllActions()
 		
 		hero.emit = true
-		refresh.hidden = false
-		refresh.runAction(SKAction.fadeInWithDuration(1.0))
-        refresh.zPosition = 1.1
-        menu.zPosition = 1.1
-        gamePlay.zPosition = 0.9
-        menuPause.zPosition = 0.9
-		menu.hidden = false
-		menu.runAction(SKAction.fadeInWithDuration(1.0))
 		
 		if score > NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
 			
@@ -520,26 +545,23 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				
 				updateEnemysPosition()
 			}
-			
-			updateHeroEmitter()
-		}
-	}
+            
+            updateHeroEmitter()
+            
+        }
+    }
 	
 	func updateHeroEmitter(){
-		
-		if hero.emit && hero.emitFrameCount < hero.maxEmitFrameCount {
-			
-			hero.emitFrameCount++
-			hero.particles.hidden = false
-			
-		} else {
-			
-			hero.emit = false
-			hero.particles.hidden = true
-			hero.emitFrameCount = 0
-			
-		}
-		
+
+        if hero.emit {
+            hero.emit = false
+            hero.guy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.1), completion: {
+                
+                self.hero.guy.hidden = true
+                self.openGameOverMenu()
+                
+            })
+        }
 	}
 	
 	func updateEnemysPosition(){

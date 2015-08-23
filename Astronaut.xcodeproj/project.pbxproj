@@ -19,8 +19,7 @@
 		81E4454C1B86686600BC86B2 /* PlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4454B1B86686600BC86B2 /* PlayScene.swift */; };
 		81E445501B86689100BC86B2 /* Hero.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4454F1B86689100BC86B2 /* Hero.swift */; };
 		81E445521B866B0500BC86B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E445511B866B0500BC86B2 /* Images.xcassets */; };
-		D9AB40611B866F590010A8C2 /* HitParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = D9AB405F1B866F590010A8C2 /* HitParticle.sks */; };
-		D9AB40621B866F590010A8C2 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = D9AB40601B866F590010A8C2 /* spark.png */; };
+		D93159291B8A12600085390A /* explosion.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D93159281B8A12600085390A /* explosion.atlas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,8 +49,7 @@
 		81E4454B1B86686600BC86B2 /* PlayScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayScene.swift; sourceTree = "<group>"; };
 		81E4454F1B86689100BC86B2 /* Hero.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hero.swift; sourceTree = "<group>"; };
 		81E445511B866B0500BC86B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		D9AB405F1B866F590010A8C2 /* HitParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HitParticle.sks; sourceTree = "<group>"; };
-		D9AB40601B866F590010A8C2 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		D93159281B8A12600085390A /* explosion.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = explosion.atlas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,10 +109,9 @@
 		81E445231B8667D900BC86B2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D93159281B8A12600085390A /* explosion.atlas */,
 				8143166F1B873162008A3C81 /* GameKit.framework */,
 				8143166D1B8730B4008A3C81 /* GameCenter.swift */,
-				D9AB40601B866F590010A8C2 /* spark.png */,
-				D9AB405F1B866F590010A8C2 /* HitParticle.sks */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -223,11 +220,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9AB40621B866F590010A8C2 /* spark.png in Resources */,
 				81E445521B866B0500BC86B2 /* Images.xcassets in Resources */,
-				D9AB40611B866F590010A8C2 /* HitParticle.sks in Resources */,
 				81E445281B8667D900BC86B2 /* GameScene.sks in Resources */,
 				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
+				D93159291B8A12600085390A /* explosion.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
