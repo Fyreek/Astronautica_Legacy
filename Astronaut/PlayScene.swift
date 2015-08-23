@@ -88,14 +88,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         }
         
-        for var j=0; j<explosionAnimationFrames.count; j++ {
-        
-            println(explosionAnimationFrames[j])
-            
-        }
-        
-        println(explosionAnimationFrames.count)
-        
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel.fontColor = UIColor.whiteColor()
 		scoreLabel.position.y = (self.size.height / 2) - 40
@@ -555,7 +547,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
         if hero.emit {
             hero.emit = false
-            hero.guy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.1), completion: {
+            hero.guy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.1, resize: true, restore: true), completion: {
                 
                 self.hero.guy.hidden = true
                 self.openGameOverMenu()
