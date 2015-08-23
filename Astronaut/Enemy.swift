@@ -21,14 +21,16 @@ class Enemy {
 	var yPos = CGFloat()
     var rotationDirection:Int = 0
     var preLocation:CGFloat = 0
+    var health:Int = 0
 	
-    init(speed:Float, guy:SKSpriteNode, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat) {
+    init(speed:Float, guy:SKSpriteNode, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int) {
 		
 		self.speed = speed
 		self.guy = guy
 		self.rotationSpeed = rotationSpeed
         self.rotationDirection = rotationDirection
         self.preLocation = preLocation
+        self.health = health
 		self.setRandomFrame()
 		
 		
