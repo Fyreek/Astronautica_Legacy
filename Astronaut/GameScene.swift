@@ -10,10 +10,10 @@ import SpriteKit
 
 class GameScene: SKScene {
 	
-	var startGameButton = SKSpriteNode(imageNamed: "PlayButton32")
-	var nameLabel = SKLabelNode(text: "Astronautica")
-	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton20")
-	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardButton20")
+	var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
+	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
+	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
+	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardsButton32")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
 	let bg = SKSpriteNode(imageNamed: "Background188")
 	var highScore:Int = 0
@@ -29,37 +29,36 @@ class GameScene: SKScene {
 		bg.zPosition = 1.0
 		addChild(nameLabel)
 		nameLabel.position.x = 0
-		nameLabel.position.y = (self.size.height / 3)
+		nameLabel.position.y = (self.size.height / 4.5)
 		nameLabel.zPosition = 1.1
-		nameLabel.setScale(1.5)
-		nameLabel.fontColor = UIColor.whiteColor()
 		
 		addChild(startGameButton)
 		startGameButton.name = "startGameButton"
 		startGameButton.hidden = false
-		startGameButton.position.y = 0
+		startGameButton.position.y = -(self.size.height / 4.5)
 		startGameButton.position.x = 0
 		startGameButton.zPosition = 1.1
 		
 		addChild(highScoreLabel)
 		highScoreLabel.hidden = false
 		highScoreLabel.position.x = 0
-		highScoreLabel.position.y = -(self.size.height / 3)
+		highScoreLabel.position.y = -(self.size.height / 36)
 		highScoreLabel.zPosition = 1.1
-		highScoreLabel.setScale(0.6)
+		highScoreLabel.setScale(1)
+		highScoreLabel.alpha = 0.3
 		highScoreLabel.fontColor = UIColor.whiteColor()
 		
 		addChild(menuOptionButton)
 		menuOptionButton.name = "menuOptionButton"
 		menuOptionButton.hidden = false
-		menuOptionButton.position.y = 0
+		menuOptionButton.position.y = -(self.size.height / 4.5)
 		menuOptionButton.position.x = self.size.width / 3
 		menuOptionButton.zPosition = 1.1
 		
 		addChild(menuHSButton)
 		menuHSButton.name = "menuHSButton"
 		menuHSButton.hidden = false
-		menuHSButton.position.y = 0
+		menuHSButton.position.y = -(self.size.height / 4.5)
 		menuHSButton.position.x = -(self.size.width / 3)
 		menuHSButton.zPosition = 1.1
 		

@@ -39,13 +39,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	var score = 0
 	var scoreLabel = SKLabelNode()
-	var refresh = SKSpriteNode(imageNamed: "ReplayButton25")
+	var refresh = SKSpriteNode(imageNamed: "ReplayButton32")
 	var totalScore = SKLabelNode(text: "0")
-	var menu = SKSpriteNode(imageNamed: "MenuButton25")
+	var menu = SKSpriteNode(imageNamed: "MenuButton32")
 	
-	var gamePause = SKSpriteNode(imageNamed: "PauseButton20")
-	var gamePlay = SKSpriteNode(imageNamed: "PlayButton20")
-    var menuPause = SKSpriteNode(imageNamed: "MenuButton20")
+	var gamePause = SKSpriteNode(imageNamed: "PauseButton32")
+	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
+    var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     
     var startEnemy:Int = 3
 	
