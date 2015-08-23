@@ -173,37 +173,99 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func heroGameEnding() {
+    
+        gameOver = true
+        gamePause.hidden = true
+        hero.guy.removeAllActions()
+        
+        hero.emit = true
+        
+        if score > NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
+            
+            NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            //submit score to GameCenter
+            EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
+            
+            totalScore.hidden = false
+            totalScore.text = ("New Highscore: ") + String(score) + (" points!")
+            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+            
+        } else {
+            
+            totalScore.hidden = false
+            totalScore.text = ("You reached ") + String(score) + (" points!")
+            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+            
+        }
+    }
+    
 	func didBeginContact(contact: SKPhysicsContact) {
 		
-		gameOver = true
-		gamePause.hidden = true
-		hero.guy.removeAllActions()
-		
-		hero.emit = true
-		
-		if score > NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
-			
-			NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
-			NSUserDefaults.standardUserDefaults().synchronize()
-			//submit score to GameCenter
-			EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
-			
-			totalScore.hidden = false
-			totalScore.text = ("New Highscore: ") + String(score) + (" points!")
-			totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-			
-		} else {
-			
-			totalScore.hidden = false
-			totalScore.text = ("You reached ") + String(score) + (" points!")
-			totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-			
-		}
+        let firstNode = contact.bodyA.node as! SKSpriteNode
+        let secondNode = contact.bodyB.node as! SKSpriteNode
+        
+        if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
+        
+            heroGameEnding()
+        
+        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue {
+        
+            heroGameEnding()
+        
+        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
+        
+            if firstNode.position.x == endOfScreenRight {
+            
+                if firstNode.position.y > self.frame.height / 2 - 50 {
+                
+                    firstNode.position.y -= firstNode.size.height / 2 - 10
+                    firstNode.zRotation = 0
+                    println("moved first Node down")
+                } else {
+                
+                    firstNode.position.y += firstNode.size.height / 2 + 10
+                    firstNode.zRotation = 0
+                    println("moved first Node up")
+                }
+                
+            
+            } else if secondNode.position.x == endOfScreenRight {
+
+                if secondNode.position.y > self.frame.height / 2 - 50 {
+                    
+                    secondNode.position.y -= secondNode.size.height / 2 - 10
+                    firstNode.zRotation = 0
+                    println("moved second Node down")
+                } else {
+                    
+                    secondNode.position.y += secondNode.size.height / 2 + 10
+                    firstNode.zRotation = 0
+                    println("moved second Node up")
+                }
+                
+            }
+        }
+        
 		
 	}
 	
+    func enemyCollisionOnStart(#firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
+    
+        firstNode.removeAllActions()
+        firstNode.hidden = true
+        firstNode.position.x = endOfScreenRight + 200
+        firstNode.removeFromParent()
+        
+        println("reranged starting pos")
+        addEnemys()
+        
+    }
+    
 	func reloadGame() {
 		
+        hero.guy.hidden = false
 		countDownText.hidden = false
 		hero.guy.removeAllActions()
 		
@@ -280,7 +342,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		heroPlayer.physicsBody = SKPhysicsBody(texture: heroPlayer.texture, alphaThreshold: 0, size: heroPlayer.size)
 		heroPlayer.physicsBody!.affectedByGravity = false
 		heroPlayer.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
-		heroPlayer.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
+        heroPlayer.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
 		heroPlayer.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue
 		
 		let heroParticles = SKEmitterNode(fileNamed: "HitParticle.sks")
@@ -335,8 +397,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemyNode.physicsBody = SKPhysicsBody(texture: enemyNode.texture, alphaThreshold: 0, size: enemyNode.size)
 		enemyNode.physicsBody!.affectedByGravity = false
 		enemyNode.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-		enemyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
+		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+		enemyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
 		
         var enemy = Enemy(speed: speed, guy: enemyNode, rotationSpeed: rotationSpeed, rotationDirection: rotationDirection, preLocation: preLocation)
 		enemys.append(enemy)
