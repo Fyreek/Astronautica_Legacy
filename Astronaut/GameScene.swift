@@ -10,8 +10,7 @@ import SpriteKit
 
 class GameScene: SKScene {
 	
-	var startGameButton = SKSpriteNode(imageNamed: "RectButton25")
-	var startGameLabel = SKLabelNode(text: "Start Game")
+	var startGameButton = SKSpriteNode(imageNamed: "PlayButton32")
 	var nameLabel = SKLabelNode(text: "Astronautica")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton20")
 	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardButton20")
@@ -41,14 +40,6 @@ class GameScene: SKScene {
 		startGameButton.position.y = 0
 		startGameButton.position.x = 0
 		startGameButton.zPosition = 1.1
-		
-		addChild(startGameLabel)
-		startGameLabel.hidden = false
-		startGameLabel.position.x = 0
-		startGameLabel.position.y = -5
-		startGameLabel.zPosition = 1.1
-		startGameLabel.setScale(0.6)
-		startGameLabel.fontColor = UIColor.blackColor()
 		
 		addChild(highScoreLabel)
 		highScoreLabel.hidden = false
@@ -81,11 +72,6 @@ class GameScene: SKScene {
         for touch: AnyObject in touches {
 			let location = touch.locationInNode(self)
 			if self.nodeAtPoint(location) == self.startGameButton {
-                self.startGameButton.runAction(buttonPressAnim){
-                    self.showPlayScene()
-                }
-                
-			} else if self.nodeAtPoint(location) == self.startGameLabel {
                 self.startGameButton.runAction(buttonPressAnim){
                     self.showPlayScene()
                 }

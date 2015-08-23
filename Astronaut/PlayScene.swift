@@ -609,7 +609,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
         if hero.emit {
             hero.emit = false
-            hero.guy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.1, resize: true, restore: true), completion: {
+            hero.guy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
                 
                 self.hero.guy.hidden = true
                 self.openGameOverMenu()
