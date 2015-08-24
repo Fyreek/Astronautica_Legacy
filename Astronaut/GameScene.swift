@@ -66,32 +66,45 @@ class GameScene: SKScene {
 	
 	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
-        let buttonPressAnim = SKAction.sequence([buttonPressDark, buttonPressLight])
-        
         for touch: AnyObject in touches {
 			let location = touch.locationInNode(self)
 			if self.nodeAtPoint(location) == self.startGameButton {
-                self.startGameButton.runAction(buttonPressAnim){
+                self.startGameButton.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.menuHSButton {
+                self.menuHSButton.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.menuOptionButton {
+                self.menuOptionButton.runAction(buttonPressDark)
+            }
+        }
+	}
+    
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        
+        for touch: AnyObject in touches {
+            let location = touch.locationInNode(self)
+            if self.nodeAtPoint(location) == self.startGameButton {
+                self.startGameButton.runAction(buttonPressLight){
                     self.showPlayScene()
                 }
                 
             } else if self.nodeAtPoint(location) == self.menuHSButton {
-                self.menuHSButton.runAction(buttonPressAnim){
+                self.menuHSButton.runAction(buttonPressLight){
                     EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
-                self.menuOptionButton.runAction(buttonPressAnim) {
+                self.menuOptionButton.runAction(buttonPressLight) {
                     self.showOptionScene()
                 }
                 
-            
+                
             }
         }
-	}
+        
+    }
 	
     func showOptionScene() {
     
-        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Left, duration: 1.0)
+        let transition = SKTransition.fadeWithDuration(1)
         var scene = OptionScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true
@@ -106,7 +119,7 @@ class GameScene: SKScene {
     
 	func showPlayScene() {
         
-        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Down, duration: 1.0)
+        let transition = SKTransition.fadeWithDuration(1)
         var scene = PlayScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true

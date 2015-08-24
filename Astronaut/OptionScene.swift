@@ -68,12 +68,20 @@ class OptionScene: SKScene {
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
-       let buttonPressAnim = SKAction.sequence([buttonPressDark, buttonPressLight])
+        for touch: AnyObject in touches {
+            let location = touch.locationInNode(self)
+            if self.nodeAtPoint(location) == self.backSprite {
+                self.backSprite.runAction(buttonPressDark)
+            }
+        }
+    }
+    
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.backSprite {
-                self.backSprite.runAction(buttonPressAnim){
+                self.backSprite.runAction(buttonPressLight){
                     self.showMenu()
                 }
             }
@@ -91,7 +99,7 @@ class OptionScene: SKScene {
         blueSlider.hidden = true
         blueSlider.removeFromSuperview()
         
-        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Right, duration: 1.0)
+        let transition = SKTransition.fadeWithDuration(1)
             
         var scene = GameScene(size: self.size)
         let skView = self.view as SKView!
