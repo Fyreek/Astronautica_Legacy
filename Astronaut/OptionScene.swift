@@ -18,7 +18,7 @@ class OptionScene: SKScene {
     var blueSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     let bg = SKSpriteNode(imageNamed: "Background188")
     let coloredSprite = SKSpriteNode(imageNamed: "Astronaut25")
-    let backSprite = SKSpriteNode(imageNamed: "backButton")
+    let backSprite = SKSpriteNode(imageNamed: "BackButton32")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0.2, duration: 0.2)
     var optionSceneActive = false
