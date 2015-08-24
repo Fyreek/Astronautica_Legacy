@@ -31,7 +31,7 @@ class OptionScene: SKScene {
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
-        redSlider.maximumValue = 100
+        redSlider.maximumValue = 1
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
         redSlider.value = 50
@@ -40,7 +40,7 @@ class OptionScene: SKScene {
         
         greenSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 3, 280, 20))
         greenSlider.minimumValue = 0
-        greenSlider.maximumValue = 100
+        greenSlider.maximumValue = 1
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
         greenSlider.value = 50
@@ -49,7 +49,7 @@ class OptionScene: SKScene {
         
         blueSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 2 , 280, 20))
         blueSlider.minimumValue = 0
-        blueSlider.maximumValue = 100
+        blueSlider.maximumValue = 1
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
         blueSlider.value = 50
@@ -113,9 +113,9 @@ class OptionScene: SKScene {
     
     func sliderValueDidChange() {
         if optionSceneActive {
-            println("Red value: \(redSlider.value)")
-            println("Green value: \(greenSlider.value)")
-            println("Blue value: \(blueSlider.value)")
+            //println("Red value: \(redSlider.value)")
+            //println("Green value: \(greenSlider.value)")
+            //println("Blue value: \(blueSlider.value)")
         
             red = Float(redSlider.value)
             green = Float(greenSlider.value)
