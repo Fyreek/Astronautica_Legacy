@@ -18,6 +18,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
     
+    var heroColor:UIColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
+    var heroColorRed:CGFloat = 0
+    var heroColorGreen:CGFloat = 0
+    var heroColorBlue:CGFloat = 0
+    var heroBlendFactor:Int = 0
+    
     var playSceneActive = false
     
 	var highScore:Int = 0
@@ -87,6 +93,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
         
         }
+        
+        heroColorRed = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed"))
+        heroColorGreen = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen"))
+        heroColorBlue = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue"))
+        
+        hero.guy.color = UIColor(red: heroColorRed , green: heroColorGreen , blue: heroColorBlue, alpha: 1.0)
+        hero.guy.colorBlendFactor = 0.4
+        
+        println(heroColorRed)
+        println(heroColorGreen)
+        println(heroColorBlue)
         
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel.fontColor = UIColor.whiteColor()
@@ -218,7 +235,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
             if firstNode.position.x == endOfScreenRight {
             
-                if firstNode.position.y > self.frame.height / 2 - 50 {
+                /*if firstNode.position.y > self.frame.height / 2 - 50 {
                 
                     firstNode.position.y -= firstNode.size.height / 2 - 10
                     firstNode.zRotation = 0
@@ -245,11 +262,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     secondNode.position.y += secondNode.size.height / 2 + 10
                     firstNode.zRotation = 0
                     println("moved second Node up")
-                }
+                }*/
                 
             } else {
                 
-                println("collision on screen")
+                //println("collision on screen")
 
             }
         }
@@ -271,6 +288,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func reloadGame() {
 		
+        
+        
         hero.guy.hidden = false
 		countDownText.hidden = false
 		hero.guy.removeAllActions()
@@ -280,7 +299,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		hero.guy.position.y = 0
 		hero.guy.position.x = -(self.size.width/2)/3
-		hero.guy.name = "kevin"
+		//hero.guy.name = "kevin"
 		
 		refresh.runAction(SKAction.fadeOutWithDuration(1.0))
 		menu.runAction(SKAction.fadeOutWithDuration(1.0))
@@ -308,8 +327,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			self.addEnemys()
 			
 		}
-		
-		timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
+        
+        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
 		
 		
 	}

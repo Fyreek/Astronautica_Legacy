@@ -64,8 +64,8 @@ class GameScene: SKScene {
 		
 	}
 	
-	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent)
-	{
+	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        
         let buttonPressAnim = SKAction.sequence([buttonPressDark, buttonPressLight])
         
         for touch: AnyObject in touches {
@@ -79,21 +79,42 @@ class GameScene: SKScene {
                 self.menuHSButton.runAction(buttonPressAnim){
                     EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                 }
+            } else if self.nodeAtPoint(location) == self.menuOptionButton {
+                self.menuOptionButton.runAction(buttonPressAnim) {
+                    self.showOptionScene()
+                }
+                
+            
             }
         }
 	}
 	
+    func showOptionScene() {
+    
+        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Left, duration: 1.0)
+        var scene = OptionScene(size: self.size)
+        let skView = self.view as SKView!
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .ResizeFill
+        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        scene.size = skView.bounds.size
+        scene.optionSceneActive = true
+        skView.presentScene(scene, transition: transition)
+
+        
+    }
+    
 	func showPlayScene() {
         
-            let transition = SKTransition.revealWithDirection(SKTransitionDirection.Down, duration: 1.0)
-            var scene = PlayScene(size: self.size)
-            let skView = self.view as SKView!
-            skView.ignoresSiblingOrder = true
-            scene.scaleMode = .ResizeFill
-            scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-            scene.size = skView.bounds.size
-            scene.playSceneActive = true
-            skView.presentScene(scene, transition: transition)
+        let transition = SKTransition.revealWithDirection(SKTransitionDirection.Down, duration: 1.0)
+        var scene = PlayScene(size: self.size)
+        let skView = self.view as SKView!
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .ResizeFill
+        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        scene.size = skView.bounds.size
+        scene.playSceneActive = true
+        skView.presentScene(scene, transition: transition)
         
 	}
 	
