@@ -34,7 +34,11 @@ class OptionScene: SKScene {
         redSlider.maximumValue = 1
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
-        redSlider.value = 1
+        if !NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed").isNaN {
+            redSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed")
+        } else {
+            redSlider.value = 1
+        }
         redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         self.view?.addSubview(redSlider)
         
@@ -43,7 +47,11 @@ class OptionScene: SKScene {
         greenSlider.maximumValue = 1
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
-        greenSlider.value = 1
+        if !NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen").isNaN {
+            greenSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen")
+        } else {
+            greenSlider.value = 1
+        }
         greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         self.view?.addSubview(greenSlider)
         
@@ -52,7 +60,11 @@ class OptionScene: SKScene {
         blueSlider.maximumValue = 1
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
-        blueSlider.value = 1
+        if !NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue").isNaN {
+            blueSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue")
+        } else {
+            blueSlider.value = 1
+        }
         blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         self.view?.addSubview(blueSlider)
         
@@ -64,6 +76,7 @@ class OptionScene: SKScene {
         backSprite.position.y = -(self.size.height / 4)
         addChild(backSprite)
         
+        sliderValueDidChange()
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -113,10 +126,7 @@ class OptionScene: SKScene {
     
     func sliderValueDidChange() {
         if optionSceneActive {
-            //println("Red value: \(redSlider.value)")
-            //println("Green value: \(greenSlider.value)")
-            //println("Blue value: \(blueSlider.value)")
-        
+
             red = Float(redSlider.value)
             green = Float(greenSlider.value)
             blue = Float(blueSlider.value)

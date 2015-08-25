@@ -767,8 +767,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				
 				if enemy.position.x > endOfScreenLeft{
 					
-					//enemy.position.x -= CGFloat(enemy.speed)
-					
 					if enemy.name == "Asteroid16" {
 						enemy.position.x -= CGFloat(totalSpeedAsteroid)
 					} else if enemy.name == "Satellite15" {
