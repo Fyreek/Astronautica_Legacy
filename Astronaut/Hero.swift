@@ -8,22 +8,33 @@
 
 import SpriteKit
 
-class Hero {
+class Hero: SKSpriteNode {
 	
-	var guy:SKSpriteNode
-	var speed: CGFloat = 75
-	var pace = 0.1
-	var emit = false
-	var emitFrameCount = 0
-	var maxEmitFrameCount = 20
-	var particles:SKEmitterNode
-	//var heroAtlas = SKTextureAtlas(named: "hero.atlas")
+	var movementSpeed:CGFloat!
+	var pace:Double!
+	var emit:Bool!
 	
-	init(guy:SKSpriteNode, particles:SKEmitterNode){
-		self.guy = guy
-		self.particles = particles
+	override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
+		self.movementSpeed = 75
+		self.pace = 0.1
+		self.emit = false
 		
+		super.init(texture: texture, color: color, size: size)
 	}
 	
+	convenience init(color: SKColor, movementSpeed: CGFloat = 75, pace: Double = 0.1, emit: Bool = false){
 	
+		var size = CGSize(width: SKSpriteNode(imageNamed: "Astronaut25").size.width, height: SKSpriteNode(imageNamed: "Astronaut25").size.height)
+		self.init(texture:nil, color: color, size: size)
+		self.movementSpeed = movementSpeed
+		self.pace = pace
+		self.emit = emit.boolValue
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		
+		super.init(coder: aDecoder)
+		
+	    fatalError("init(coder:) has not been implemented")
+	}
 }

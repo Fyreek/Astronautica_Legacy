@@ -34,7 +34,7 @@ class OptionScene: SKScene {
         redSlider.maximumValue = 1
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
-        redSlider.value = 50
+        redSlider.value = 1
         redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         self.view?.addSubview(redSlider)
         
@@ -43,7 +43,7 @@ class OptionScene: SKScene {
         greenSlider.maximumValue = 1
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
-        greenSlider.value = 50
+        greenSlider.value = 1
         greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         self.view?.addSubview(greenSlider)
         
@@ -52,7 +52,7 @@ class OptionScene: SKScene {
         blueSlider.maximumValue = 1
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
-        blueSlider.value = 50
+        blueSlider.value = 1
         blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         self.view?.addSubview(blueSlider)
         
