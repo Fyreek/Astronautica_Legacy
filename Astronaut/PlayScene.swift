@@ -299,7 +299,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		hero.position.y = 0
 		hero.position.x = -(self.size.width/2)/3
-		//hero.name = "kevin"
 		
 		refresh.runAction(SKAction.fadeOutWithDuration(1.0))
 		menu.runAction(SKAction.fadeOutWithDuration(1.0))
@@ -438,24 +437,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		resetEnemy(enemy, yPos: yPos)
 		
 		addChild(enemy)
-		
-//		var enemyNode = Enemy(imageNamed: named)
-//		
-//		enemyNode.physicsBody = SKPhysicsBody(texture: enemyNode.texture, alphaThreshold: 0, size: enemyNode.size)
-//		enemyNode.physicsBody!.affectedByGravity = false
-//		enemyNode.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-//		enemyNode.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
-//		enemyNode.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
-//		enemyNode.physicsBody!.allowsRotation = false
-//        
-//        var enemy = Enemy(movementSpeed: movementSpeed, rotationSpeed: rotationSpeed, rotationDirection: rotationDirection, preLocation: preLocation, health: health)
-//		enemys.append(enemy)
-//		
-//		enemy.name = named
-//		resetEnemy(enemyNode, yPos: yPos)
-//		enemy.yPos = enemyNode.position.y
-//		addChild(enemyNode)
-		
+
 	}
 	
 	func resetEnemy(enemyNode:SKSpriteNode, yPos: CGFloat) {
@@ -819,9 +801,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						
 						enemy.removeFromParent()
 						enemy.moving = false
-						//var numberer:Int = enemysIndex[enemy.uniqueIndetifier].
-						
-						
+                        var number:Int
+                        number = enemysIndex.find{ $0 == enemy.uniqueIndetifier}!
+                        enemys.removeAtIndex(number)
+                        enemysIndex.removeAtIndex(number)
 						enemy.hidden = true
 						enemy.position.x = self.size.width + 200
 						
@@ -831,7 +814,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						enemy.currentFrame = 0
 						enemy.setRandomFrame()
 						enemy.moving = false
-						//enemy.range += 0.1
 						enemy.range = enemy.range + 0.1
 						
 					}
@@ -868,3 +850,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 }
 
+extension Array {
+    func find(includedElement: T -> Bool) -> Int?{
+        for (idx, element) in enumerate(self) {
+            if includedElement(element) {
+                return idx
+            }
+        }
+        return nil
+    }
+    
+    
+}
