@@ -13,8 +13,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var touchLocation = CGFloat()
 	var gameOver = true
 	var gameStarted = false
-	var enemys:[Enemy] = []
-	var enemysIndex:[Int] = []
+	var enemies:[Enemy] = []
+	var enemiesIndex:[Int] = []
 	var endOfScreenRight = CGFloat()
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
@@ -282,13 +282,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         firstNode.removeFromParent()
         
         println("reranged starting pos")
-        addEnemys()
+        addEnemies()
         
     }
     
 	func reloadGame() {
-		
-        
         
         hero.hidden = false
 		countDownText.hidden = false
@@ -311,19 +309,20 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		totalSpeedSatellite = normalSpeedSatellite
 		totalSpeedRocket = normalSpeedRocket
 		
-		for enemy in enemys {
+		for enemy in enemies {
 			
 			resetEnemy(enemy, yPos: enemy.yPos)
 			enemy.hidden = true
 			
 		}
 		
-		enemys.removeAll(keepCapacity: false)
-		addEnemys()
+		enemies.removeAll(keepCapacity: false)
+        enemiesIndex.removeAll(keepCapacity: false)
+		addEnemies()
 		
 		for var i = 1; i < startEnemy; i++ {
 			
-			self.addEnemys()
+			self.addEnemies()
 			
 		}
         
@@ -373,7 +372,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
-	func addEnemys() {
+	func addEnemies() {
 		enemyCount++
 		var number:Int = Int(arc4random_uniform(11))
 		var upDown:Int = Int(arc4random_uniform(2))
@@ -430,8 +429,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.preLocation = preLocation
 		enemy.health = health
 		enemy.uniqueIndetifier = uniqueIdentifier
-		enemys.append(enemy)
-		enemysIndex.append(uniqueIdentifier)
+		enemies.append(enemy)
+		enemiesIndex.append(uniqueIdentifier)
 		
 		enemy.name = named
 		resetEnemy(enemy, yPos: yPos)
@@ -657,7 +656,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gamePaused {
 			if !gameOver {
 				
-				updateEnemysPosition()
+				updateEnemiesPosition()
 			}
             
             updateHeroEmitter()
@@ -678,9 +677,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
 	}
 	
-	func updateEnemysPosition(){
+	func updateEnemiesPosition(){
 		
-		for enemy in enemys {
+		for enemy in enemies {
 			
 			if enemy.moving == false {
 				
@@ -802,9 +801,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						enemy.removeFromParent()
 						enemy.moving = false
                         var number:Int
-                        number = enemysIndex.find{ $0 == enemy.uniqueIndetifier}!
-                        enemys.removeAtIndex(number)
-                        enemysIndex.removeAtIndex(number)
+                        number = enemiesIndex.find{ $0 == enemy.uniqueIndetifier}!
+                        enemies.removeAtIndex(number)
+                        enemiesIndex.removeAtIndex(number)
 						enemy.hidden = true
 						enemy.position.x = self.size.width + 200
 						
@@ -844,7 +843,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
 		} else if score % 5 == 0 {
 			
-			addEnemys()
+			addEnemies()
 			
 		}
 	}
