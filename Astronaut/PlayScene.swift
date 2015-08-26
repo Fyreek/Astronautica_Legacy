@@ -54,13 +54,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     
-    var startEnemy:Int = 3
+    var startEnemy:Int = 1
 	
     var touchingScreen = false
     var touchYPosition:CGFloat = 0
     
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
-    let buttonPressLight = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0.2, duration: 0.2)
+    let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     
 	var timer = NSTimer()
     var timerPause = NSTimer()
@@ -326,7 +326,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
 		}
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
 		
 		
 	}
@@ -383,7 +383,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         var preLocation:CGFloat = 0
         var health:Int = 0
 		
-		//number = 10
+		number = 10
 		
 		println(number)
 		
@@ -502,7 +502,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             menuPause.zPosition = 0.9
             menuPause.hidden = true
             countDownRunning = true
-            timerPause = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
+            timerPause = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
 
 		}
 	}
@@ -604,6 +604,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     if self.nodeAtPoint(location) == self.refresh {
                         if gameOver {
                             if !countDownRunning {
+                                self.refresh.removeAllActions()
                                 self.refresh.runAction(buttonPressLight){
                                     self.reloadGame()
                                     self.countDownRunning = true
@@ -613,36 +614,58 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     } else if self.nodeAtPoint(location) == self.menu {
                         if gameOver {
                             if !countDownRunning {
+                                self.menu.removeAllActions()
                                 self.menu.runAction(buttonPressLight){
                                     self.showMenu()
                                     self.gameStarted = false
                                 }
                             }
                         }
+                    } else {
+                        buttonRemoveAction()
                     }
                 } else if !gameOver {
                     if self.nodeAtPoint(location) == self.gamePause {
+                        self.gamePause.removeAllActions()
                         self.gamePause.runAction(buttonPressLight){
                             self.pauseGame()
                         }
                     } else {
+                        removeAllActions()
                         self.heroMovement()
                     }
                 }
             } else if self.nodeAtPoint(location) == self.gamePlay {
                 if !countDownRunning {
+                    self.gamePlay.removeAllActions()
                     self.gamePlay.runAction(buttonPressLight){
                         self.resumeGame()
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuPause {
                 if !countDownRunning {
+                    self.menuPause.removeAllActions()
                     self.menuPause.runAction(buttonPressLight){
                         self.showMenu()
                     }
                 }
+            } else {
+                buttonRemoveAction()
             }
         }
+    }
+    
+    func buttonRemoveAction() {
+        menuPause.removeAllActions()
+        menu.removeAllActions()
+        refresh.removeAllActions()
+        gamePlay.removeAllActions()
+        gamePause.removeAllActions()
+        self.menuPause.runAction(buttonPressLight)
+        self.menu.runAction(buttonPressLight)
+        self.refresh.runAction(buttonPressLight)
+        self.gamePlay.runAction(buttonPressLight)
+        self.gamePause.runAction(buttonPressLight)
     }
     
 	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -703,25 +726,31 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         println(enemy.position.y)
                         print("Hero Pos: ")
                         println(hero.position.y)
+                        var an:Float = Float(hero.position.x - enemy.position.x)
+                        var geg:Float = Float(hero.position.y - enemy.position.y)
+                        var angleBetween:Float = sin(an / geg)
+                        let rotateAction = SKAction.rotateToAngle(CGFloat(angleBetween), duration: 0)
+                        let rotateAction2 = SKAction.rotateToAngle(CGFloat(360 - angleBetween), duration: 0)
                         
-                        if hero.position.y > enemy.position.y {
+                        println("Angle: \(angleBetween)")
+                        if hero.position.y + 30 > enemy.position.y {
 						
                             enemy.position.y = CGFloat(Double(enemy.position.y) + 1 )
                             enemy.rotationSpeed = 0
-                            //enemy.zRotation = -45
+                            //enemy.runAction(SKAction.rotateToAngle(45, duration: 0))
                             enemy.preLocation = enemy.position.y
                             
-                        } else if hero.position.y < enemy.position.y {
+                        } else if hero.position.y - 30 < enemy.position.y {
 						
                             enemy.position.y = CGFloat(Double(enemy.position.y) - 1)
                             enemy.rotationSpeed = 1
-                            //enemy.zRotation = 45
+                            //enemy.runAction(SKAction.rotateToAngle(45, duration: 0))
                             enemy.preLocation = enemy.position.y
                             
                         } else {
                         
-                            //enemy.runAction(SKAction.rotateToAngle(0, duration: 1))
-                            
+                            //println("im bereicht")
+                            //enemy.runAction(SKAction.rotateToAngle(0, duration: 0))
                         }
                     } else {
                         

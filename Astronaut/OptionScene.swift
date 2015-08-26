@@ -20,7 +20,7 @@ class OptionScene: SKScene {
     let coloredSprite = SKSpriteNode(imageNamed: "Astronaut25")
     let backSprite = SKSpriteNode(imageNamed: "BackButton32")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
-    let buttonPressLight = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0.2, duration: 0.2)
+    let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var optionSceneActive = false
     var red:Float = 0
     var green:Float = 0
@@ -94,9 +94,13 @@ class OptionScene: SKScene {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.backSprite {
+                backSprite.removeAllActions()
                 self.backSprite.runAction(buttonPressLight){
                     self.showMenu()
                 }
+            } else {
+                backSprite.removeAllActions()
+                self.backSprite.runAction(buttonPressLight)
             }
         }
     }

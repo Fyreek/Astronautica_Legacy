@@ -101,6 +101,16 @@ class GameScene: SKScene {
                 }
                 
                 
+            } else  {
+            
+                menuHSButton.removeAllActions()
+                menuOptionButton.removeAllActions()
+                startGameButton.removeAllActions()
+                
+                self.menuHSButton.runAction(buttonPressLight)
+                self.menuOptionButton.runAction(buttonPressLight)
+                self.startGameButton.runAction(buttonPressLight)
+                
             }
         }
         
