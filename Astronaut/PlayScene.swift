@@ -54,7 +54,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     
-    var startEnemy:Int = 1
+    var startEnemy:Int = 3
 	
     var touchingScreen = false
     var touchYPosition:CGFloat = 0
@@ -383,7 +383,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         var preLocation:CGFloat = 0
         var health:Int = 0
 		
-		number = 10
+		//number = 10
 		
 		println(number)
 		
