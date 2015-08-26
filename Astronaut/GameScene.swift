@@ -18,7 +18,7 @@ class GameScene: SKScene {
 	let bg = SKSpriteNode(imageNamed: "Background188")
 	var highScore:Int = 0
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
-    let buttonPressLight = SKAction.colorizeWithColor(UIColor.whiteColor(), colorBlendFactor: 0.2, duration: 0.2)
+    let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     
 	override func didMoveToView(view: SKView) {
         
@@ -71,7 +71,8 @@ class GameScene: SKScene {
 			if self.nodeAtPoint(location) == self.startGameButton {
                 self.startGameButton.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.menuHSButton {
-                self.menuHSButton.runAction(buttonPressDark)
+                self.menuHSButton.runAction(buttonPressDark){
+                }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
                 self.menuOptionButton.runAction(buttonPressDark)
             }
@@ -83,15 +84,18 @@ class GameScene: SKScene {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.startGameButton {
+                self.menuHSButton.removeAllActions()
                 self.startGameButton.runAction(buttonPressLight){
                     self.showPlayScene()
                 }
                 
             } else if self.nodeAtPoint(location) == self.menuHSButton {
+                self.menuHSButton.removeAllActions()
                 self.menuHSButton.runAction(buttonPressLight){
                     EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
+                self.menuHSButton.removeAllActions()
                 self.menuOptionButton.runAction(buttonPressLight) {
                     self.showOptionScene()
                 }
