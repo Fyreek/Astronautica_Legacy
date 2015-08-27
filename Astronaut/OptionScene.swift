@@ -25,9 +25,12 @@ class OptionScene: SKScene {
     var red:Float = 0
     var green:Float = 0
     var blue:Float = 0
+    var lastSpriteName:String = ""
     
     override func didMoveToView(view: SKView) {
         addChild(bg)
+        
+        backSprite.name = "backSprite"
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
@@ -79,11 +82,23 @@ class OptionScene: SKScene {
         sliderValueDidChange()
     }
     
+    func removeButtonAnim() {
+    
+        if lastSpriteName == self.backSprite.name  {
+        
+            backSprite.removeAllActions()
+            backSprite.runAction(buttonPressLight)
+        
+        }
+    
+    }
+    
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.backSprite {
+                lastSpriteName = self.backSprite.name!
                 self.backSprite.runAction(buttonPressDark)
             }
         }
@@ -94,9 +109,11 @@ class OptionScene: SKScene {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.backSprite {
-                backSprite.removeAllActions()
-                self.backSprite.runAction(buttonPressLight){
-                    self.showMenu()
+                removeButtonAnim()
+                if lastSpriteName == self.backSprite.name {
+                    self.backSprite.runAction(buttonPressLight){
+                        self.showMenu()
+                    }
                 }
             } else {
                 backSprite.removeAllActions()

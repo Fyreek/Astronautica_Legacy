@@ -20,12 +20,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePaused = false
 	var enemyCount = 0
 	
+    var gameOverMenuLoaded = false
+    
     var heroColorRed:CGFloat = 1
     var heroColorGreen:CGFloat = 1
     var heroColorBlue:CGFloat = 1
     var heroBlendFactor:Float = 0.4
     
     var playSceneActive = false
+    
+    var lastSpriteName:String = "empty"
     
 	var highScore:Int = 0
 	
@@ -181,7 +185,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func openGameOverMenu() {
     
         refresh.hidden = false
-        refresh.runAction(SKAction.fadeInWithDuration(1.0))
+        refresh.runAction(SKAction.fadeInWithDuration(1.0)){
+            self.gameOverMenuLoaded = true
+        }
         refresh.zPosition = 1.1
         menu.zPosition = 1.1
         gamePlay.zPosition = 0.9
@@ -292,6 +298,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = false
 		hero.removeAllActions()
 		
+        gameOverMenuLoaded = false
+        
         refresh.zPosition = 0.9
         menu.zPosition = 0.9
         
@@ -550,8 +558,39 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         touchingScreen = false
     }
     
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        funcTouchesIn(touches, withEvent: event)
+    //override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    //    funcTouchesIn(touches, withEvent: event)
+    //}
+    
+    func removeButtonAnim() {
+    
+        if lastSpriteName == self.refresh.name {
+        
+            refresh.removeAllActions()
+            refresh.runAction(buttonPressLight)
+        
+        } else if lastSpriteName == self.menu.name {
+        
+            menu.removeAllActions()
+            menu.runAction(buttonPressLight)
+        
+        } else if lastSpriteName == self.gamePause.name {
+        
+            gamePause.removeAllActions()
+            gamePause.runAction(buttonPressLight)
+        
+        } else if lastSpriteName == self.gamePlay.name {
+        
+            gamePlay.removeAllActions()
+            gamePlay.runAction(buttonPressLight)
+        
+        } else if lastSpriteName == self.menuPause.name {
+        
+            menuPause.removeAllActions()
+            menuPause.runAction(buttonPressLight)
+            
+        }
+    
     }
     
     func funcTouchesIn(touches: Set<NSObject>, withEvent event: UIEvent) {
@@ -562,12 +601,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if !gamePaused {
                 if gameOver {
                     if self.nodeAtPoint(location) == self.refresh {
+                        lastSpriteName = self.refresh.name!
                         if gameOver {
                             if !countDownRunning {
                                 self.refresh.runAction(buttonPressDark)
                             }
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
+                        lastSpriteName = self.menu.name!
                         if gameOver {
                             if !countDownRunning {
                                 self.menu.runAction(buttonPressDark)
@@ -577,16 +618,26 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 } else if !gameOver {
                     
                     if self.nodeAtPoint(location) == self.gamePause {
+                        lastSpriteName = self.gamePause.name!
                         self.gamePause.runAction(buttonPressDark)
                     } else {
-                        self.heroMovement()
+                        if lastSpriteName == "empty" {
+                            //removeAllActions()
+                            buttonRemoveAction()
+                            self.heroMovement()
+                        } else {
+                            buttonRemoveAction()
+                        }
+
                     }
                 }
             } else if self.nodeAtPoint(location) == self.gamePlay {
+                lastSpriteName = self.gamePlay.name!
                 if !countDownRunning {
                     self.gamePlay.runAction(buttonPressDark)
                 }
             } else if self.nodeAtPoint(location) == self.menuPause {
+                lastSpriteName = self.menuPause.name!
                 if !countDownRunning {
                     self.menuPause.runAction(buttonPressDark)
                 }
@@ -604,53 +655,101 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     if self.nodeAtPoint(location) == self.refresh {
                         if gameOver {
                             if !countDownRunning {
-                                self.refresh.removeAllActions()
-                                self.refresh.runAction(buttonPressLight){
-                                    self.reloadGame()
-                                    self.countDownRunning = true
+                                removeButtonAnim()
+                                if lastSpriteName == self.refresh.name {
+                                    self.lastSpriteName = "empty"
+                                    self.refresh.runAction(buttonPressLight){
+                                        self.reloadGame()
+                                        self.countDownRunning = true
+                                        //self.lastSpriteName = "empty"
+                                    }
                                 }
                             }
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
                         if gameOver {
                             if !countDownRunning {
-                                self.menu.removeAllActions()
-                                self.menu.runAction(buttonPressLight){
-                                    self.showMenu()
-                                    self.gameStarted = false
+                                removeButtonAnim()
+                                if lastSpriteName == self.menu.name {
+                                    self.lastSpriteName = "empty"
+                                    self.menu.runAction(buttonPressLight){
+                                        self.showMenu()
+                                        self.gameStarted = false
+                                        //self.lastSpriteName = "empty"
+                                    }
                                 }
                             }
                         }
                     } else {
-                        buttonRemoveAction()
+                        if gameOverMenuLoaded {
+                            buttonRemoveAction()
+                        }
                     }
                 } else if !gameOver {
                     if self.nodeAtPoint(location) == self.gamePause {
-                        self.gamePause.removeAllActions()
-                        self.gamePause.runAction(buttonPressLight){
-                            self.pauseGame()
+                        removeButtonAnim()
+                        if lastSpriteName == self.gamePause.name {
+                            self.lastSpriteName = "empty"
+                            self.gamePause.runAction(buttonPressLight){
+                                self.pauseGame()
+                                //self.lastSpriteName = "emtpy"
+                            }
                         }
                     } else {
-                        removeAllActions()
-                        self.heroMovement()
+                        if lastSpriteName == "empty" {
+                            //removeAllActions()
+                            buttonRemoveAction()
+                            self.heroMovement()
+                        } else {
+                            buttonRemoveAction()
+                            self.lastSpriteName = "empty"
+                        }
+                        //removeAllActions()
+                        //buttonRemoveAction()
+                        //self.heroMovement()
                     }
                 }
             } else if self.nodeAtPoint(location) == self.gamePlay {
                 if !countDownRunning {
-                    self.gamePlay.removeAllActions()
-                    self.gamePlay.runAction(buttonPressLight){
-                        self.resumeGame()
+                    removeButtonAnim()
+                    if lastSpriteName == self.gamePlay.name {
+                        self.lastSpriteName = "empty"
+                        self.gamePlay.runAction(buttonPressLight){
+                            self.resumeGame()
+                            //self.lastSpriteName = "empty"
+                        }
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuPause {
                 if !countDownRunning {
-                    self.menuPause.removeAllActions()
-                    self.menuPause.runAction(buttonPressLight){
-                        self.showMenu()
+                    removeButtonAnim()
+                    if lastSpriteName == self.menuPause.name {
+                        self.lastSpriteName = "empty"
+                        self.menuPause.runAction(buttonPressLight){
+                            self.showMenu()
+                            //self.lastSpriteName = "empty"
+                        }
                     }
                 }
             } else {
-                buttonRemoveAction()
+                
+                if lastSpriteName == self.menuPause.name {
+                
+                        menuPause.removeAllActions()
+                        menuPause.runAction(buttonPressLight)
+                
+                } else if lastSpriteName == self.gamePlay.name {
+                
+                    gamePlay.removeAllActions()
+                    gamePlay.runAction(buttonPressLight)
+                
+                } else {
+                
+                    if gameOverMenuLoaded == true {
+                        buttonRemoveAction()
+                    }
+    
+                }
             }
         }
     }

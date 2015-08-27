@@ -19,6 +19,7 @@ class GameScene: SKScene {
 	var highScore:Int = 0
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
+    var lastSpriteName:String = ""
     
 	override func didMoveToView(view: SKView) {
         
@@ -69,38 +70,68 @@ class GameScene: SKScene {
         for touch: AnyObject in touches {
 			let location = touch.locationInNode(self)
 			if self.nodeAtPoint(location) == self.startGameButton {
+                lastSpriteName = self.startGameButton.name!
                 self.startGameButton.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.menuHSButton {
+                lastSpriteName = self.menuHSButton.name!
                 self.menuHSButton.runAction(buttonPressDark){
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
+                lastSpriteName = self.menuOptionButton.name!
                 self.menuOptionButton.runAction(buttonPressDark)
             }
         }
 	}
+    
+    func removeButtonAnim() {
+    
+        if lastSpriteName == self.startGameButton.name  {
+            
+            startGameButton.removeAllActions()
+            startGameButton.runAction(buttonPressLight)
+        
+        } else if lastSpriteName == self.menuHSButton.name  {
+        
+            menuHSButton.removeAllActions()
+            menuHSButton.runAction(buttonPressLight)
+        
+        } else if lastSpriteName == self.menuOptionButton.name {
+        
+            menuOptionButton.removeAllActions()
+            menuHSButton.runAction(buttonPressLight)
+            
+        }
+    
+    }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.startGameButton {
-                self.menuHSButton.removeAllActions()
-                self.startGameButton.runAction(buttonPressLight){
-                    self.showPlayScene()
+                //self.menuHSButton.removeAllActions()
+                removeButtonAnim()
+                if lastSpriteName == startGameButton.name {
+                    self.startGameButton.runAction(buttonPressLight){
+                        self.showPlayScene()
+                    }
                 }
-                
             } else if self.nodeAtPoint(location) == self.menuHSButton {
-                self.menuHSButton.removeAllActions()
-                self.menuHSButton.runAction(buttonPressLight){
-                    EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                //self.menuHSButton.removeAllActions()
+                removeButtonAnim()
+                if lastSpriteName == menuHSButton.name {
+                    self.menuHSButton.runAction(buttonPressLight){
+                        EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                    }
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
-                self.menuHSButton.removeAllActions()
-                self.menuOptionButton.runAction(buttonPressLight) {
-                    self.showOptionScene()
+                //self.menuHSButton.removeAllActions()
+                removeButtonAnim()
+                if lastSpriteName == menuOptionButton.name {
+                    self.menuOptionButton.runAction(buttonPressLight) {
+                        self.showOptionScene()
+                    }
                 }
-                
-                
             } else  {
             
                 menuHSButton.removeAllActions()
