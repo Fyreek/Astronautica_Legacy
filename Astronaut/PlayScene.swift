@@ -88,6 +88,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		addHero()
 		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+        
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
 		
         let explosionAtlas = SKTextureAtlas(named: "explosion")
         
@@ -452,6 +454,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.preLocation = preLocation
 		enemy.health = health
 		enemy.uniqueIndetifier = uniqueIdentifier
+        enemy.setRandomFrame()
 		enemies.append(enemy)
 		enemiesIndex.append(uniqueIdentifier)
 		
@@ -518,6 +521,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		//Spiel fortsetzen.
 		
 		if !gameOver {
+            
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
             
             countDownText.hidden = false
             gamePlay.hidden = true
@@ -790,6 +795,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
+        if NSUserDefaults.standardUserDefaults().boolForKey("gamePaused").boolValue == true {
+            pauseGame()
+        }
+        
 		if !gamePaused {
 			if !gameOver {
 				

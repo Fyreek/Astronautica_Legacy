@@ -37,7 +37,7 @@ class GameViewController: UIViewController, EasyGameCenterDelegate {
 		skView.presentScene(scene)
         
 	}
-	
+    
 	override func shouldAutorotate() -> Bool {
 		return true
 	}
