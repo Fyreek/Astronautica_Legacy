@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import iAd
 
 class GameScene: SKScene {
 	
@@ -20,9 +21,16 @@ class GameScene: SKScene {
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var lastSpriteName:String = ""
+	var UIiAd: ADBannerView = ADBannerView()
     
 	override func didMoveToView(view: SKView) {
-        
+		
+		UIiAd.setTranslatesAutoresizingMaskIntoConstraints(false)
+		self.view!.addSubview(UIiAd)
+		let viewsDictionary = ["bannerView":UIiAd]
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
 		highScoreLabel.fontSize = 18

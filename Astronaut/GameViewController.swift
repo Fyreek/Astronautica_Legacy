@@ -10,7 +10,6 @@ import UIKit
 import SpriteKit
 
 
-
 class GameViewController: UIViewController, EasyGameCenterDelegate {
 	
 	override func viewDidLoad() {
@@ -35,6 +34,8 @@ class GameViewController: UIViewController, EasyGameCenterDelegate {
 		scene.size = skView.bounds.size
 		
 		skView.presentScene(scene)
+		
+		self.canDisplayBannerAds = true
         
 	}
     

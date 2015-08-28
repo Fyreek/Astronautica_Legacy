@@ -78,6 +78,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	override func didMoveToView(view: SKView) {
+		
 		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") Reset Highscore on start!
 		
 		self.physicsWorld.contactDelegate = self
@@ -316,7 +317,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
 	func reloadGame() {
-        
+		
+		scoreLabel.hidden = false
         hero.hidden = false
 		countDownText.hidden = false
 		hero.removeAllActions()
