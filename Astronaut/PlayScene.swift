@@ -35,14 +35,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
     var explosionAnimationFrames = [SKTexture]()
     
-	var gameSpeed:Float = 1.3
+	var gameSpeed:Float = 1
 	var gameProgress:Int = 0
-	var totalSpeedAsteroid:CGFloat = 1.5
+	var totalSpeedAsteroid:CGFloat = 3
 	var totalSpeedSatellite:CGFloat = 2
-	var totalSpeedRocket:CGFloat = 3
-	var normalSpeedAsteroid:CGFloat = 1.5
+	var totalSpeedRocket:CGFloat = 2
+	var normalSpeedAsteroid:CGFloat = 3
 	var normalSpeedSatellite:CGFloat = 2
-	var normalSpeedRocket:CGFloat = 3
+	var normalSpeedRocket:CGFloat = 4
 	
 	var countDownRunning = false
 	
@@ -126,20 +126,23 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         println(heroColorRed)
         println(heroColorGreen)
         println(heroColorBlue)
-        
+		
 		scoreLabel = SKLabelNode(text: "0")
+		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
+		scoreLabel.fontSize = 24
 		scoreLabel.fontColor = UIColor.whiteColor()
 		scoreLabel.position.y = (self.size.height / 2) - 40
 		scoreLabel.position.x = -(self.size.width / 2) + 40
 		
+		countDownText = SKLabelNode(fontNamed: "Minecraft")
+		countDownText.fontSize = 24
 		countDownText.fontColor = UIColor.whiteColor()
-		countDownText.setScale(2.0)
 		countDownText.position.y = (self.size.height / 8)
 		
-		refresh.position.y = 0
+		refresh.position.y = -(self.size.height / 4.5)
 		refresh.position.x = -(self.size.width / 8)
 		
-		menu.position.y = 0
+		menu.position.y = -(self.size.height / 4.5)
 		menu.position.x = (self.size.width / 8)
 		
 		gamePause.position.y = -(self.size.height / 2) + 40
@@ -150,7 +153,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         menuPause.position.y = 0
         menuPause.position.x = self.size.width / 8
-        
+		
+		totalScore = SKLabelNode(fontNamed: "Minecraft")
+		totalScore.fontSize = 18
 		totalScore.position.x = 0
 		totalScore.position.y = self.size.height / 8
 		
@@ -184,7 +189,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		gamePause.zPosition = 1.1
 		gamePause.alpha = 0
 		
-		totalScore.name = "totaScore"
+		totalScore.name = "totalScore"
 		totalScore.fontColor = UIColor.whiteColor()
 		totalScore.hidden = true
 		totalScore.zPosition = 1.1
@@ -219,6 +224,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         gameOver = true
         gamePause.hidden = true
         hero.removeAllActions()
+		scoreLabel.hidden = true
         
         hero.emit = true
         
@@ -230,7 +236,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
             
             totalScore.hidden = false
-            totalScore.text = ("New Highscore: ") + String(score) + (" points!")
+			totalScore.text = ("New Highscore: ") + String(score) + (" points!")
             totalScore.runAction(SKAction.fadeInWithDuration(1.0))
             
         } else {
@@ -991,10 +997,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			//gameSpeed = gameSpeed + 0.1
 			
 			
-		} else if score % 5 == 0 {
+		}
+		if score <= 50 {
+		
+			if score % 5 == 0 {
 			
-			addEnemies()
+				addEnemies()
+				
+			}
+		} else if score <= 100 {
 			
+			if score % 10 == 0 {
+				
+				addEnemies()
+				
+			}
+		} else {
+			
+			if score % 25 == 0 {
+				
+				addEnemies()
+			}
 		}
 	}
 }

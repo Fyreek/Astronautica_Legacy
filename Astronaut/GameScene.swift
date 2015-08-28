@@ -24,6 +24,8 @@ class GameScene: SKScene {
 	override func didMoveToView(view: SKView) {
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
+		highScoreLabel.fontSize = 18
 		highScoreLabel.text = "Highscore: " + String(highScore)
 		
 		addChild(bg)
@@ -47,7 +49,7 @@ class GameScene: SKScene {
 		highScoreLabel.zPosition = 1.1
 		highScoreLabel.setScale(1)
 		highScoreLabel.alpha = 0.3
-		highScoreLabel.fontColor = UIColor.whiteColor()
+		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7") //will fix later
 		
 		addChild(menuOptionButton)
 		menuOptionButton.name = "menuOptionButton"
