@@ -416,6 +416,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         var preLocation:CGFloat = 0
         var health:Int = 0
 		
+        //enemySpawn
 		//number = 10
 		
 		println(number)
@@ -469,6 +470,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.name = named
 		resetEnemy(enemy, yPos: yPos)
 		
+        if enemy.name == "Missile8" {
+            var yMovement:CGFloat = (hero.position.y - enemy.position.y) / (hero.position.x - enemy.position.x)
+            enemy.preLocation = yMovement * 2
+            var an:CGFloat = hero.position.x - enemy.position.x
+            var geg:CGFloat = hero.position.y - enemy.position.y
+            var angleBetween:CGFloat = sin(an / geg)
+            let angle = atan2(hero.position.y - enemy.position.y, hero.position.x - enemy.position.x)
+            let Pi = CGFloat(M_PI)
+            if hero.position.y > enemy.position.y {
+                enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180 , duration: 0))
+            } else if hero.position.y < enemy.position.y {
+                enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180, duration: 0))
+            }
+        }
+        
 		addChild(enemy)
 
 	}
@@ -852,57 +868,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					enemy.angle = enemy.angle + Float(hero.pace)
 					
 				} else if enemy.name == "Missile8" {
-					if enemy.position.x >= hero.position.x + 100 {
-                        print("Enemy Pos: ")
-                        println(enemy.position.y)
-                        print("Hero Pos: ")
-                        println(hero.position.y)
-                        var an:Float = Float(hero.position.x - enemy.position.x)
-                        var geg:Float = Float(hero.position.y - enemy.position.y)
-                        var angleBetween:Float = sin(an / geg)
-                        let rotateAction = SKAction.rotateToAngle(CGFloat(angleBetween), duration: 0)
-                        let rotateAction2 = SKAction.rotateToAngle(CGFloat(360 - angleBetween), duration: 0)
-                        
-                        println("Angle: \(angleBetween)")
-                        if hero.position.y + 30 > enemy.position.y {
-						
-                            enemy.position.y = CGFloat(Double(enemy.position.y) + 1 )
-                            enemy.rotationSpeed = 0
-                            //enemy.runAction(SKAction.rotateToAngle(45, duration: 0))
-                            enemy.preLocation = enemy.position.y
+
+                        if hero.position.y > enemy.position.y {
+
+                            enemy.position.y -= enemy.preLocation
                             
-                        } else if hero.position.y - 30 < enemy.position.y {
-						
-                            enemy.position.y = CGFloat(Double(enemy.position.y) - 1)
-                            enemy.rotationSpeed = 1
-                            //enemy.runAction(SKAction.rotateToAngle(45, duration: 0))
-                            enemy.preLocation = enemy.position.y
+                        } else if hero.position.y < enemy.position.y {
                             
-                        } else {
-                        
-                            //println("im bereicht")
-                            //enemy.runAction(SKAction.rotateToAngle(0, duration: 0))
-                        }
-                    } else {
-                        
-                        var testLocation:CGFloat = CGFloat(abs(Int(hero.position.y - enemy.position.y)))
-                        println(testLocation)
-                        
-                        if enemy.rotationSpeed == 0 {
-                        
-                            enemy.position.y = CGFloat(Double(enemy.position.y) + 1 )
-                            
-                        } else if enemy.rotationSpeed == 1 {
-                        
-                            enemy.position.y = CGFloat(Double(enemy.position.y) - 1 )
-                            
-                        } else {
-                        
-                            enemy.position.y = CGFloat(enemy.position.y)
+                            enemy.position.y -= enemy.preLocation
                         
                         }
-                    
-                    }
 
 				} else if enemy.name == "Asteroid16" {
                     
@@ -929,11 +904,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 					
 					if enemy.name == "Asteroid16" {
 						enemy.position.x -= CGFloat(totalSpeedAsteroid)
-					} else if enemy.name == "Satellite15" {
+                    } else if enemy.name == "Satellite15" {
 						enemy.position.x -= CGFloat(totalSpeedSatellite)
 					} else if enemy.name == "Missile8" {
 						enemy.position.x -= CGFloat(totalSpeedRocket)
-					}
+                    }
 					
 				} else {
                     
