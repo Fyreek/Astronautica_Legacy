@@ -99,9 +99,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         }
         
-        heroColorRed = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed"))
-        heroColorGreen = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen"))
-        heroColorBlue = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue"))
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed") != 0.0 {
+            heroColorRed = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed"))
+        } else {
+            heroColorRed = 1
+            NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorRed")
+        }
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen") != 0.0 {
+            heroColorGreen = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen"))
+        } else {
+            heroColorGreen = 1
+            NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorGreen")
+        }
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue") != 0.0 {
+            heroColorBlue = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue"))
+        } else {
+            heroColorBlue = 1
+            NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorBlue")
+        }
         
         hero.color = UIColor(red: heroColorRed , green: heroColorGreen , blue: heroColorBlue, alpha: 1.0)
 		hero.colorBlendFactor = 0.4

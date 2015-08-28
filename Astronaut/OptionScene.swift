@@ -37,7 +37,7 @@ class OptionScene: SKScene {
         redSlider.maximumValue = 1
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
-        if !NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed").isNaN {
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed") != 0.0 {
             redSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed")
         } else {
             redSlider.value = 1
@@ -50,7 +50,7 @@ class OptionScene: SKScene {
         greenSlider.maximumValue = 1
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
-        if !NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen").isNaN {
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen") != 0.0 {
             greenSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen")
         } else {
             greenSlider.value = 1
@@ -63,7 +63,7 @@ class OptionScene: SKScene {
         blueSlider.maximumValue = 1
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
-        if !NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue").isNaN {
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue") != 0.0 {
             blueSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue")
         } else {
             blueSlider.value = 1
