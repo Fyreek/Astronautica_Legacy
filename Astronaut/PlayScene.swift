@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import iAd
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero:Hero!
@@ -76,11 +77,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		case Enemy = 2
 		
 	}
-	
+    
 	override func didMoveToView(view: SKView) {
 		
 		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") Reset Highscore on start!
-		
+        
+        
+        
 		self.physicsWorld.contactDelegate = self
 		endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
 		endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
@@ -207,6 +210,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
     func openGameOverMenu() {
     
+        //UIiAd.hidden = false
+        showAds()
+        
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
             self.gameOverMenuLoaded = true
@@ -323,6 +329,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = false
 		hero.removeAllActions()
 		
+        //UIiAd.hidden = true
+        hideAds()
+        
         gameOverMenuLoaded = false
         
         refresh.zPosition = 0.9
@@ -505,6 +514,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func showMenu() {
 		
+        //UIiAd.hidden = true
+        hideAds()
+        
         let transition = SKTransition.fadeWithDuration(1)
         
 		var scene = GameScene(size: self.size)
@@ -521,12 +533,23 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
+    func showAds(){
+        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+    }
+    
+    func hideAds(){
+        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
+    }
+    
 	func pauseGame() {
 		
 		//Spiel pausieren.
 		
 		if !gameOver {
 			
+            //UIiAd.hidden = false
+            showAds()
+            
 			gamePaused = true
 			gamePlay.hidden = false
 			gamePlay.alpha = 1
@@ -548,6 +571,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
             
+            //UIiAd.hidden = true
+            hideAds()
+        
             countDownText.hidden = false
             gamePlay.hidden = true
             gamePlay.zPosition = 0.9
