@@ -209,8 +209,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func openGameOverMenu() {
-    
-        //UIiAd.hidden = false
+
         showAds()
         
         refresh.hidden = false
@@ -328,8 +327,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         hero.hidden = false
 		countDownText.hidden = false
 		hero.removeAllActions()
-		
-        //UIiAd.hidden = true
+
         hideAds()
         
         gameOverMenuLoaded = false
@@ -513,9 +511,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	func showMenu() {
-		
-        //UIiAd.hidden = true
-        hideAds()
         
         let transition = SKTransition.fadeWithDuration(1)
         
@@ -547,7 +542,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		if !gameOver {
 			
-            //UIiAd.hidden = false
             showAds()
             
 			gamePaused = true
@@ -570,8 +564,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gameOver {
             
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
-            
-            //UIiAd.hidden = true
+
             hideAds()
         
             countDownText.hidden = false
