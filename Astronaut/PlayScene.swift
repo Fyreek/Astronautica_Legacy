@@ -20,6 +20,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
 	var enemyCount = 0
+    
+    var bgAnimSpeed:CGFloat = 16
 	
     var gameOverMenuLoaded = false
     
@@ -48,8 +50,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var countDownRunning = false
 	
 	let bg = SKSpriteNode(imageNamed: "Background188")
+    let bg2 = SKSpriteNode(imageNamed: "Background188")
+    let bg3 = SKSpriteNode(imageNamed: "Background188")
     
-	var score = 0
+    var score = 0
 	var scoreLabel = SKLabelNode()
 	var refresh = SKSpriteNode(imageNamed: "ReplayButton32")
 	var totalScore = SKLabelNode(text: "0")
@@ -67,6 +71,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     
+    var shiftBackground = SKAction()
+    var replaceBackground = SKAction()
+    var movingAndReplacingBackground = SKAction()
+    
 	var timer = NSTimer()
     var timerPause = NSTimer()
 	var countDown = 3
@@ -78,17 +86,25 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
     
-	override func didMoveToView(view: SKView) {
-		
+    override func didMoveToView(view: SKView) {
+        
 		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") Reset Highscore on start!
         
-        
+        shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
+        replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
+        movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
         
 		self.physicsWorld.contactDelegate = self
 		endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
 		endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
 		
 		addChild(bg)
+        bg.position.x = 0
+        bg2.position.x = self.size.width
+        bg3.position.x = self.size.width * 2
+        addChild(bg2)
+        addChild(bg3)
+        
 		addHero()
 		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
@@ -203,7 +219,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		menu.hidden = true
 		menu.zPosition = 1.1
 		menu.alpha = 0
-		
+        
 		startGameNormal()
 		
 	}
@@ -231,6 +247,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         gamePause.hidden = true
         hero.removeAllActions()
 		scoreLabel.hidden = true
+        stopBGAnim()
         
         hero.emit = true
         
@@ -308,7 +325,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 //		}
 		
 	}
-
+    
     func enemyCollisionOnStart(#firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
     
         firstNode.removeAllActions()
@@ -328,6 +345,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = false
 		hero.removeAllActions()
 
+        bg.position.x = 0
+        bg2.position.x = self.size.width
+        bg3.position.x = self.size.width * 2
+        
         hideAds()
         
         gameOverMenuLoaded = false
@@ -339,7 +360,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero.position.x = -(self.size.width/2)/3
 		
 		refresh.runAction(SKAction.fadeOutWithDuration(1.0))
-		menu.runAction(SKAction.fadeOutWithDuration(1.0))
+        menu.runAction(SKAction.fadeOutWithDuration(1.0))
 		totalScore.runAction(SKAction.fadeOutWithDuration(1.0))
 		score = 0
 		scoreLabel.text = "0"
@@ -371,6 +392,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
+    func startBGAnim() {
+        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width * CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width * CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width * CGFloat(gameSpeed) / bgAnimSpeed)))
+    }
+    
+    func stopBGAnim() {
+        bg.removeAllActions()
+        bg2.removeAllActions()
+        bg3.removeAllActions()
+    }
+    
 	func updateTimer() {
 		
 		if countDown > 0 {
@@ -385,7 +418,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			countDownText.text = String(countDown)
 			
 		} else {
-			
+            
+            startBGAnim()
+            
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -543,6 +578,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gameOver {
 			
             showAds()
+            stopBGAnim()
             
 			gamePaused = true
 			gamePlay.hidden = false
@@ -566,7 +602,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
 
             hideAds()
-        
+            
             countDownText.hidden = false
             gamePlay.hidden = true
             gamePlay.zPosition = 0.9
@@ -586,6 +622,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             countDownText.text = String(countDown)
             
         } else {
+            
+            startBGAnim()
             
             countDown = 3
             countDownText.text = String(countDown)
@@ -844,7 +882,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		if !gamePaused {
 			if !gameOver {
-				
+				updateBGPosition()
 				updateEnemiesPosition()
 			}
             
@@ -853,6 +891,34 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 	
+    func updateBGPosition() {
+    
+        if bg.position.x <= endOfScreenLeft - self.size.width / 2{
+        
+            bg.position.x = self.size.width * 2
+            stopBGAnim()
+            startBGAnim()
+        
+        }
+        
+        if bg2.position.x <= endOfScreenLeft - self.size.width / 2{
+        
+            bg2.position.x = self.size.width * 2
+            stopBGAnim()
+            startBGAnim()
+        
+        }
+    
+        if bg3.position.x <= endOfScreenLeft - self.size.width / 2{
+        
+            bg3.position.x = self.size.width * 2
+            stopBGAnim()
+            startBGAnim()
+        
+        }
+        
+    }
+    
 	func updateHeroEmitter(){
 
         if hero.emit == true {
