@@ -64,6 +64,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     
     var startEnemy:Int = 3
+    var scalingFactor:Float = 1
 	
     var touchingScreen = false
     var touchYPosition:CGFloat = 0
@@ -95,8 +96,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
         
 		self.physicsWorld.contactDelegate = self
-		endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
-		endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
+		//endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
+		//endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
 		
 		addChild(bg)
         bg.position.x = 0
@@ -107,6 +108,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		addHero()
 		
+        scalingFactor = Float((self.size.height * 2) / 640) //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        print("Scaling Factor: ")
+        println(scalingFactor)
+        
+        endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * CGFloat(scalingFactor))
+        endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * CGFloat(scalingFactor))
+        
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
         
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
@@ -393,9 +401,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func startBGAnim() {
-        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width * CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width * CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width * CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
     }
     
     func stopBGAnim() {
@@ -491,13 +499,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		var enemy = Enemy(imageNamed: named)
 		
+        enemy.setScale(CGFloat(scalingFactor))
+        
 		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false
 		enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
 		enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
 		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
 		enemy.physicsBody!.allowsRotation = false
-		
+        
 		enemy.movementSpeed = movementSpeed
 		enemy.yPos = yPos
 		enemy.rotationSpeed = rotationSpeed
