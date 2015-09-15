@@ -125,7 +125,6 @@ class OptionScene: SKScene {
     func showMenu() {
         
         optionSceneActive = false
-        
         redSlider.hidden = true
         redSlider.removeFromSuperview()
         greenSlider.hidden = true

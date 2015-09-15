@@ -9,8 +9,12 @@
 import SpriteKit
 import iAd
 
+protocol showAdDelegate {
+    func showAdDelegateFunc()
+}
+
 class GameScene: SKScene {
-	
+    
 	var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
@@ -24,7 +28,7 @@ class GameScene: SKScene {
     
 	override func didMoveToView(view: SKView) {
 		
-        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+        GameViewController().showBannerAd()
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -169,7 +173,7 @@ class GameScene: SKScene {
     
 	func showPlayScene() {
         
-        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+        GameViewController().hideBannerAd()
         
         let transition = SKTransition.fadeWithDuration(1)
         var scene = PlayScene(size: self.size)

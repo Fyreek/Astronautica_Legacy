@@ -16,7 +16,7 @@ class GameViewController: UIViewController, EasyGameCenterDelegate, ADBannerView
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+        
         UIiAd.setTranslatesAutoresizingMaskIntoConstraints(false)
         self.view!.addSubview(UIiAd)
         let viewsDictionary = ["bannerView":UIiAd]
@@ -26,15 +26,11 @@ class GameViewController: UIViewController, EasyGameCenterDelegate, ADBannerView
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBannerAd", name: "hideadsID", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
-        
 		// Init Easy Game Center
 		EasyGameCenter.sharedInstance(self)
 		
 		let scene = GameScene()
-		
-		
+        
 		let skView = self.view as! SKView
 		skView.showsFPS = false
 		skView.showsNodeCount = false
@@ -91,7 +87,7 @@ class GameViewController: UIViewController, EasyGameCenterDelegate, ADBannerView
     }
     
     func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
-        
+        UIiAd.alpha = 0
     }
     
     func showBannerAd() {

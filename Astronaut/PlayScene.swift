@@ -64,7 +64,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     
     var startEnemy:Int = 3
-    var scalingFactor:Float = 1
+    var scalingFactor:CGFloat = 1
 	
     var touchingScreen = false
     var touchYPosition:CGFloat = 0
@@ -96,9 +96,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
         
 		self.physicsWorld.contactDelegate = self
-		//endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
-		//endOfScreenRight = (self.size.width / 2) + (SKSpriteNode(imageNamed: "Satellite15").size.width / 2)
 		
+        scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        print("Scaling Factor: ")
+        println(scalingFactor)
+        
+        bg.setScale(scalingFactor)
+        bg2.setScale(scalingFactor)
+        bg3.setScale(scalingFactor)
+        
 		addChild(bg)
         bg.position.x = 0
         bg2.position.x = self.size.width
@@ -107,13 +113,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         addChild(bg3)
         
 		addHero()
-		
-        scalingFactor = Float((self.size.height * 2) / 640) //iPhone 5 Height, so iPhone 5 has original scaled sprites.
-        print("Scaling Factor: ")
-        println(scalingFactor)
         
-        endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * CGFloat(scalingFactor))
-        endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * CGFloat(scalingFactor))
+        endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * scalingFactor)
+        endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * scalingFactor)
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
         
@@ -443,7 +445,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func addHero(){
 		hero = Hero(imageNamed: "Astronaut25")
-		
+		hero.setScale(scalingFactor)
+        
 		hero.physicsBody = SKPhysicsBody(texture: hero.texture, alphaThreshold: 0, size: hero.size)
 		hero.physicsBody!.affectedByGravity = false
 		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
@@ -499,7 +502,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		var enemy = Enemy(imageNamed: named)
 		
-        enemy.setScale(CGFloat(scalingFactor))
+        enemy.setScale(scalingFactor)
         
 		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false
@@ -574,11 +577,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func showAds(){
-        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+        GameViewController().showBannerAd()
     }
     
     func hideAds(){
-        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
+        GameViewController().hideBannerAd()
     }
     
 	func pauseGame() {
