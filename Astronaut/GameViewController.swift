@@ -10,18 +10,18 @@ import UIKit
 import SpriteKit
 import iAd
 
-class GameViewController: UIViewController, EasyGameCenterDelegate, ADBannerViewDelegate {
+class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
     
     var UIiAd: ADBannerView = ADBannerView()
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
-        UIiAd.setTranslatesAutoresizingMaskIntoConstraints(false)
+        UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
         let viewsDictionary = ["bannerView":UIiAd]
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: .allZeros, metrics: nil, views: viewsDictionary))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
         
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
@@ -42,7 +42,7 @@ class GameViewController: UIViewController, EasyGameCenterDelegate, ADBannerView
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
-		
+        
 		skView.presentScene(scene)
         
 	}
@@ -51,11 +51,11 @@ class GameViewController: UIViewController, EasyGameCenterDelegate, ADBannerView
 		return true
 	}
 	
-	override func supportedInterfaceOrientations() -> Int {
+	override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
 		if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-			return Int(UIInterfaceOrientationMask.AllButUpsideDown.rawValue)
+			return UIInterfaceOrientationMask.AllButUpsideDown
 		} else {
-			return Int(UIInterfaceOrientationMask.All.rawValue)
+			return UIInterfaceOrientationMask.All
 		}
 	}
 	

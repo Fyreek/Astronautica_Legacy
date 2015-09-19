@@ -9,13 +9,14 @@
 import SpriteKit
 import iAd
 
-protocol showAdDelegate {
-    func showAdDelegateFunc()
+protocol GameViewControllerDelegate{
+    func showBannerAd()
 }
 
 class GameScene: SKScene {
     
-	var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
+    var delegatee:GameViewController? = nil
+    var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
 	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardsButton32")
@@ -27,8 +28,9 @@ class GameScene: SKScene {
     var lastSpriteName:String = ""
     
 	override func didMoveToView(view: SKView) {
-		
-        GameViewController().showBannerAd()
+        
+        //
+        
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -74,7 +76,21 @@ class GameScene: SKScene {
 		
 	}
 	
-	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    func showAds(){
+    
+        if (delegatee != nil) {
+        delegatee!.showBannerAd()
+        }
+        
+    }
+    
+    func hideAds(){
+    
+        
+    
+    }
+    
+	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch: AnyObject in touches {
 			let location = touch.locationInNode(self)
@@ -113,7 +129,7 @@ class GameScene: SKScene {
     
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
@@ -159,7 +175,7 @@ class GameScene: SKScene {
     func showOptionScene() {
     
         let transition = SKTransition.fadeWithDuration(1)
-        var scene = OptionScene(size: self.size)
+        let scene = OptionScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill
@@ -173,10 +189,10 @@ class GameScene: SKScene {
     
 	func showPlayScene() {
         
-        GameViewController().hideBannerAd()
+        //self.viewController.showBannerAd()
         
         let transition = SKTransition.fadeWithDuration(1)
-        var scene = PlayScene(size: self.size)
+        let scene = PlayScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill

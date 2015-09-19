@@ -76,8 +76,8 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 			/* If EasyGameCenter is start instance (for not instance Here) */
 			if newValue != nil {
 				if let instance = EasyGameCenter.sharedInstance() {
-					let delegateVC = EasyGameCenter.delegate as? UIViewController
-					let newDelegateVC = newValue as? UIViewController
+					let delegateVC = EasyGameCenter.delegate as UIViewController
+					let newDelegateVC = newValue as UIViewController
 					if newDelegateVC != delegateVC {
 						instance.delegateGetSetVC = newValue
 					}
@@ -125,7 +125,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	ShareInstance Private
 	
-	:returns: EasyGameCenter or Nil
+	- returns: EasyGameCenter or Nil
 	
 	*/
 	class private func sharedInstance() -> EasyGameCenter? {
@@ -153,21 +153,21 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 						
 						/* For the local player from Game Center */
 						GKAchievement.loadAchievementsWithCompletionHandler({
-							(var allAchievements:[AnyObject]!, error:NSError!) -> Void in
+							(var allAchievements:[GKAchievement]?, error:NSError?) -> Void in
 							if error != nil {
 								self.checkupNetAndPlayer()
 								EasyGameCenter.debug("\n[Easy Game Center] Couldn't load achievements, error: \(error)\n")
 							}
 							/* Load Achievement with value pourcent */
-							for anAchievement in allAchievements  {
-								if let oneAchievement = anAchievement as? GKAchievement {
-									self.achievementsCache[oneAchievement.identifier] = oneAchievement
+							for anAchievement in allAchievements!  {
+								if let oneAchievement = anAchievement as GKAchievement {
+									self.achievementsCache[oneAchievement.identifier!] = oneAchievement
 								}
 							}
 							
 							/* Get Description cache */
 							GKAchievementDescription.loadAchievementDescriptionsWithCompletionHandler {
-								(var achievementsDescription:[AnyObject]!, error:NSError!) -> Void in
+								(var achievementsDescription:[GKAchievement]?, error:NSError?) -> Void in
 								
 								if error != nil {
 									self.checkupNetAndPlayer()
@@ -212,7 +212,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	Login player to GameCenter With Handler Authentification
 	This function is recall When player connect to Game Center
 	
-	:param: completion (Bool) if player login to Game Center
+	- parameter completion: (Bool) if player login to Game Center
 	
 	*/
 	private func loginPlayerToGameCenter()  {
@@ -242,7 +242,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 							
 						} else {
 							GKLocalPlayer.localPlayer().authenticateHandler = {
-								(var gameCenterVC:UIViewController!, var error:NSError!) -> Void in
+								(gameCenterVC:UIViewController?, error:NSError?) -> Void in
 								/* If got error / Or player not set value for login */
 								if error != nil {
 									instanceEGC!.checkupNetAndPlayer()
@@ -312,7 +312,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Show Game Center Player Achievements
 	
-	:param: completion Viod just if open Game Center Achievements
+	- parameter completion: Viod just if open Game Center Achievements
 	*/
 	class func showGameCenterAchievements(completion: ((isShow:Bool) -> Void)? = nil) {
 		let delegateUIVC = EasyGameCenter.delegate as? UIViewController
@@ -323,7 +323,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 		} else {
 			if EasyGameCenter.isConnectedToNetwork() && EasyGameCenter.isPlayerIdentifiedToGameCenter() {
 				
-				var gc = GKGameCenterViewController()
+				let gc = GKGameCenterViewController()
 				gc.gameCenterDelegate = Static.instance!
 				gc.viewState = GKGameCenterViewControllerState.Achievements
 				
@@ -342,10 +342,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Show Game Center Leaderboard
 	
-	:param: leaderboardIdentifier Leaderboard Identifier
-	:param: completion            Viod just if open Game Center Leaderboard
+	- parameter leaderboardIdentifier: Leaderboard Identifier
+	- parameter completion:            Viod just if open Game Center Leaderboard
 	*/
-	class func showGameCenterLeaderboard(#leaderboardIdentifier :String, completion: ((isShow:Bool) -> Void)? = nil) {
+	class func showGameCenterLeaderboard(leaderboardIdentifier leaderboardIdentifier :String, completion: ((isShow:Bool) -> Void)? = nil) {
 		let delegateUIVC = EasyGameCenter.delegate as? UIViewController
 		let instance = Static.instance
 		if (delegate == nil || instance == nil) {
@@ -354,7 +354,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 			if leaderboardIdentifier != "" {
 				if EasyGameCenter.isConnectedToNetwork() && EasyGameCenter.isPlayerIdentifiedToGameCenter() {
 					
-					var gc = GKGameCenterViewController()
+					let gc = GKGameCenterViewController()
 					gc.gameCenterDelegate = instance!
 					gc.leaderboardIdentifier = leaderboardIdentifier
 					gc.viewState = GKGameCenterViewControllerState.Leaderboards
@@ -374,7 +374,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Show Game Center Challenges
 	
-	:param: completion Viod just if open Game Center Challenges
+	- parameter completion: Viod just if open Game Center Challenges
 	
 	*/
 	class func showGameCenterChallenges(completion: ((isShow:Bool) -> Void)? = nil) {
@@ -385,7 +385,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 		} else {
 			if EasyGameCenter.isConnectedToNetwork() && EasyGameCenter.isPlayerIdentifiedToGameCenter() {
 				
-				var gc = GKGameCenterViewController()
+				let gc = GKGameCenterViewController()
 				gc.gameCenterDelegate =  instance!
 				gc.viewState = GKGameCenterViewControllerState.Challenges
 				
@@ -403,12 +403,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Show banner game center
 	
-	:param: title       title
-	:param: description description
-	:param: completion  When show message
+	- parameter title:       title
+	- parameter description: description
+	- parameter completion:  When show message
 	
 	*/
-	class func showCustomBanner(#title:String, description:String,completion: (() -> Void)? = nil) {
+	class func showCustomBanner(title title:String, description:String,completion: (() -> Void)? = nil) {
 		if EasyGameCenter.isPlayerIdentifiedToGameCenter() {
 			dispatch_async(dispatch_get_main_queue()) {
 				GKNotificationBanner.showBannerWithTitle(title, message: description, completionHandler: {
@@ -424,7 +424,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Show page Authentication Game Center
 	
-	:param: completion Viod just if open Game Center Authentication
+	- parameter completion: Viod just if open Game Center Authentication
 	
 	*/
 	class func showGameCenterAuthentication(completion: ((result:Bool) -> Void)? = nil) {
@@ -438,14 +438,14 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	If player is Identified to Game Center
 	
-	:returns: Bool is identified
+	- returns: Bool is identified
 	
 	*/
 	class func isPlayerIdentifiedToGameCenter() -> Bool { return GKLocalPlayer.localPlayer().authenticated }
 	/**
 	Get local player (GKLocalPlayer)
 	
-	:returns: Bool True is identified
+	- returns: Bool True is identified
 	
 	*/
 	class func getLocalPlayer() -> GKLocalPlayer { return GKLocalPlayer.localPlayer() }
@@ -467,8 +467,8 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 					var playerInformationTuple:(playerID:String,alias:String,profilPhoto:UIImage?)
 					playerInformationTuple.profilPhoto = nil
 					
-					playerInformationTuple.playerID = EasyGameCenter.getLocalPlayer().playerID
-					playerInformationTuple.alias = EasyGameCenter.getLocalPlayer().alias
+					playerInformationTuple.playerID = EasyGameCenter.getLocalPlayer().playerID!
+					playerInformationTuple.alias = EasyGameCenter.getLocalPlayer().alias!
 					if error == nil { playerInformationTuple.profilPhoto = image }
 					completionTuple(playerInformationTuple: playerInformationTuple)
 				})
@@ -484,10 +484,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get Leaderboards
 	
-	:param: completion return [GKLeaderboard] or nil
+	- parameter completion: return [GKLeaderboard] or nil
 	
 	*/
-	class func getGKLeaderboard(#completion: ((resultArrayGKLeaderboard:Set<GKLeaderboard>?) -> Void)) {
+	class func getGKLeaderboard(completion completion: ((resultArrayGKLeaderboard:Set<GKLeaderboard>?) -> Void)) {
 		let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 		dispatch_async(dispatch_get_global_queue(priority, 0)) {
 			let instanceEGC = EasyGameCenter.sharedInstance()
@@ -500,7 +500,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 						(var leaderboards:[AnyObject]!, error:NSError!) ->
 						Void in
 						
-						if error != nil { println("\n[Easy Game Center] Couldn't loadLeaderboards, error: \(error)\n") }
+						if error != nil { print("\n[Easy Game Center] Couldn't loadLeaderboards, error: \(error)\n") }
 						
 						if let leaderboardsIsArrayGKLeaderboard = leaderboards as? [GKLeaderboard] {
 							completion(resultArrayGKLeaderboard: Set(leaderboardsIsArrayGKLeaderboard))
@@ -518,12 +518,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Reports a  score to Game Center
 	
-	:param: The score Int
-	:param: Leaderboard identifier
-	:param: completion (bool) when the score is report to game center or Fail
+	- parameter The: score Int
+	- parameter Leaderboard: identifier
+	- parameter completion: (bool) when the score is report to game center or Fail
 	
 	*/
-	class func reportScoreLeaderboard(#leaderboardIdentifier:String, score: Int) {
+	class func reportScoreLeaderboard(leaderboardIdentifier leaderboardIdentifier:String, score: Int) {
 		let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 		dispatch_async(dispatch_get_global_queue(priority, 0)) {
 			if EasyGameCenter.isPlayerIdentifiedToGameCenter() {
@@ -544,11 +544,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get High Score for leaderboard identifier
 	
-	:param: leaderboardIdentifier leaderboard ID
-	:param: completion            Tuple (playerName: String, score: Int, rank: Int)
+	- parameter leaderboardIdentifier: leaderboard ID
+	- parameter completion:            Tuple (playerName: String, score: Int, rank: Int)
 	
 	*/
-	class func getHighScore(#leaderboardIdentifier:String, completion:((playerName:String, score:Int,rank:Int)? -> Void)) {
+	class func getHighScore(leaderboardIdentifier leaderboardIdentifier:String, completion:((playerName:String, score:Int,rank:Int)? -> Void)) {
 		EasyGameCenter.getGKScoreLeaderboard(leaderboardIdentifier: leaderboardIdentifier, completion: {
 			(resultGKScore) -> Void in
 			if resultGKScore != nil {
@@ -556,7 +556,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 				let rankVal = resultGKScore!.rank
 				let nameVal  = EasyGameCenter.getLocalPlayer().alias
 				let scoreVal  = Int(resultGKScore!.value)
-				completion((playerName: nameVal, score: scoreVal, rank: rankVal))
+				completion((playerName: nameVal!, score: scoreVal, rank: rankVal))
 				
 			} else {
 				completion(nil)
@@ -566,10 +566,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get GKScoreOfLeaderboard
 	
-	:param: completion GKScore or nil
+	- parameter completion: GKScore or nil
 	
 	*/
-	class func  getGKScoreLeaderboard(#leaderboardIdentifier:String, completion:((resultGKScore:GKScore?) -> Void)) {
+	class func  getGKScoreLeaderboard(leaderboardIdentifier leaderboardIdentifier:String, completion:((resultGKScore:GKScore?) -> Void)) {
 		let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 		dispatch_async(dispatch_get_global_queue(priority, 0)) {
 			if EasyGameCenter.isPlayerIdentifiedToGameCenter() {
@@ -599,12 +599,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get Tuple ( GKAchievement , GKAchievementDescription) for identifier Achievement
 	
-	:param: achievementIdentifier Identifier Achievement
+	- parameter achievementIdentifier: Identifier Achievement
 	
-	:returns: (gkAchievement:GKAchievement,gkAchievementDescription:GKAchievementDescription)?
+	- returns: (gkAchievement:GKAchievement,gkAchievementDescription:GKAchievementDescription)?
 	
 	*/
-	class func getTupleGKAchievementAndDescription(#achievementIdentifier:String,completion completionTuple: ((tupleGKAchievementAndDescription:(gkAchievement:GKAchievement,gkAchievementDescription:GKAchievementDescription)?) -> Void)
+	class func getTupleGKAchievementAndDescription(achievementIdentifier achievementIdentifier:String,completion completionTuple: ((tupleGKAchievementAndDescription:(gkAchievement:GKAchievement,gkAchievementDescription:GKAchievementDescription)?) -> Void)
 		) {
 			let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 			dispatch_async(dispatch_get_global_queue(priority, 0)) {
@@ -637,12 +637,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get Achievement
 	
-	:param: identifierAchievement Identifier achievement
+	- parameter identifierAchievement: Identifier achievement
 	
-	:returns: GKAchievement Or nil if not exist
+	- returns: GKAchievement Or nil if not exist
 	
 	*/
-	class func getAchievementForIndentifier(#identifierAchievement : NSString) -> GKAchievement? {
+	class func getAchievementForIndentifier(identifierAchievement identifierAchievement : NSString) -> GKAchievement? {
 		if identifierAchievement != "" {
 			let instanceEGC = EasyGameCenter.sharedInstance()
 			if instanceEGC == nil {
@@ -669,13 +669,13 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Add progress to an achievement
 	
-	:param: progress               Progress achievement Double (ex: 10% = 10.00)
-	:param: achievementIdentifier  Achievement Identifier
-	:param: showBannnerIfCompleted if you want show banner when now or not when is completed
-	:param: completionIsSend       Completion if is send to Game Center
+	- parameter progress:               Progress achievement Double (ex: 10% = 10.00)
+	- parameter achievementIdentifier:  Achievement Identifier
+	- parameter showBannnerIfCompleted: if you want show banner when now or not when is completed
+	- parameter completionIsSend:       Completion if is send to Game Center
 	
 	*/
-	class func reportAchievement( #progress : Double, achievementIdentifier : String, showBannnerIfCompleted : Bool = true ,addToExisting: Bool = false) {
+	class func reportAchievement( progress progress : Double, achievementIdentifier : String, showBannnerIfCompleted : Bool = true ,addToExisting: Bool = false) {
 		if achievementIdentifier != "" {
 			let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 			dispatch_async(dispatch_get_global_queue(priority, 0)) {
@@ -686,8 +686,8 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 					} else {
 						if let achievement = EasyGameCenter.getAchievementForIndentifier(identifierAchievement: achievementIdentifier) {
 							
-							var currentValue = achievement.percentComplete
-							var newProgress: Double = !addToExisting ? progress : progress + currentValue
+							let currentValue = achievement.percentComplete
+							let newProgress: Double = !addToExisting ? progress : progress + currentValue
 							
 							achievement.percentComplete = newProgress
 							
@@ -727,10 +727,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get GKAchievementDescription
 	
-	:param: completion return array [GKAchievementDescription] or nil
+	- parameter completion: return array [GKAchievementDescription] or nil
 	
 	*/
-	class func getGKAllAchievementDescription(#completion: ((arrayGKAD:Set<GKAchievementDescription>?) -> Void)){
+	class func getGKAllAchievementDescription(completion completion: ((arrayGKAD:Set<GKAchievementDescription>?) -> Void)){
 		let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
 		dispatch_async(dispatch_get_global_queue(priority, 0)) {
 			let instanceEGC = EasyGameCenter.sharedInstance()
@@ -760,11 +760,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	If achievement is Completed
 	
-	:param: Achievement Identifier
+	- parameter Achievement: Identifier
 	:return: (Bool) if finished
 	
 	*/
-	class func isAchievementCompleted(#achievementIdentifier: String) -> Bool{
+	class func isAchievementCompleted(achievementIdentifier achievementIdentifier: String) -> Bool{
 		if let achievement = EasyGameCenter.getAchievementForIndentifier(identifierAchievement: achievementIdentifier) {
 			if achievement.completed || achievement.percentComplete == 100.00 {
 				return true
@@ -775,7 +775,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get Achievements Completes during the game and banner was not showing
 	
-	:returns: [String : GKAchievement] or nil
+	- returns: [String : GKAchievement] or nil
 	
 	*/
 	class func getAchievementCompleteAndBannerNotShowing() -> [GKAchievement]? {
@@ -803,7 +803,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Show all save achievement Complete if you have ( showBannerAchievementWhenComplete = false )
 	
-	:param: completion if is Show Achievement banner
+	- parameter completion: if is Show Achievement banner
 	(Bug Game Center if you show achievement by showsCompletionBanner = true when you report and again you show showsCompletionBanner = false is not show)
 	
 	*/
@@ -822,7 +822,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 					if let achievementNotShow: [GKAchievement] = EasyGameCenter.getAchievementCompleteAndBannerNotShowing() {
 						for achievement in achievementNotShow  {
 							
-							EasyGameCenter.getTupleGKAchievementAndDescription(achievementIdentifier: achievement.identifier, completion: {
+							EasyGameCenter.getTupleGKAchievementAndDescription(achievementIdentifier: achievement.identifier!, completion: {
 								(tupleGKAchievementAndDescription) -> Void in
 								
 								if let tupleOK = tupleGKAchievementAndDescription {
@@ -849,12 +849,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get progress to an achievement
 	
-	:param: Achievement Identifier
+	- parameter Achievement: Identifier
 	
-	:returns: Double or nil (if not find)
+	- returns: Double or nil (if not find)
 	
 	*/
-	class func getProgressForAchievement(#achievementIdentifier:String) -> Double? {
+	class func getProgressForAchievement(achievementIdentifier achievementIdentifier:String) -> Double? {
 		let instanceEGC = EasyGameCenter.sharedInstance()
 		if instanceEGC == nil {
 			EasyGameCenter.debug("\n[Easy Game Center] Instance nil\n")
@@ -882,7 +882,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 		dispatch_async(dispatch_get_global_queue(priority, 0)) {
 			if EasyGameCenter.isPlayerIdentifiedToGameCenter() {
 				GKAchievement.resetAchievementsWithCompletionHandler({
-					(var error:NSError!) -> Void in
+					(error:NSError?) -> Void in
 					if error != nil {
 						EasyGameCenter.debug("\n[Easy Game Center] Couldn't Reset achievement (Send data error) \n")
 					} else {
@@ -909,12 +909,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Report achievement classic
 	
-	:param: achievement GKAchievement
+	- parameter achievement: GKAchievement
 	*/
-	private func reportAchievementToGameCenter(#achievement:GKAchievement) {
+	private func reportAchievementToGameCenter(achievement achievement:GKAchievement) {
 		/* try to report the progress to the Game Center */
 		GKAchievement.reportAchievements([achievement], withCompletionHandler:  {
-			(var error:NSError!) -> Void in
+			(error:NSError?) -> Void in
 			if error != nil { /* Game Center Save Automatique */ }
 		})
 	}
@@ -923,12 +923,12 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/*####################################################################################################*/
 	/**
 	Dismiss Game Center when player open
-	:param: GKGameCenterViewController
+	- parameter GKGameCenterViewController:
 	
 	Override of GKGameCenterControllerDelegate
 	
 	*/
-	internal func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController!) {
+	internal func gameCenterViewControllerDidFinish(gameCenterViewController: GKGameCenterViewController) {
 		gameCenterViewController.dismissViewControllerAnimated(true, completion: nil)
 	}
 	
@@ -948,8 +948,8 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Find player By number
 	
-	:param: minPlayers Int
-	:param: maxPlayers Max
+	- parameter minPlayers: Int
+	- parameter maxPlayers: Max
 	*/
 	class func findMatchWithMinPlayers(minPlayers: Int, maxPlayers: Int) {
 		let instanceEGC = EasyGameCenter.sharedInstance()
@@ -972,7 +972,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get Player in match
 	
-	:returns: Set<GKPlayer>
+	- returns: Set<GKPlayer>
 	*/
 	class func getPlayerInMatch() -> Set<GKPlayer>? {
 		let instanceEGC = EasyGameCenter.sharedInstance()
@@ -1008,7 +1008,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Get match
 	
-	:returns: GKMatch or nil if haven't match
+	- returns: GKMatch or nil if haven't match
 	*/
 	class func getMatch() -> GKMatch? {
 		let instanceEGC = EasyGameCenter.sharedInstance()
@@ -1034,7 +1034,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 			if instanceEGC!.match == nil {
 				EasyGameCenter.debug("\n[Easy Game Center] No Match\n")
 			} else {
-				let playerIDs = match!.players.map { ($0 as! GKPlayer).playerID }
+				let playerIDs = match!.players.map { ($0 ).playerID }
 				
 				/* Load an array of player */
 				GKPlayer.loadPlayersForIdentifiers(playerIDs) {
@@ -1059,8 +1059,8 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Transmits data to all players connected to the match.
 	
-	:param: data     NSData
-	:param: modeSend GKMatchSendDataMode
+	- parameter data:     NSData
+	- parameter modeSend: GKMatchSendDataMode
 	
 	:GKMatchSendDataMode Reliable: a.s.a.p. but requires fragmentation and reassembly for large messages, may stall if network congestion occurs
 	:GKMatchSendDataMode Unreliable: Preferred method. Best effort and immediate, but no guarantees of delivery or order; will not stall.
@@ -1074,7 +1074,14 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 				EasyGameCenter.debug("\n[Easy Game Center] No Match\n")
 			} else {
 				var error: NSError?
-				let success = instanceEGC!.match!.sendDataToAllPlayers(data, withDataMode: modeSend, error: &error)
+				let success: Bool
+				do {
+					try instanceEGC!.match!.sendDataToAllPlayers(data, withDataMode: modeSend)
+					success = true
+				} catch let error1 as NSError {
+					error = error1
+					success = false
+				}
 				if error != nil || !success {
 					EasyGameCenter.debug("\n[Easy Game Center] Fail sending data all Player\n")
 					EasyGameCenter.disconnectMatch()
@@ -1091,11 +1098,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Called when data is received from a player.
 	
-	:param: theMatch GKMatch
-	:param: data     NSData
-	:param: playerID String
+	- parameter theMatch: GKMatch
+	- parameter data:     NSData
+	- parameter playerID: String
 	*/
-	func match(theMatch: GKMatch!, didReceiveData data: NSData!, fromPlayer playerID: String!) {
+	func match(theMatch: GKMatch, didReceiveData data: NSData, fromPlayer playerID: String) {
 		if match != theMatch {
 			return
 		}
@@ -1106,11 +1113,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	
 	Echange avec autre players
 	
-	:param: theMatch GKMatch
-	:param: playerID String
-	:param: state    GKPlayerConnectionState
+	- parameter theMatch: GKMatch
+	- parameter playerID: String
+	- parameter state:    GKPlayerConnectionState
 	*/
-	func match(theMatch: GKMatch!, player playerID: String!, didChangeState state: GKPlayerConnectionState) {
+	func match(theMatch: GKMatch, player playerID: String, didChangeState state: GKPlayerConnectionState) {
 		/* recall when is desconnect match = nil */
 		if match != theMatch {
 			return
@@ -1133,11 +1140,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Called when the match cannot connect to any other players.
 	
-	:param: theMatch GKMatch
-	:param: error    NSError
+	- parameter theMatch: GKMatch
+	- parameter error:    NSError
 	
 	*/
-	func match(theMatch: GKMatch!, didFailWithError error: NSError!) {
+	func match(theMatch: GKMatch, didFailWithError error: NSError?) {
 		if self.match != theMatch {
 			return
 		}
@@ -1153,10 +1160,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Called when a peer-to-peer match is found.
 	
-	:param: viewController GKMatchmakerViewController
-	:param: theMatch       GKMatch
+	- parameter viewController: GKMatchmakerViewController
+	- parameter theMatch:       GKMatch
 	*/
-	internal func matchmakerViewController(viewController: GKMatchmakerViewController!, didFindMatch theMatch: GKMatch!) {
+	internal func matchmakerViewController(viewController: GKMatchmakerViewController, didFindMatch theMatch: GKMatch) {
 		viewController.dismissViewControllerAnimated(true, completion: nil)
 		self.match = theMatch
 		self.match!.delegate = self
@@ -1172,10 +1179,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Called when another player accepts a match invite from the local player
 	
-	:param: player         GKPlayer
-	:param: inviteToAccept GKPlayer
+	- parameter player:         GKPlayer
+	- parameter inviteToAccept: GKPlayer
 	*/
-	internal func player(player: GKPlayer!, didAcceptInvite inviteToAccept: GKInvite!) {
+	internal func player(player: GKPlayer, didAcceptInvite inviteToAccept: GKInvite) {
 		let gkmv = GKMatchmakerViewController(invite: inviteToAccept)
 		gkmv.matchmakerDelegate = self
 		
@@ -1187,20 +1194,20 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Initiates a match from Game Center with the requested players
 	
-	:param: player          The GKPlayer object containing the current player’s information
-	:param: playersToInvite An array of GKPlayer
+	- parameter player:          The GKPlayer object containing the current player’s information
+	- parameter playersToInvite: An array of GKPlayer
 	*/
-	internal func player(player: GKPlayer!, didRequestMatchWithOtherPlayers playersToInvite: [AnyObject]!) {
+	internal func player(player: GKPlayer, didRequestMatchWithOtherPlayers playersToInvite: [GKPlayer]) {
 		
 	}
 	
 	/**
 	Called when the local player starts a match with another player from Game Center
 	
-	:param: player            The GKPlayer object containing the current player’s information
-	:param: playerIDsToInvite An array of GKPlayer
+	- parameter player:            The GKPlayer object containing the current player’s information
+	- parameter playerIDsToInvite: An array of GKPlayer
 	*/
-	internal func player(player: GKPlayer!, didRequestMatchWithPlayers playerIDsToInvite: [AnyObject]!) {
+	internal func player(player: GKPlayer, didRequestMatchWithPlayers playerIDsToInvite: [String]) {
 		
 	}
 	
@@ -1210,9 +1217,9 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Called when the user cancels the matchmaking request (required)
 	
-	:param: viewController GKMatchmakerViewController
+	- parameter viewController: GKMatchmakerViewController
 	*/
-	internal func matchmakerViewControllerWasCancelled(viewController: GKMatchmakerViewController!) {
+	internal func matchmakerViewControllerWasCancelled(viewController: GKMatchmakerViewController) {
 		viewController.dismissViewControllerAnimated(true, completion: nil)
 		EasyGameCenter.debug("\n[Easy Game Center] Player cancels the matchmaking request \n")
 		EasyGameCenter.delegate!.easyGameCenterMatchCancel?()
@@ -1220,10 +1227,10 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Called when the view controller encounters an unrecoverable error.
 	
-	:param: viewController GKMatchmakerViewController
-	:param: error          NSError
+	- parameter viewController: GKMatchmakerViewController
+	- parameter error:          NSError
 	*/
-	internal func matchmakerViewController(viewController: GKMatchmakerViewController!, didFailWithError error: NSError!) {
+	internal func matchmakerViewController(viewController: GKMatchmakerViewController, didFailWithError error: NSError) {
 		viewController.dismissViewControllerAnimated(true, completion: nil)
 		EasyGameCenter.debug("\n[Easy Game Center] Error finding match: \(error.localizedDescription)\n")
 		EasyGameCenter.delegate!.easyGameCenterMatchCancel?()
@@ -1234,7 +1241,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	CheckUp Connection the new
 	
-	:returns: Bool Connection Validation
+	- returns: Bool Connection Validation
 	
 	*/
 	class func isConnectedToNetwork() -> Bool {
@@ -1260,19 +1267,19 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Open Dialog for player see he wasn't authentifate to Game Center and can go to login
 	
-	:param: titre                     Title
-	:param: message                   Message
-	:param: buttonOK                  Title of button OK
-	:param: buttonOpenGameCenterLogin Title of button open Game Center
-	:param: completion                Completion if player open Game Center Authentification
+	- parameter titre:                     Title
+	- parameter message:                   Message
+	- parameter buttonOK:                  Title of button OK
+	- parameter buttonOpenGameCenterLogin: Title of button open Game Center
+	- parameter completion:                Completion if player open Game Center Authentification
 	
 	*/
-	class func openDialogGameCenterAuthentication(#title:String, message:String,buttonOK:String,buttonOpenGameCenterLogin:String, completion: ((openGameCenterAuthentification:Bool) -> Void)?) {
+	class func openDialogGameCenterAuthentication(title title:String, message:String,buttonOK:String,buttonOpenGameCenterLogin:String, completion: ((openGameCenterAuthentification:Bool) -> Void)?) {
 		
 		let delegateUIVC = EasyGameCenter.delegate as? UIViewController
 		let instance = Static.instance
 		if (delegate == nil || instance == nil) {
-			println("\n[Easy Game Center] Delegate UIViewController not set")
+			print("\n[Easy Game Center] Delegate UIViewController not set")
 		} else {
 			/* iOS 8 */
 			if ( objc_getClass("UIAlertController") != nil ) {
@@ -1290,7 +1297,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 				alert.addAction(UIAlertAction(title: buttonOpenGameCenterLogin, style: .Default, handler: {
 					action in
 					
-					EasyGameCenter.showGameCenterAuthentication(completion: {
+					EasyGameCenter.showGameCenterAuthentication({
 						(resultOpenGameCenter) -> Void in
 						
 						if completion != nil { completion!(openGameCenterAuthentification: resultOpenGameCenter) }
@@ -1312,8 +1319,8 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	/**
 	Class callBack UIAlertView iOS 7
 	
-	:param: View        UIAlertView
-	:param: buttonIndex ButtonIndex
+	- parameter View:        UIAlertView
+	- parameter buttonIndex: ButtonIndex
 	
 	*/
 	class func alertView(View: UIAlertView!, clickedButtonAtIndex buttonIndex: Int){
@@ -1321,7 +1328,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 		switch buttonIndex{
 			
 		case 1:
-			EasyGameCenter.showGameCenterAuthentication(completion: {
+			EasyGameCenter.showGameCenterAuthentication({
 				(resultOpenGameCenter) -> Void in
 				EasyGameCenter.debug("\n[Easy Game Center] showGameCenterAuthentication() has been opened\n")
 			})
@@ -1340,7 +1347,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 	private class func debug(object: Any) {
 		if EasyGameCenter.debugMode {
 			dispatch_async(dispatch_get_main_queue()) {
-				Swift.println(object)
+				Swift.print(object)
 			}
 		}
 	}

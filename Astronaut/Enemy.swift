@@ -23,7 +23,7 @@ class Enemy : SKSpriteNode {
     var health:Int!
 	var uniqueIndetifier:Int!
 	
-	override init(texture: SKTexture!, color: UIColor!, size: CGSize) {
+	override init(texture: SKTexture?, color: UIColor, size: CGSize) {
 		self.movementSpeed = 0.0
 		self.currentFrame = 0
 		self.randomFrame = 0
@@ -42,9 +42,9 @@ class Enemy : SKSpriteNode {
 	
 	convenience init(movementSpeed: Float = 0.0, currentFrame: Int = 0, randomFrame: Int = 0, moving: Bool = false, rotationSpeed: CGFloat = 1.0, angle: Float = 0.0, range: Float = 1.2, yPos: CGFloat = 0, rotationDirection: Int = 0, preLocation: CGFloat = 0, health: Int = 0, uniqueIdentifier: Int = 0){
 	
-		var size = CGSize(width: SKSpriteNode(imageNamed: "Asteroid16").size.width, height: SKSpriteNode(imageNamed: "Asteroid16").size.height)
+		let size = CGSize(width: SKSpriteNode(imageNamed: "Asteroid16").size.width, height: SKSpriteNode(imageNamed: "Asteroid16").size.height)
 		
-		var color:SKColor = SKColor.clearColor()
+		let color:SKColor = SKColor.clearColor()
 		
 		self.init(texture:nil, color: color, size: size)
 		self.movementSpeed = movementSpeed
@@ -67,7 +67,7 @@ class Enemy : SKSpriteNode {
 	
 	func setRandomFrame() {
 		
-		var range = UInt32(5)..<UInt32(200)
+		let range = UInt32(5)..<UInt32(200)
 		self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
 	}
 	

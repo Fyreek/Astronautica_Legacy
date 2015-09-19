@@ -47,6 +47,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var normalSpeedSatellite:CGFloat = 2
 	var normalSpeedRocket:CGFloat = 4
 	
+    var viewController: GameViewController!
+    
 	var countDownRunning = false
 	
 	let bg = SKSpriteNode(imageNamed: "Background188")
@@ -98,8 +100,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		self.physicsWorld.contactDelegate = self
 		
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
-        print("Scaling Factor: ")
-        println(scalingFactor)
+        print("Scaling Factor: ", terminator: "")
+        print(scalingFactor)
         
         bg.setScale(scalingFactor)
         bg2.setScale(scalingFactor)
@@ -153,9 +155,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         hero.color = UIColor(red: heroColorRed , green: heroColorGreen , blue: heroColorBlue, alpha: 1.0)
 		hero.colorBlendFactor = 0.4
 		
-        println(heroColorRed)
-        println(heroColorGreen)
-        println(heroColorBlue)
+        print(heroColorRed)
+        print(heroColorGreen)
+        print(heroColorBlue)
 		
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -283,8 +285,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func didBeginContact(contact: SKPhysicsContact) {
 		
-        let firstNode = contact.bodyA.node as! SKSpriteNode
-        let secondNode = contact.bodyB.node as! SKSpriteNode
+        //let firstNode = contact.bodyA.node as! SKSpriteNode
+        //let secondNode = contact.bodyB.node as! SKSpriteNode
         
         if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
         
@@ -336,14 +338,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
     
-    func enemyCollisionOnStart(#firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
+    func enemyCollisionOnStart(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
     
         firstNode.removeAllActions()
         firstNode.hidden = true
         firstNode.position.x = endOfScreenRight + 200
         firstNode.removeFromParent()
         
-        println("reranged starting pos")
+        print("reranged starting pos")
         addEnemies()
         
     }
@@ -447,7 +449,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero = Hero(imageNamed: "Astronaut25")
 		hero.setScale(scalingFactor)
         
-		hero.physicsBody = SKPhysicsBody(texture: hero.texture, alphaThreshold: 0, size: hero.size)
+		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
 		hero.physicsBody!.affectedByGravity = false
 		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
         hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
@@ -460,19 +462,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func addEnemies() {
 		enemyCount++
-		var number:Int = Int(arc4random_uniform(11))
-		var upDown:Int = Int(arc4random_uniform(2))
-		var heightNumber:Int = Int((self.size.height / 2) - 15)
-		var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
-		var rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
-        var rotationDirection:Int = Int(arc4random_uniform(2))
-        var preLocation:CGFloat = 0
-        var health:Int = 0
+		let number:Int = Int(arc4random_uniform(11))
+		let upDown:Int = Int(arc4random_uniform(2))
+		let heightNumber:Int = Int((self.size.height / 2) - 15)
+		let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
+		let rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
+        let rotationDirection:Int = Int(arc4random_uniform(2))
+        let preLocation:CGFloat = 0
+        //var health:Int = 0
 		
         //enemySpawn
 		//number = 10
 		
-		println(number)
+		print(number)
 		
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
@@ -498,13 +500,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
-	func addEnemy(#named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int) {
+	func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int) {
 		
-		var enemy = Enemy(imageNamed: named)
+		let enemy = Enemy(imageNamed: named)
 		
         enemy.setScale(scalingFactor)
         
-		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture, alphaThreshold: 0, size: enemy.size)
+		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false
 		enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
 		enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
@@ -526,11 +528,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		resetEnemy(enemy, yPos: yPos)
 		
         if enemy.name == "Missile8" {
-            var yMovement:CGFloat = (hero.position.y - enemy.position.y) / (hero.position.x - enemy.position.x)
+            let yMovement:CGFloat = (hero.position.y - enemy.position.y) / (hero.position.x - enemy.position.x)
             enemy.preLocation = yMovement * 2
-            var an:CGFloat = hero.position.x - enemy.position.x
-            var geg:CGFloat = hero.position.y - enemy.position.y
-            var angleBetween:CGFloat = sin(an / geg)
+            //let an:CGFloat = hero.position.x - enemy.position.x
+            //let geg:CGFloat = hero.position.y - enemy.position.y
+            //var angleBetween:CGFloat = sin(an / geg)
             let angle = atan2(hero.position.y - enemy.position.y, hero.position.x - enemy.position.x)
             let Pi = CGFloat(M_PI)
             if hero.position.y > enemy.position.y {
@@ -562,7 +564,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         let transition = SKTransition.fadeWithDuration(1)
         
-		var scene = GameScene(size: self.size)
+		let scene = GameScene(size: self.size)
 		let skView = self.view as SKView!
 		skView.ignoresSiblingOrder = true
 		scene.scaleMode = .ResizeFill
@@ -577,11 +579,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func showAds(){
-        GameViewController().showBannerAd()
+        self.viewController.showBannerAd()
     }
     
     func hideAds(){
-        GameViewController().hideBannerAd()
+        self.viewController.hideBannerAd()
     }
     
 	func pauseGame() {
@@ -657,7 +659,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func heroMovement() {
         
-		var duration = (abs(hero.position.y - touchLocation)) / hero.movementSpeed
+		let duration = (abs(hero.position.y - touchLocation)) / hero.movementSpeed
 		
 		let moveAction = SKAction.moveToY(touchLocation, duration: NSTimeInterval(duration))
 		
@@ -666,9 +668,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 	}
 	
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
-        funcTouchesOut(touches, withEvent: event)
+        funcTouchesOut(touches, withEvent: event!)
         touchingScreen = false
     }
     
@@ -881,9 +883,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.gamePause.runAction(buttonPressLight)
     }
     
-	override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
 							
-        funcTouchesIn(touches, withEvent: event)
+        funcTouchesIn(touches, withEvent: event!)
         
     }
 
@@ -979,7 +981,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
 				} else if enemy.name == "Asteroid16" {
                     
-                    var degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+                    let degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
                     if enemy.rotationDirection == 0 {
                          enemy.zRotation -= CGFloat(degreeRotation)
                     } else {
@@ -1018,9 +1020,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						enemy.speed = totalSpeedRocket
 					}
 					
-					var upDown:Int = Int(arc4random_uniform(2))
-					var heightNumber:Int = Int((self.size.height / 2) - 15)
-					var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
+					let upDown:Int = Int(arc4random_uniform(2))
+					let heightNumber:Int = Int((self.size.height / 2) - 15)
+					let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 					
 					if upDown == 0 {
 						enemy.position.y = CGFloat(-(height))
@@ -1098,8 +1100,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 }
 
 extension Array {
-    func find(includedElement: T -> Bool) -> Int?{
-        for (idx, element) in enumerate(self) {
+    func find(includedElement: Element -> Bool) -> Int?{
+        for (idx, element) in self.enumerate() {
             if includedElement(element) {
                 return idx
             }

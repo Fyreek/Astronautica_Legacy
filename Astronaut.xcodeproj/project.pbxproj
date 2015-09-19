@@ -10,8 +10,8 @@
 		812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 812FED241B905B2900A2A8C3 /* Minecraft.ttf */; };
 		812FED271B9063E800A2A8C3 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812FED261B9063E800A2A8C3 /* HexColor.swift */; };
 		8143166E1B8730B4008A3C81 /* GameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8143166D1B8730B4008A3C81 /* GameCenter.swift */; };
-		814316701B873162008A3C81 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8143166F1B873162008A3C81 /* GameKit.framework */; };
-		81B8D4501B906D340065615B /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81B8D44F1B906D340065615B /* iAd.framework */; };
+		814316701B873162008A3C81 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8143166F1B873162008A3C81 /* GameKit.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		81B8D4501B906D340065615B /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81B8D44F1B906D340065615B /* iAd.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		81E445261B8667D900BC86B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E445251B8667D900BC86B2 /* AppDelegate.swift */; };
 		81E445281B8667D900BC86B2 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 81E445271B8667D900BC86B2 /* GameScene.sks */; };
 		81E4452A1B8667D900BC86B2 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E445291B8667D900BC86B2 /* GameScene.swift */; };
@@ -191,7 +191,9 @@
 		81E445181B8667D900BC86B2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = YaLu;
 				TargetAttributes = {
 					81E4451F1B8667D900BC86B2 = {
@@ -318,6 +320,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -391,10 +394,10 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yalu.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Debug;
 		};
@@ -411,10 +414,10 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yalu.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_WHOLE_MODULE_OPTIMIZATION = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -432,6 +435,7 @@
 				);
 				INFOPLIST_FILE = AstronautTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yalu.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Astronaut.app/Astronaut";
 			};
@@ -447,6 +451,7 @@
 				);
 				INFOPLIST_FILE = AstronautTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yalu.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Astronaut.app/Astronaut";
 			};

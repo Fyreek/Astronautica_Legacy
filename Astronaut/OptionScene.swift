@@ -93,7 +93,7 @@ class OptionScene: SKScene {
     
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
@@ -104,7 +104,7 @@ class OptionScene: SKScene {
         }
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
@@ -134,7 +134,7 @@ class OptionScene: SKScene {
         
         let transition = SKTransition.fadeWithDuration(1)
             
-        var scene = GameScene(size: self.size)
+        let scene = GameScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill
