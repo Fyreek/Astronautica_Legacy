@@ -79,7 +79,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     }
     
     func bannerViewDidLoadAd(banner: ADBannerView!) {
-        var BV = UIiAd.bounds.height
+        //var BV = UIiAd.bounds.height
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(1) // Time it takes the animation to complete
         UIiAd.alpha = 1 // Fade in the animation
