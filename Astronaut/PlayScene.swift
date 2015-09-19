@@ -22,6 +22,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePaused = false
 	var enemyCount = 0
     
+    var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
 	
     var gameOverMenuLoaded = false
@@ -38,6 +39,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var highScore:Int = 0
 	
     var explosionAnimationFrames = [SKTexture]()
+    var backgroundAnimationFrames = [SKTexture]()
     
 	var gameSpeed:Float = 1
 	var gameProgress:Int = 0
@@ -129,12 +131,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
 		
         let explosionAtlas = SKTextureAtlas(named: "explosion")
+        let backgroundAtlas = SKTextureAtlas(named: "background")
         
-        let numImages = explosionAtlas.textureNames.count
-        for var i=1; i<(numImages + 3) / 3; i++ {
+        let numImagesExplosion = explosionAtlas.textureNames.count
+        for var i=1; i<(numImagesExplosion + 3) / 3; i++ {
         
             let explosionTextureName = "explosion32-\(i)"
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
+        
+        }
+        
+        let numImagesBackground = backgroundAtlas.textureNames.count
+        for var i=1; i<(numImagesBackground + 3) / 3; i++ {
+        
+            let backgroundTextureName = "background107-\(i)"
+            backgroundAnimationFrames.append(backgroundAtlas.textureNamed(backgroundTextureName))
         
         }
         
@@ -908,6 +919,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			if !gameOver {
 				updateBGPosition()
 				updateEnemiesPosition()
+                updateBackgroundEmitter()
 			}
             
             updateHeroEmitter()
@@ -941,6 +953,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         }
         
+    }
+    
+    func updateBackgroundEmitter() {
+        if bgEmit == true {
+            bgEmit = false
+            bg.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05))
+            bg.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+            
+                self.bg.texture = SKTexture(imageNamed: "Background188")
+                self.bg2.texture = SKTexture(imageNamed: "Background188")
+                self.bg3.texture = SKTexture(imageNamed: "Background188")
+            })
+            bg2.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05))
+            bg3.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05))
+        }
     }
     
 	func updateHeroEmitter(){
@@ -1078,7 +1105,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			totalSpeedAsteroid = totalSpeedAsteroid + 0.1
 			totalSpeedSatellite = totalSpeedSatellite + 0.1
 			totalSpeedRocket = totalSpeedRocket + 0.1
-			
+			//bgEmit = true
+            
 			gameProgress++
 			//gameSpeed = gameSpeed + 0.1
 			
