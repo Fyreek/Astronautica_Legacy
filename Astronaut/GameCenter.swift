@@ -18,7 +18,6 @@ REMEMBER report plusieur score  pour plusieur leaderboard  en array
 
 
 */
-import Foundation
 import GameKit
 import SystemConfiguration
 

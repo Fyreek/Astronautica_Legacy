@@ -10,8 +10,9 @@ import SpriteKit
 import iAd
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
-	var hero:Hero!
-	var touchLocation = CGFloat()
+	var hero = Hero(imageNamed: "Astronaut25")
+    //hero = Hero(imageNamed: "Astronaut25")
+    var touchLocation = CGFloat()
 	var gameOver = true
 	var gameStarted = false
 	var enemies:[Enemy] = []
@@ -579,11 +580,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func showAds(){
-        self.viewController.showBannerAd()
+        //self.viewController.showBannerAd()
     }
     
     func hideAds(){
-        self.viewController.hideBannerAd()
+        //self.viewController.hideBannerAd()
     }
     
 	func pauseGame() {
