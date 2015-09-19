@@ -92,7 +92,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
-		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") Reset Highscore on start!
+		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
         replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
@@ -103,6 +103,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         print("Scaling Factor: ", terminator: "")
         print(scalingFactor)
+        
+        bg.zPosition = 0.9
+        bg2.zPosition = 0.9
+        bg3.zPosition = 0.9
         
         bg.setScale(scalingFactor)
         bg2.setScale(scalingFactor)
@@ -166,31 +170,39 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scoreLabel.fontColor = UIColor.whiteColor()
 		scoreLabel.position.y = (self.size.height / 2) - 40
 		scoreLabel.position.x = -(self.size.width / 2) + 40
+        scoreLabel.zPosition = 1.2
 		
 		countDownText = SKLabelNode(fontNamed: "Minecraft")
 		countDownText.fontSize = 24
 		countDownText.fontColor = UIColor.whiteColor()
 		countDownText.position.y = (self.size.height / 8)
+        countDownText.zPosition = 1.2
 		
 		refresh.position.y = -(self.size.height / 4.5)
 		refresh.position.x = -(self.size.width / 8)
+        refresh.zPosition = 1.2
 		
 		menu.position.y = -(self.size.height / 4.5)
 		menu.position.x = (self.size.width / 8)
+        menu.zPosition = 1.2
 		
 		gamePause.position.y = -(self.size.height / 2) + 40
 		gamePause.position.x = -(self.size.width / 2) + 40
+        gamePause.zPosition = 1.2
 		
 		gamePlay.position.y = 0
 		gamePlay.position.x = -(self.size.width / 8)
+        gamePlay.zPosition = 1.2
         
         menuPause.position.y = 0
         menuPause.position.x = self.size.width / 8
+        menuPause.zPosition = 1.2
 		
 		totalScore = SKLabelNode(fontNamed: "Minecraft")
 		totalScore.fontSize = 18
 		totalScore.position.x = 0
 		totalScore.position.y = self.size.height / 8
+        totalScore.zPosition = 1.2
 		
 		addChild(totalScore)
 		addChild(scoreLabel)
@@ -204,33 +216,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = true
 		refresh.name = "refresh"
 		refresh.hidden = true
-		refresh.zPosition = 1.1
 		refresh.alpha = 0
 		
 		gamePlay.name = "gamePlay"
 		gamePlay.hidden = true
-		gamePlay.zPosition = 1.1
 		gamePlay.alpha = 0
 		
         menuPause.name = "menuPause"
         menuPause.hidden = true
-        menuPause.zPosition = 1.1
         menuPause.alpha = 0
         
 		gamePause.name = "gamePause"
 		gamePause.hidden = true
-		gamePause.zPosition = 1.1
 		gamePause.alpha = 0
 		
 		totalScore.name = "totalScore"
 		totalScore.fontColor = UIColor.whiteColor()
 		totalScore.hidden = true
-		totalScore.zPosition = 1.1
 		totalScore.alpha = 0
 		
 		menu.name = "menu"
 		menu.hidden = true
-		menu.zPosition = 1.1
 		menu.alpha = 0
         
 		startGameNormal()
@@ -449,6 +455,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	func addHero(){
 		hero = Hero(imageNamed: "Astronaut25")
 		hero.setScale(scalingFactor)
+        hero.zPosition = 1.1
         
 		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
 		hero.physicsBody!.affectedByGravity = false
@@ -506,6 +513,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		let enemy = Enemy(imageNamed: named)
 		
         enemy.setScale(scalingFactor)
+        enemy.zPosition = 1.1
         
 		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false

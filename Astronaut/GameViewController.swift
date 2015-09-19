@@ -23,6 +23,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
         
+        UIiAd.delegate = self
+        
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
         
@@ -31,7 +33,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 		
 		let scene = GameScene()
         
-		let skView = self.view as! SKView
+		let skView = self.originalContentView as! SKView
 		skView.showsFPS = false
 		skView.showsNodeCount = false
 		
@@ -80,6 +82,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     
     func bannerViewDidLoadAd(banner: ADBannerView!) {
         //var BV = UIiAd.bounds.height
+        self.view.addSubview(UIiAd)
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(1) // Time it takes the animation to complete
         UIiAd.alpha = 1 // Fade in the animation

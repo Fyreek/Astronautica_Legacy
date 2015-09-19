@@ -29,8 +29,7 @@ class GameScene: SKScene {
     
 	override func didMoveToView(view: SKView) {
         
-        //
-        
+        //gViewController.showBannerAd()
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -42,20 +41,20 @@ class GameScene: SKScene {
 		addChild(nameLabel)
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
-		nameLabel.zPosition = 1.1
+		nameLabel.zPosition = 1.2
 		
 		addChild(startGameButton)
 		startGameButton.name = "startGameButton"
 		startGameButton.hidden = false
 		startGameButton.position.y = -(self.size.height / 4.5)
 		startGameButton.position.x = 0
-		startGameButton.zPosition = 1.1
+		startGameButton.zPosition = 1.2
 		
 		addChild(highScoreLabel)
 		highScoreLabel.hidden = false
 		highScoreLabel.position.x = 0
 		highScoreLabel.position.y = -(self.size.height / 36)
-		highScoreLabel.zPosition = 1.1
+		highScoreLabel.zPosition = 1.2
 		highScoreLabel.setScale(1)
 		highScoreLabel.alpha = 0.3
 		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7") //will fix later
@@ -65,14 +64,14 @@ class GameScene: SKScene {
 		menuOptionButton.hidden = false
 		menuOptionButton.position.y = -(self.size.height / 4.5)
 		menuOptionButton.position.x = self.size.width / 3
-		menuOptionButton.zPosition = 1.1
+		menuOptionButton.zPosition = 1.2
 		
 		addChild(menuHSButton)
 		menuHSButton.name = "menuHSButton"
 		menuHSButton.hidden = false
 		menuHSButton.position.y = -(self.size.height / 4.5)
 		menuHSButton.position.x = -(self.size.width / 3)
-		menuHSButton.zPosition = 1.1
+		menuHSButton.zPosition = 1.2
 		
 	}
 	

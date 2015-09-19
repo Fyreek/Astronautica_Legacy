@@ -28,6 +28,7 @@ class OptionScene: SKScene {
     var lastSpriteName:String = ""
     
     override func didMoveToView(view: SKView) {
+        bg.zPosition = 0.9
         addChild(bg)
         
         backSprite.name = "backSprite"
@@ -73,10 +74,12 @@ class OptionScene: SKScene {
         
         coloredSprite.position.x = 0
         coloredSprite.position.y = -(self.size.height / 4)
+        coloredSprite.zPosition = 1.2
         addChild(coloredSprite)
         
         backSprite.position.x = -(self.size.width / 4)
         backSprite.position.y = -(self.size.height / 4)
+        backSprite.zPosition = 1.2
         addChild(backSprite)
         
         sliderValueDidChange()
