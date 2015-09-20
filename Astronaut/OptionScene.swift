@@ -26,9 +26,14 @@ class OptionScene: SKScene {
     var green:Float = 0
     var blue:Float = 0
     var lastSpriteName:String = ""
+    var scalingFactor:CGFloat = 1
     
     override func didMoveToView(view: SKView) {
+        
+        scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+
         bg.zPosition = 0.9
+        bg.setScale(scalingFactor)
         addChild(bg)
         
         backSprite.name = "backSprite"
@@ -44,6 +49,7 @@ class OptionScene: SKScene {
             redSlider.value = 1
         }
         redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
+        redSlider.alpha = 0
         self.view?.addSubview(redSlider)
         
         greenSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 3, 280, 20))
@@ -57,6 +63,7 @@ class OptionScene: SKScene {
             greenSlider.value = 1
         }
         greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
+        greenSlider.alpha = 0
         self.view?.addSubview(greenSlider)
         
         blueSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 2 , 280, 20))
@@ -70,13 +77,23 @@ class OptionScene: SKScene {
             blueSlider.value = 1
         }
         blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
+        blueSlider.alpha = 0
         self.view?.addSubview(blueSlider)
         
+        UIView.animateWithDuration(1.0, animations: {
+        
+            self.redSlider.alpha = 1.0
+            self.greenSlider.alpha = 1.0
+            self.blueSlider.alpha = 1.0
+        })
+        
+        coloredSprite.setScale(scalingFactor)
         coloredSprite.position.x = 0
         coloredSprite.position.y = -(self.size.height / 4)
         coloredSprite.zPosition = 1.2
         addChild(coloredSprite)
         
+        backSprite.setScale(scalingFactor)
         backSprite.position.x = -(self.size.width / 4)
         backSprite.position.y = -(self.size.height / 4)
         backSprite.zPosition = 1.2
@@ -128,12 +145,21 @@ class OptionScene: SKScene {
     func showMenu() {
         
         optionSceneActive = false
-        redSlider.hidden = true
-        redSlider.removeFromSuperview()
-        greenSlider.hidden = true
-        greenSlider.removeFromSuperview()
-        blueSlider.hidden = true
-        blueSlider.removeFromSuperview()
+        
+        UIView.animateWithDuration(1.0, animations: {
+        
+            self.redSlider.alpha = 0
+            self.greenSlider.alpha = 0
+            self.blueSlider.alpha = 0
+            
+        }, completion: {(finished: Bool) -> Void in
+        
+            self.redSlider.removeFromSuperview()
+            self.greenSlider.removeFromSuperview()
+            self.blueSlider.removeFromSuperview()
+            
+        
+        })
         
         let transition = SKTransition.fadeWithDuration(1)
             

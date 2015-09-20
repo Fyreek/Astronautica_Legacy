@@ -8,14 +8,15 @@
 
 import SpriteKit
 import iAd
+import UIKit
 
-protocol GameViewControllerDelegate{
-    func showBannerAd()
+protocol setAdBannerDelegate {
+    func setAdBannerStatus(shown:Bool)
 }
 
 class GameScene: SKScene {
     
-    var delegatee:GameViewController? = nil
+    var delegatee:setAdBannerDelegate? = nil
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
@@ -26,10 +27,17 @@ class GameScene: SKScene {
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var lastSpriteName:String = ""
+    var scalingFactor:CGFloat = 1
     
 	override func didMoveToView(view: SKView) {
         
+        if delegatee != nil {
+            delegatee!.setAdBannerStatus(true)
+        }
         //gViewController.showBannerAd()
+        
+        scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        bg.setScale(scalingFactor)
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -38,11 +46,13 @@ class GameScene: SKScene {
 		
 		addChild(bg)
 		bg.zPosition = 1.0
+        nameLabel.setScale(scalingFactor)
 		addChild(nameLabel)
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
 		nameLabel.zPosition = 1.2
 		
+        startGameButton.setScale(scalingFactor)
 		addChild(startGameButton)
 		startGameButton.name = "startGameButton"
 		startGameButton.hidden = false
@@ -50,6 +60,7 @@ class GameScene: SKScene {
 		startGameButton.position.x = 0
 		startGameButton.zPosition = 1.2
 		
+        highScoreLabel.setScale(scalingFactor)
 		addChild(highScoreLabel)
 		highScoreLabel.hidden = false
 		highScoreLabel.position.x = 0
@@ -59,6 +70,7 @@ class GameScene: SKScene {
 		highScoreLabel.alpha = 0.3
 		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7") //will fix later
 		
+        menuOptionButton.setScale(scalingFactor)
 		addChild(menuOptionButton)
 		menuOptionButton.name = "menuOptionButton"
 		menuOptionButton.hidden = false
@@ -66,6 +78,7 @@ class GameScene: SKScene {
 		menuOptionButton.position.x = self.size.width / 3
 		menuOptionButton.zPosition = 1.2
 		
+        menuHSButton.setScale(scalingFactor)
 		addChild(menuHSButton)
 		menuHSButton.name = "menuHSButton"
 		menuHSButton.hidden = false
@@ -77,9 +90,7 @@ class GameScene: SKScene {
 	
     func showAds(){
     
-        if (delegatee != nil) {
-        delegatee!.showBannerAd()
-        }
+        
         
     }
     

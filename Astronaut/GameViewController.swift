@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import iAd
 
-class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
+class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate, setAdBannerDelegate {
     
     var UIiAd: ADBannerView = ADBannerView()
     
@@ -48,6 +48,14 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 		skView.presentScene(scene)
         
 	}
+    
+    func setAdBannerStatus(shown: Bool) {
+        if shown == true {
+            showBannerAd()
+        } else if shown == false {
+            hideBannerAd()
+        }
+    }
     
 	override func shouldAutorotate() -> Bool {
 		return true
