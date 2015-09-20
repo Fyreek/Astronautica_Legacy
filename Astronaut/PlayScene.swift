@@ -142,9 +142,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         
         let numImagesBackground = backgroundAtlas.textureNames.count
-        for var i=1; i<(numImagesBackground + 3) / 3; i++ {
+        for var i=1; i<(numImagesBackground / 3); i++ {
         
-            let backgroundTextureName = "background107-\(i)"
+            let backgroundTextureName = "background107_\(i)"
             backgroundAnimationFrames.append(backgroundAtlas.textureNamed(backgroundTextureName))
         
         }

@@ -1302,11 +1302,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 			/* Connected */
 		case .StateConnected:
 			if theMatch.expectedPlayerCount == 0 {
-				if #available(iOS 8.0, *) {
+				//if #available(iOS 8.0, *) {
 					lookupPlayers()
-				} else {
+				//} else {
 					// Fallback on earlier versions
-				}
+				//}
 			}
 			
 			/* Lost deconnection */
@@ -1347,11 +1347,11 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 		self.match = theMatch
 		self.match!.delegate = self
 		if match!.expectedPlayerCount == 0 {
-			if #available(iOS 8.0, *) {
+			//if #available(iOS 8.0, *) {
 				self.lookupPlayers()
-			} else {
+			//} else {
 				// Fallback on earlier versions
-			}
+			//}
 		}
 	}
 	
@@ -1463,7 +1463,7 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 		let delegateUIVC = EasyGameCenter.delegate
 		
 		
-		if #available(iOS 8.0, *) {
+		//if #available(iOS 8.0, *) {
 			let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
 			
 			delegateUIVC.presentViewController(alert, animated: true, completion: nil)
@@ -1483,15 +1483,15 @@ class EasyGameCenter: NSObject, GKGameCenterControllerDelegate, GKMatchmakerView
 				})
 				
 			}))
-		} else {
-			let alert: UIAlertView = UIAlertView()
-			alert.delegate = self
-			alert.title = title
-			alert.message = message
-			alert.addButtonWithTitle(buttonOK)
-			alert.addButtonWithTitle(buttonOpenGameCenterLogin)
-			alert.show()
-		}
+//		} else {
+//			let alert: UIAlertView = UIAlertView()
+//			alert.delegate = self
+//			alert.title = title
+//			alert.message = message
+//			alert.addButtonWithTitle(buttonOK)
+//			alert.addButtonWithTitle(buttonOpenGameCenterLogin)
+//			alert.show()
+//		}
 		
 		
 		
