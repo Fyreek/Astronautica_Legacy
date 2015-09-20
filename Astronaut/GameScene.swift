@@ -31,10 +31,7 @@ class GameScene: SKScene {
     
 	override func didMoveToView(view: SKView) {
         
-        if delegatee != nil {
-            delegatee!.setAdBannerStatus(true)
-        }
-        //gViewController.showBannerAd()
+        showAds()
         
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         bg.setScale(scalingFactor)
@@ -90,13 +87,13 @@ class GameScene: SKScene {
 	
     func showAds(){
     
-        
+        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
         
     }
     
     func hideAds(){
     
-        
+        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     
     }
     
@@ -199,7 +196,7 @@ class GameScene: SKScene {
     
 	func showPlayScene() {
         
-        //self.viewController.showBannerAd()
+        hideAds()
         
         let transition = SKTransition.fadeWithDuration(1)
         let scene = PlayScene(size: self.size)

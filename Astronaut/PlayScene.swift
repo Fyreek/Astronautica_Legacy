@@ -599,11 +599,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func showAds(){
-        //self.viewController.showBannerAd()
+        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
     }
     
     func hideAds(){
-        //self.viewController.hideBannerAd()
+        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     }
     
 	func pauseGame() {

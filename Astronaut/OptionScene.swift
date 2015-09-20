@@ -19,6 +19,7 @@ class OptionScene: SKScene {
     let bg = SKSpriteNode(imageNamed: "Background188")
     let coloredSprite = SKSpriteNode(imageNamed: "Astronaut25")
     let backSprite = SKSpriteNode(imageNamed: "BackButton32")
+    let resetSprite = SKSpriteNode(imageNamed: "BackButton32")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var optionSceneActive = false
@@ -37,6 +38,7 @@ class OptionScene: SKScene {
         addChild(bg)
         
         backSprite.name = "backSprite"
+        resetSprite.name = "resetSprite"
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
@@ -99,6 +101,13 @@ class OptionScene: SKScene {
         backSprite.zPosition = 1.2
         addChild(backSprite)
         
+        resetSprite.setScale(scalingFactor)
+        resetSprite.position.x = (self.size.width / 4)
+        resetSprite.position.y = -(self.size.height / 4)
+        resetSprite.zPosition = 1.2
+        resetSprite.alpha = 0
+        addChild(resetSprite)
+        
         sliderValueDidChange()
     }
     
@@ -109,6 +118,11 @@ class OptionScene: SKScene {
             backSprite.removeAllActions()
             backSprite.runAction(buttonPressLight)
         
+        } else if lastSpriteName == self.resetSprite.name {
+        
+            resetSprite.removeAllActions()
+            resetSprite.runAction(buttonPressLight)
+            
         }
     
     }
@@ -120,6 +134,9 @@ class OptionScene: SKScene {
             if self.nodeAtPoint(location) == self.backSprite {
                 lastSpriteName = self.backSprite.name!
                 self.backSprite.runAction(buttonPressDark)
+            } else if resetSprite.containsPoint(location) {
+                lastSpriteName = self.resetSprite.name!
+                self.resetSprite.runAction(buttonPressDark)
             }
         }
     }
@@ -133,6 +150,13 @@ class OptionScene: SKScene {
                 if lastSpriteName == self.backSprite.name {
                     self.backSprite.runAction(buttonPressLight){
                         self.showMenu()
+                    }
+                }
+            } else if resetSprite.containsPoint(location) {
+                removeButtonAnim()
+                if lastSpriteName == self.resetSprite.name {
+                    self.resetSprite.runAction(buttonPressLight){
+                        NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore")
                     }
                 }
             } else {
