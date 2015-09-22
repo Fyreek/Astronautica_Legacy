@@ -28,12 +28,15 @@ class GameScene: SKScene {
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var lastSpriteName:String = ""
     var scalingFactor:CGFloat = 1
+    var scalingFactorX:CGFloat = 1
     
 	override func didMoveToView(view: SKView) {
         
         showAds()
         
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        scalingFactorX = self.size.width / (nameLabel.size.width + 20)
+        
         bg.setScale(scalingFactor)
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
@@ -43,12 +46,16 @@ class GameScene: SKScene {
 		
 		addChild(bg)
 		bg.zPosition = 1.0
-        nameLabel.setScale(scalingFactor)
-		addChild(nameLabel)
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
-		nameLabel.zPosition = 1.2
-		
+        nameLabel.zPosition = 1.2
+        if nameLabel.size.width > self.size.width {
+            nameLabel.setScale(scalingFactorX)
+        } else {
+            nameLabel.setScale(scalingFactor)
+        }
+        addChild(nameLabel)
+        
         startGameButton.setScale(scalingFactor)
 		addChild(startGameButton)
 		startGameButton.name = "startGameButton"
