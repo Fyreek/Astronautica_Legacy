@@ -60,6 +60,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let bgAn = SKSpriteNode(imageNamed: "Background188")
     let bg2An = SKSpriteNode(imageNamed: "Background188")
     let bg3An = SKSpriteNode(imageNamed: "Background188")
+    var bgAnCount:Int = 0
     
     var score = 0
 	var scoreLabel = SKLabelNode()
@@ -1002,7 +1003,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func updateBackgroundEmitter() {
         if bgEmit == true {
             bgEmit = false
-            var rNum:Int = Int(arc4random_uniform(UInt32(backgroundAnimationFrames.count)))
+            let rNum:Int = Int(arc4random_uniform(UInt32(backgroundAnimationFrames.count)))
             
             self.bgAn.texture = self.backgroundAnimationFrames[rNum]
             self.bg2An.texture = self.backgroundAnimationFrames[rNum]
@@ -1157,8 +1158,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			totalSpeedAsteroid = totalSpeedAsteroid + 0.1
 			totalSpeedSatellite = totalSpeedSatellite + 0.1
 			totalSpeedRocket = totalSpeedRocket + 0.1
-			bgEmit = true
-            
+            if score > bgAnCount {
+                bgEmit = true
+                bgAnCount = score
+            }
 			gameProgress++
 			//gameSpeed = gameSpeed + 0.1
 			
