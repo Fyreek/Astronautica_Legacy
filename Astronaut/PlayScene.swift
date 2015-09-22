@@ -1105,7 +1105,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			totalSpeedAsteroid = totalSpeedAsteroid + 0.1
 			totalSpeedSatellite = totalSpeedSatellite + 0.1
 			totalSpeedRocket = totalSpeedRocket + 0.1
-			//bgEmit = true
+			bgEmit = true
             
 			gameProgress++
 			//gameSpeed = gameSpeed + 0.1

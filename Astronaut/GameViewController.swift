@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import iAd
 
-class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate, setAdBannerDelegate {
+class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
     
     var UIiAd: ADBannerView = ADBannerView()
     
@@ -19,9 +19,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
         
         UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
-        let viewsDictionary = ["bannerView":UIiAd]
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBannerAd", name: "hideadsID", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
@@ -52,12 +49,11 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
         
 	}
     
-    func setAdBannerStatus(shown: Bool) {
-        if shown == true {
-            showBannerAd()
-        } else if shown == false {
-            hideBannerAd()
-        }
+    func addAdConstraints() {
+        let viewsDictionary = ["bannerView":UIiAd]
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
+    
     }
     
 	override func shouldAutorotate() -> Bool {
@@ -84,6 +80,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     override func viewWillAppear(animated: Bool) {
         UIiAd.delegate = self
         self.view.addSubview(UIiAd)
+        addAdConstraints()
     }
     
     override func viewWillDisappear(animated: Bool) {

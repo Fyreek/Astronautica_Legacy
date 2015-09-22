@@ -8,15 +8,9 @@
 
 import SpriteKit
 import iAd
-import UIKit
-
-protocol setAdBannerDelegate {
-    func setAdBannerStatus(shown:Bool)
-}
 
 class GameScene: SKScene {
     
-    var delegatee:setAdBannerDelegate? = nil
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
