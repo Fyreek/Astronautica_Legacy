@@ -9,7 +9,7 @@
 import SpriteKit
 import iAd
 
-class GameScene: SKScene {
+class GameScene: SKScene, EasyGameCenterDelegate {
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
@@ -17,7 +17,9 @@ class GameScene: SKScene {
 	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardsButton32")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
 	let bg = SKSpriteNode(imageNamed: "Background188")
+    var ticks:Int = 0
 	var highScore:Int = 0
+    var highScoreBefore:Int = 0
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var lastSpriteName:String = ""
@@ -27,7 +29,7 @@ class GameScene: SKScene {
 	override func didMoveToView(view: SKView) {
         
         showAds()
-        
+            
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
         
@@ -85,7 +87,7 @@ class GameScene: SKScene {
 		menuHSButton.zPosition = 1.2
 		
 	}
-	
+    
     func showAds(){
     
         NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
@@ -212,7 +214,18 @@ class GameScene: SKScene {
 	}
 	
 	override func update(currentTime: CFTimeInterval) {
-		/* Called before each frame is rendered */
+        if ticks == 20 {
+            highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+            if highScore > highScoreBefore {
+        
+                highScoreLabel.text = "Highscore: " + String(highScore)
+            
+            }
+            
+            highScoreBefore = highScore
+            ticks = 0
+        }
+        ticks = ticks + 1
 	}
 	
 }

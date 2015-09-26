@@ -43,12 +43,11 @@ class OptionScene: SKScene {
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
         redSlider.maximumValue = 1
+        redSlider.value = 1.0
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed") != 0.0 {
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed") != 1.0 {
             redSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed")
-        } else {
-            redSlider.value = 1
         }
         redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         redSlider.alpha = 0
@@ -57,12 +56,11 @@ class OptionScene: SKScene {
         greenSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 3, 280, 20))
         greenSlider.minimumValue = 0
         greenSlider.maximumValue = 1
+        greenSlider.value = 1.0
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen") != 0.0 {
-            greenSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen")
-        } else {
-            greenSlider.value = 1
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen") != 1.0 {
+            self.greenSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen")
         }
         greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         greenSlider.alpha = 0
@@ -71,12 +69,11 @@ class OptionScene: SKScene {
         blueSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 2 , 280, 20))
         blueSlider.minimumValue = 0
         blueSlider.maximumValue = 1
+        blueSlider.value = 1.0
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue") != 0.0 {
-            blueSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue")
-        } else {
-            blueSlider.value = 1
+        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue") != 1.0 {
+           self.blueSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue")
         }
         blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         blueSlider.alpha = 0
@@ -209,7 +206,6 @@ class OptionScene: SKScene {
             NSUserDefaults.standardUserDefaults().setFloat(green, forKey: "heroColorGreen")
             NSUserDefaults.standardUserDefaults().setFloat(blue, forKey: "heroColorBlue")
             NSUserDefaults.standardUserDefaults().synchronize()
-
         
             coloredSprite.color = color
             coloredSprite.colorBlendFactor = 0.4

@@ -13,6 +13,8 @@ import iAd
 class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
     
     var UIiAd: ADBannerView = ADBannerView()
+    var gotScore:Bool = false
+    var gcScore:Int = -1
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -48,6 +50,24 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 		skView.presentScene(scene)
         
 	}
+    
+    func easyGameCenterAuthentified() {
+        loadHighScore()
+    }
+    
+    func loadHighScore() {
+        EasyGameCenter.getHighScore(leaderboardIdentifier: "astronautgame_leaderboard") {
+            (tupleHighScore) -> Void in
+            if self.gotScore == false {
+                if let tupleIsOk = tupleHighScore {
+                self.gcScore = tupleIsOk.score
+                NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
+                NSUserDefaults.standardUserDefaults().synchronize()
+                self.gotScore = true
+                }
+            }
+        }
+    }
     
     func addAdConstraints() {
         let viewsDictionary = ["bannerView":UIiAd]
