@@ -444,12 +444,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func startBGAnim() {
-        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bgAn.runAction(SKAction.moveToX(bgAn.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg2An.runAction(SKAction.moveToX(bg2An.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg3An.runAction(SKAction.moveToX(bg3An.position.x - self.size.width - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bgAn.runAction(SKAction.moveToX(bgAn.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg2An.runAction(SKAction.moveToX(bg2An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg3An.runAction(SKAction.moveToX(bg3An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
     }
     
     func stopBGAnim() {
@@ -721,9 +721,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         touchingScreen = false
     }
     
-    //override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-    //    funcTouchesIn(touches, withEvent: event)
-    //}
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        funcTouchesIn(touches, withEvent: event!)
+        
+    }
     
     func removeButtonAnim() {
     
