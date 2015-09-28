@@ -15,7 +15,7 @@ class Hero: SKSpriteNode {
 	var emit:Bool!
 	
 	override init(texture: SKTexture?, color: UIColor, size: CGSize) {
-		self.movementSpeed = 75
+		self.movementSpeed = 125
 		self.pace = 0.1
 		self.emit = false
 		
