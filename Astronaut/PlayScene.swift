@@ -11,7 +11,6 @@ import iAd
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
-    //hero = Hero(imageNamed: "Astronaut25")
     var touchLocation = CGFloat()
 	var gameOver = true
 	var gameStarted = false
@@ -21,7 +20,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
 	var enemyCount = 0
-    
+	
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
 	
@@ -43,12 +42,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	var gameSpeed:Float = 1
 	var gameProgress:Int = 0
-	var totalSpeedAsteroid:CGFloat = 3
-	var totalSpeedSatellite:CGFloat = 2
-	var totalSpeedRocket:CGFloat = 2
-	var normalSpeedAsteroid:CGFloat = 3
-	var normalSpeedSatellite:CGFloat = 2
-	var normalSpeedRocket:CGFloat = 4
+	var totalSpeedAsteroid:CGFloat = 3.5
+	var totalSpeedSatellite:CGFloat = 2.5
+	var totalSpeedRocket:CGFloat = 6
+	var normalSpeedAsteroid:CGFloat = 3.5
+	var normalSpeedSatellite:CGFloat = 2.5
+	var normalSpeedRocket:CGFloat = 6
 	
     var viewController: GameViewController!
     
@@ -72,7 +71,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     
-    var startEnemy:Int = 3
+    var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
 	
     var touchingScreen = false
@@ -195,14 +194,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
-		scoreLabel.fontSize = 24
+		scoreLabel.fontSize = 22
 		scoreLabel.fontColor = UIColor.whiteColor()
 		scoreLabel.position.y = (self.size.height / 2) - 40
 		scoreLabel.position.x = -(self.size.width / 2) + 40
         scoreLabel.zPosition = 1.2
 		
 		countDownText = SKLabelNode(fontNamed: "Minecraft")
-		countDownText.fontSize = 24
+		countDownText.fontSize = 22
 		countDownText.fontColor = UIColor.whiteColor()
 		countDownText.position.y = (self.size.height / 8)
         countDownText.zPosition = 1.2
@@ -280,8 +279,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
             self.gameOverMenuLoaded = true
         }
-        refresh.zPosition = 1.1
-        menu.zPosition = 1.1
+        refresh.zPosition = 1.2
+        menu.zPosition = 1.2
         gamePlay.zPosition = 0.9
         menuPause.zPosition = 0.9
         menu.hidden = false
@@ -290,46 +289,49 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func heroGameEnding() {
-    
-        gameOver = true
-        gamePause.hidden = true
-        hero.removeAllActions()
-		scoreLabel.hidden = true
-        stopBGAnim()
-        
-        hero.emit = true
-        
-        if score > NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
-            
-            NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
-            NSUserDefaults.standardUserDefaults().synchronize()
-            //submit score to GameCenter
-            EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
-            
-            totalScore.hidden = false
-			totalScore.text = ("New Highscore: ") + String(score) + (" points!")
-            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-            
-        } else {
-            
-            totalScore.hidden = false
-            totalScore.text = ("You reached ") + String(score) + (" points!")
-            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-            
-        }
-    }
-    
+			
+			hero.physicsBody = nil
+			gameOver = true
+			gamePause.hidden = true
+			hero.removeAllActions()
+			scoreLabel.hidden = true
+			stopBGAnim()
+			
+			hero.emit = true
+			
+			let scoreBefore:Int = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+			
+			if score <= scoreBefore {
+				
+				totalScore.hidden = false
+				totalScore.text = ("You reached ") + String(score) + (" points!")
+				totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+				
+			} else if score > scoreBefore {
+				
+				NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
+				NSUserDefaults.standardUserDefaults().synchronize()
+				//submit score to GameCenter
+				EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
+				
+				totalScore.hidden = false
+				totalScore.text = ("New Highscore: ") + String(score) + (" points!")
+				totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+				
+			}
+	}
+	
 	func didBeginContact(contact: SKPhysicsContact) {
 		
         //let firstNode = contact.bodyA.node as! SKSpriteNode
         //let secondNode = contact.bodyB.node as! SKSpriteNode
         
         if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
-        
+			
             heroGameEnding()
         
         } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue {
-        
+			
             heroGameEnding()
         
         } //else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
@@ -393,6 +395,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = false
 		hero.removeAllActions()
 
+		hero.movementSpeed = Hero().movementSpeed
+		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
+		hero.physicsBody!.affectedByGravity = false
+		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
+		hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
+		hero.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue
+		hero.physicsBody!.allowsRotation = false
+		
         bg.position.x = 0
         bgAn.position.x = bg.position.x
         bg2.position.x = self.size.width
@@ -477,7 +487,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		} else {
             
             startBGAnim()
-            
+			
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -494,13 +504,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero = Hero(imageNamed: "Astronaut25")
 		hero.setScale(scalingFactor)
         hero.zPosition = 1.1
-        
-		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
-		hero.physicsBody!.affectedByGravity = false
-		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
-        hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue
-		hero.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue
-		hero.physicsBody!.allowsRotation = false
 		
 		addChild(hero)
 		
@@ -645,10 +648,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			gamePaused = true
 			gamePlay.hidden = false
 			gamePlay.alpha = 1
-            gamePlay.zPosition = 1.1
+            gamePlay.zPosition = 1.2
             menuPause.hidden = false
             menuPause.alpha = 1
-            menuPause.zPosition = 1.1
+            menuPause.zPosition = 1.2
 			gamePause.hidden = true
 			hero.paused = true
 			
@@ -710,7 +713,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		let moveAction = SKAction.moveToY(touchLocation, duration: NSTimeInterval(duration))
 		
-		moveAction.timingMode = SKActionTimingMode.EaseOut
+		//moveAction.timingMode = SKActionTimingMode.EaseOut
 		hero.runAction(moveAction, withKey: "movingA")
         
 	}
@@ -722,8 +725,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        funcTouchesIn(touches, withEvent: event!)
-        
+		if !gamePaused {
+			if !gameOver {
+				heroMovement()
+			}
+		}
     }
     
     func removeButtonAnim() {
@@ -947,7 +953,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			if !gameOver {
 				updateBGPosition()
 				updateEnemiesPosition()
-                updateBackgroundEmitter()
+                //updateBackgroundEmitter()
 			}
             
             updateHeroEmitter()
@@ -1010,12 +1016,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             self.bg2An.texture = self.backgroundAnimationFrames[rNum]
             self.bg3An.texture = self.backgroundAnimationFrames[rNum]
             
-            UIView.animateWithDuration(1.0, animations: {
+            UIView.animateWithDuration(5.0, animations: {
                 self.bgAn.alpha = 1.0
                 self.bg2An.alpha = 1.0
                 self.bg3An.alpha = 1.0
                 }, completion: {(finished: Bool) -> Void in
-                    UIView.animateWithDuration(1.0, animations: {
+                    UIView.animateWithDuration(5.0, animations: {
                         self.bgAn.alpha = 0
                         self.bg2An.alpha = 0
                         self.bg3An.alpha = 0
@@ -1023,13 +1029,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             })
         }
     }
-    
+	
 	func updateHeroEmitter(){
 
         if hero.emit == true {
             hero.emit = false
             hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
-                
+				
                 self.hero.hidden = true
                 self.openGameOverMenu()
                 
@@ -1154,40 +1160,34 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		score++
 		scoreLabel.text = String(score)
 		
-		if score % 3 == 0 {
+		if score % 5 == 0 {
 			
 			totalSpeedAsteroid = totalSpeedAsteroid + 0.1
 			totalSpeedSatellite = totalSpeedSatellite + 0.1
 			totalSpeedRocket = totalSpeedRocket + 0.1
+			hero.movementSpeed = hero.movementSpeed + 5
+			
             if score > bgAnCount {
                 bgEmit = true
                 bgAnCount = score
             }
 			gameProgress++
-			//gameSpeed = gameSpeed + 0.1
 			
 			
 		}
+		
 		if score <= 50 {
 		
-			if score % 5 == 0 {
-			
-				addEnemies()
-				
-			}
-		} else if score <= 100 {
-			
 			if score % 10 == 0 {
-				
-				addEnemies()
-				
-			}
-		} else {
 			
-			if score % 25 == 0 {
-				
 				addEnemies()
+				
 			}
+		}
+		
+		if (enemies.count - 5) < (score / 10) {
+		
+			addEnemies()
 		}
 	}
 }
@@ -1201,6 +1201,4 @@ extension Array {
         }
         return nil
     }
-    
-    
 }
