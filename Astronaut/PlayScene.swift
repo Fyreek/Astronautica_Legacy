@@ -946,7 +946,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
         if NSUserDefaults.standardUserDefaults().boolForKey("gamePaused").boolValue == true {
-            pauseGame()
+            if !gameOver {
+                pauseGame()
+            }
         }
         
 		if !gamePaused {
