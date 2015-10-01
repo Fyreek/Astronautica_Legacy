@@ -36,7 +36,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var lastSpriteName:String = "empty"
     
 	var highScore:Int = 0
-	
+    
     var explosionAnimationFrames = [SKTexture]()
     var backgroundAnimationFrames = [SKTexture]()
     
@@ -513,14 +513,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemyCount++
 		let number:Int = Int(arc4random_uniform(11))
 		let upDown:Int = Int(arc4random_uniform(2))
-		let heightNumber:Int = Int((self.size.height / 2) - 15)
-		let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
+		let heightNumber:Int = Int((self.size.height / 2) - (SKSpriteNode(imageNamed: "Asteroid16").size.height / 2))
+		var height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 		let rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
         let rotationDirection:Int = Int(arc4random_uniform(2))
         let preLocation:CGFloat = 0
-        //var health:Int = 0
-		
-        //enemySpawn
+
 		//number = 10
 		
 		print(number)
@@ -535,8 +533,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
 		} else if number == 6 || number == 7 || number == 8 || number == 9 {
 			if upDown == 0 {
+                height = height + 150
                 addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount)
 			} else if upDown == 1 {
+                height = height - 150
                 addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount)
 			}
 		} else if number == 10 {
