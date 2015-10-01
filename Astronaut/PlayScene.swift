@@ -570,6 +570,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.preLocation = preLocation
 		enemy.health = health
 		enemy.uniqueIndetifier = uniqueIdentifier
+        enemy.scored = false
         enemy.setRandomFrame()
 		enemies.append(enemy)
 		enemiesIndex.append(uniqueIdentifier)
@@ -709,13 +710,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func heroMovement() {
         
+        if touchLocation > (self.size.height / 2) - (hero.size.height / 2){
+            touchLocation = (self.size.height / 2) - (hero.size.height / 2)
+        } else if touchLocation < -((self.size.height / 2) - (hero.size.height / 2)) {
+            touchLocation = -((self.size.height / 2) - (hero.size.height / 2))
+        }
 		let duration = (abs(hero.position.y - touchLocation)) / hero.movementSpeed
-		
 		let moveAction = SKAction.moveToY(touchLocation, duration: NSTimeInterval(duration))
-		
-		//moveAction.timingMode = SKActionTimingMode.EaseOut
 		hero.runAction(moveAction, withKey: "movingA")
-        
 	}
 	
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -1148,9 +1150,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 						
 					}
 					
-					updateScore()
+					enemy.scored = false
 					
 				}
+                if enemy.position.x < hero.position.x - enemy.size.width {
+                    if enemy.scored == false {
+                        updateScore()
+                        enemy.scored = true
+                    }
+                }
 			}
 			
 		}

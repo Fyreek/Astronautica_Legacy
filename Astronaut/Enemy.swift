@@ -22,6 +22,7 @@ class Enemy : SKSpriteNode {
     var preLocation:CGFloat!
     var health:Int!
 	var uniqueIndetifier:Int!
+    var scored:Bool!
 	
 	override init(texture: SKTexture?, color: UIColor, size: CGSize) {
 		self.movementSpeed = 0.0
@@ -36,11 +37,12 @@ class Enemy : SKSpriteNode {
 		self.preLocation = 0
 		self.health = 0
 		self.uniqueIndetifier = 0
+        self.scored = false
 		
 		super.init(texture: texture, color: color, size: size)
 	}
 	
-	convenience init(movementSpeed: Float = 0.0, currentFrame: Int = 0, randomFrame: Int = 0, moving: Bool = false, rotationSpeed: CGFloat = 1.0, angle: Float = 0.0, range: Float = 1.2, yPos: CGFloat = 0, rotationDirection: Int = 0, preLocation: CGFloat = 0, health: Int = 0, uniqueIdentifier: Int = 0){
+    convenience init(movementSpeed: Float = 0.0, currentFrame: Int = 0, randomFrame: Int = 0, moving: Bool = false, rotationSpeed: CGFloat = 1.0, angle: Float = 0.0, range: Float = 1.2, yPos: CGFloat = 0, rotationDirection: Int = 0, preLocation: CGFloat = 0, health: Int = 0, uniqueIdentifier: Int = 0, scored: Bool = false){
 	
 		let size = CGSize(width: SKSpriteNode(imageNamed: "Asteroid16").size.width, height: SKSpriteNode(imageNamed: "Asteroid16").size.height)
 		
@@ -59,6 +61,7 @@ class Enemy : SKSpriteNode {
 		self.preLocation = preLocation
 		self.health = health
 		self.uniqueIndetifier = uniqueIdentifier
+        self.scored = scored
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
