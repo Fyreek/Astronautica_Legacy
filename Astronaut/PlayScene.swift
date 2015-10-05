@@ -31,8 +31,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var heroColorBlue:CGFloat = 1
     var heroBlendFactor:Float = 0.4
     
-    var playSceneActive = false
-    
     var lastSpriteName:String = "empty"
     
 	var highScore:Int = 0
@@ -41,15 +39,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var backgroundAnimationFrames = [SKTexture]()
     
 	var gameSpeed:Float = 1
-	var gameProgress:Int = 0
 	var totalSpeedAsteroid:CGFloat = 3.5
 	var totalSpeedSatellite:CGFloat = 2.5
 	var totalSpeedRocket:CGFloat = 6
 	var normalSpeedAsteroid:CGFloat = 3.5
 	var normalSpeedSatellite:CGFloat = 2.5
 	var normalSpeedRocket:CGFloat = 6
-	
-    var viewController: GameViewController!
     
 	var countDownRunning = false
 	
@@ -64,7 +59,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var score = 0
 	var scoreLabel = SKLabelNode()
 	var refresh = SKSpriteNode(imageNamed: "ReplayButton32")
-	var totalScore = SKLabelNode(text: "0")
+	var totalScore = SKLabelNode(text: "")
 	var menu = SKSpriteNode(imageNamed: "MenuButton32")
 	
 	var gamePause = SKSpriteNode(imageNamed: "PauseButton32")
@@ -87,7 +82,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var timer = NSTimer()
     var timerPause = NSTimer()
 	var countDown = 3
-	var countDownText = SKLabelNode(text: "3")
+	var countDownText = SKLabelNode(text: "")
 	enum ColliderType:UInt32 {
 		
 		case Hero = 1
@@ -104,7 +99,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
         
 		self.physicsWorld.contactDelegate = self
-		
+		countDownText = SKLabelNode(text: String(countDown))
+        totalScore = SKLabelNode(text: String(score))
+        
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         print("Scaling Factor: ", terminator: "")
         print(scalingFactor)
@@ -323,8 +320,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func didBeginContact(contact: SKPhysicsContact) {
 		
-        //let firstNode = contact.bodyA.node as! SKSpriteNode
-        //let secondNode = contact.bodyB.node as! SKSpriteNode
+//        let firstNode = contact.bodyA.node as! Enemy
+//        let secondNode = contact.bodyB.node as! Enemy
         
         if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
 			
@@ -334,46 +331,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
             heroGameEnding()
         
-        } //else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
+//        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
 //        
-//            if firstNode.position.x == endOfScreenRight {
+//            print("Enemy collision")
+//            firstNode.physicsBody = nil
+//            secondNode.physicsBody = nil
 //            
-//                /*if firstNode.position.y > self.frame.height / 2 - 50 {
+//            firstNode.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 //                
-//                    firstNode.position.y -= firstNode.size.height / 2 - 10
-//                    firstNode.zRotation = 0
-//                    println("moved first Node down")
-//                    
-//                } else {
+//                firstNode.hidden = true
+//                firstNode.removeFromParent()
 //                
-//                    firstNode.position.y += firstNode.size.height / 2 + 10
-//                    firstNode.zRotation = 0
-//                    println("moved first Node up")
-//                }
-//                
+//            })
 //            
-//            } else if secondNode.position.x == endOfScreenRight {
-//
-//                if secondNode.position.y > self.frame.height / 2 - 50 {
-//                    
-//                    secondNode.position.y -= secondNode.size.height / 2 - 10
-//                    firstNode.zRotation = 0
-//                    println("moved second Node down")
-//                    
-//                } else {
-//                    
-//                    secondNode.position.y += secondNode.size.height / 2 + 10
-//                    firstNode.zRotation = 0
-//                    println("moved second Node up")
-//                }*/
+//            secondNode.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 //                
-//            } else {
+//                secondNode.hidden = true
+//                secondNode.removeFromParent()
 //                
-//                //println("collision on screen")
-//
-//            }
-//		}
-		
+//            })
+//        
+        }
 	}
     
     func enemyCollisionOnStart(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
@@ -425,7 +403,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		totalScore.runAction(SKAction.fadeOutWithDuration(1.0))
 		score = 0
 		scoreLabel.text = "0"
-		gameProgress = 0
 		gameSpeed = 1
 		totalSpeedAsteroid = normalSpeedAsteroid
 		totalSpeedSatellite = normalSpeedSatellite
@@ -455,11 +432,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
     func startBGAnim() {
         bg.runAction(SKAction.moveToX(bg.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bgAn.runAction(SKAction.moveToX(bgAn.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+//        bgAn.runAction(SKAction.moveToX(bgAn.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
         bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg2An.runAction(SKAction.moveToX(bg2An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+//        bg2An.runAction(SKAction.moveToX(bg2An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
         bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
-        bg3An.runAction(SKAction.moveToX(bg3An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+//        bg3An.runAction(SKAction.moveToX(bg3An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
     }
     
     func stopBGAnim() {
@@ -511,7 +488,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func addEnemies() {
 		enemyCount++
-		var number:Int = Int(arc4random_uniform(11))
+		let number:Int = Int(arc4random_uniform(11))
 		let upDown:Int = Int(arc4random_uniform(2))
 		let heightNumber:Int = Int((self.size.height / 2) - (SKSpriteNode(imageNamed: "Asteroid16").size.height / 2))
 		let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
@@ -564,8 +541,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false
 		enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-		enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue
-		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue
+        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
 		enemy.physicsBody!.allowsRotation = false
         
 		enemy.movementSpeed = movementSpeed
@@ -626,7 +603,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
-        self.playSceneActive = false
         skView.presentScene(scene, transition: transition)
 		
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
@@ -1191,9 +1167,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 bgEmit = true
                 bgAnCount = score
             }
-			gameProgress++
-			
-			
 		}
 		
 		if score <= 50 {
