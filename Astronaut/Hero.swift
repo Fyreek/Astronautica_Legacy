@@ -16,18 +16,16 @@ class Hero: SKSpriteNode {
 	
 	override init(texture: SKTexture?, color: UIColor, size: CGSize) {
 		self.movementSpeed = 125
-		self.pace = 0.1
 		self.emit = false
 		
 		super.init(texture: texture, color: color, size: size)
 	}
 	
-	convenience init(color: SKColor, movementSpeed: CGFloat = 75, pace: Double = 0.1, emit: Bool = false){
+	convenience init(color: SKColor, movementSpeed: CGFloat = 75, emit: Bool = false){
 	
 		let size = CGSize(width: SKSpriteNode(imageNamed: "Astronaut25").size.width, height: SKSpriteNode(imageNamed: "Astronaut25").size.height)
 		self.init(texture:nil, color: color, size: size)
 		self.movementSpeed = movementSpeed
-		self.pace = pace
 		self.emit = emit.boolValue
 	}
 

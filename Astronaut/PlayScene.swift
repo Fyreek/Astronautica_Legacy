@@ -1069,14 +1069,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 				if enemy.name == "Satellite15" {
 					
 					enemy.position.y = CGFloat((Double(enemy.position.y))) + CGFloat(sin(enemy.angle / 2) * enemy.range)
-					//enemy.angle += hero.pace
                     if enemy.position.y > self.size.height / 2 - enemy.size.height / 2{
                         enemy.angle = enemy.angle + Float(M_1_PI)
                     } else if enemy.position.y < -(self.size.height / 2 - enemy.size.height / 2) {
                         enemy.angle = enemy.angle + Float(M_1_PI)
                     }
-					enemy.angle = enemy.angle + Float(hero.pace)
-                    print(enemy.position.y)
+					enemy.angle = enemy.angle + 0.1
+                    //print(enemy.position.y)
 					
 				} else if enemy.name == "Missile8" {
 
