@@ -23,7 +23,7 @@ class OptionScene: SKScene {
     let menuSoundSprite = SKSpriteNode(imageNamed: "BackButton32")
     let menuInAppSprite = SKSpriteNode(imageNamed: "BackButton32")
     let noAdSprite = SKSpriteNode(imageNamed: "BackButton32")
-    let soundSprite = SKSpriteNode(imageNamed: "BackButton32")
+    let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
     let musicSprite = SKSpriteNode(imageNamed: "BackButton32")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
