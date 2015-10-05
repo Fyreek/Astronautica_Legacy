@@ -46,10 +46,7 @@ class OptionScene: SKScene {
         addChild(bg)
         
         soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-        print(soundOn)
-
         musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
-        print(musicOn)
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
@@ -120,9 +117,9 @@ class OptionScene: SKScene {
         soundSprite.zPosition = 1.2
         soundSprite.name = "soundSprite"
         if soundOn == true {
-            soundSprite.zRotation = 180
+            soundSprite.texture = SKTexture(imageNamed: "SoundOnButton32")
         } else {
-            soundSprite.zRotation = 0
+            soundSprite.texture = SKTexture(imageNamed: "SoundOffButton32")
         }
         addChild(soundSprite)
         
@@ -266,10 +263,10 @@ class OptionScene: SKScene {
     func soundManagment() {
         if soundOn == true {
             soundOn = false
-            soundSprite.zRotation = 0
+            soundSprite.texture = SKTexture(imageNamed: "SoundOffButton32")
         } else {
             soundOn = true
-            soundSprite.zRotation = 180
+            soundSprite.texture = SKTexture(imageNamed: "SoundOnButton32")
         }
         print(soundOn)
         NSUserDefaults.standardUserDefaults().setBool(soundOn, forKey: "soundBool")
@@ -307,13 +304,13 @@ class OptionScene: SKScene {
                 self.menuInAppSprite.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.noAdSprite {
                 lastSpriteName = self.noAdSprite.name!
-                self.noAdSprite.runAction(buttonPressLight)
+                self.noAdSprite.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.soundSprite {
                 lastSpriteName = self.soundSprite.name!
-                self.soundSprite.runAction(buttonPressLight)
+                self.soundSprite.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.musicSprite {
                 lastSpriteName = self.musicSprite.name!
-                self.musicSprite.runAction(buttonPressLight)
+                self.musicSprite.runAction(buttonPressDark)
             }
         }
     }
