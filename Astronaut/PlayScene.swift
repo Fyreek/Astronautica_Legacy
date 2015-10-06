@@ -264,23 +264,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		menu.hidden = true
 		menu.alpha = 0
         
+        UIViewController.prepareInterstitialAds()
+        
 		startGameNormal()
 		
 	}
-	
-    func showFSAd() {
-        NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
-    }
-    
-    func hideFSAd() {
-        NSNotificationCenter.defaultCenter().postNotificationName("hideFSAd", object: nil)
-    }
     
     func openGameOverMenu() {
 
+        NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
         showAds()
-        showFSAd()
-        
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
             self.gameOverMenuLoaded = true
