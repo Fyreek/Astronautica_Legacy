@@ -183,7 +183,7 @@ class GameScene: SKScene, EasyGameCenterDelegate {
     }
 	
     func showOptionScene() {
-    
+        
         let transition = SKTransition.fadeWithDuration(1)
         let scene = OptionScene(size: self.size)
         let skView = self.view as SKView!

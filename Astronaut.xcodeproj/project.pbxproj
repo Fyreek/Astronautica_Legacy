@@ -201,7 +201,6 @@
 				TargetAttributes = {
 					81E4451F1B8667D900BC86B2 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = ZA57B2W688;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
 								enabled = 1;
@@ -398,7 +397,7 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yalu.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronaut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -418,7 +417,7 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.yalu.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronaut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

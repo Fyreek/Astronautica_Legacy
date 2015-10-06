@@ -8,10 +8,13 @@
 
 import UIKit
 import SpriteKit
+import MediaPlayer
 import iAd
 
-class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
+class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate, ADInterstitialAdDelegate {
     
+    var interstitialAd:ADInterstitialAd!
+    var interstitialAdView: UIView = UIView()
     var UIiAd: ADBannerView = ADBannerView()
     var gotScore:Bool = false
     var gcScore:Int = -1
@@ -19,11 +22,17 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
+        loadInterstitialAd()
+        
         UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBannerAd", name: "hideadsID", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFullScreenAd", name: "showFSAd", object: nil)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideFullScreenAd", name: "hideFSAd", object: nil)
         
         UIiAd.delegate = self
         
@@ -50,6 +59,55 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 		skView.presentScene(scene)
         
 	}
+    
+    func loadInterstitialAd() {
+        interstitialAd = ADInterstitialAd()
+        interstitialAd.delegate = self
+    }
+    
+    func interstitialAdWillLoad(interstitialAd: ADInterstitialAd!) {
+        
+    }
+    
+    func interstitialAdDidLoad(interstitialAd: ADInterstitialAd!) {
+//        interstitialAdView = UIView()
+//        interstitialAdView.frame = self.view.bounds
+//        view.addSubview(interstitialAdView)
+//        
+//        interstitialAd.presentInView(interstitialAdView)
+//        UIViewController.prepareInterstitialAds()
+    }
+    
+    func showFullScreenAd() {
+        interstitialAdView = UIView()
+        interstitialAdView.frame = self.view.bounds
+        view.addSubview(interstitialAdView)
+        
+        interstitialAd.presentInView(interstitialAdView)
+        UIViewController.prepareInterstitialAds()
+    }
+    
+    func hideFullScreenAd() {
+    
+        interstitialAdView.removeFromSuperview()
+    
+    }
+    
+    func interstitialAdActionDidFinish(interstitialAd: ADInterstitialAd!) {
+        interstitialAdView.removeFromSuperview()
+    }
+    
+    func interstitialAdActionShouldBegin(interstitialAd: ADInterstitialAd!, willLeaveApplication willLeave: Bool) -> Bool {
+        return true
+    }
+    
+    func interstitialAd(interstitialAd: ADInterstitialAd!, didFailWithError error: NSError!) {
+        
+    }
+    
+    func interstitialAdDidUnload(interstitialAd: ADInterstitialAd!) {
+        interstitialAdView.removeFromSuperview()
+    }
     
     func easyGameCenterAuthentified() {
         loadHighScore()
@@ -87,7 +145,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 			return UIInterfaceOrientationMask.All
 		}
 	}
-	
+    
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Release any cached data, images, etc that aren't in use.

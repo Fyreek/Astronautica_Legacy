@@ -268,9 +268,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
+    func showFSAd() {
+        NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
+    }
+    
+    func hideFSAd() {
+        NSNotificationCenter.defaultCenter().postNotificationName("hideFSAd", object: nil)
+    }
+    
     func openGameOverMenu() {
 
         showAds()
+        showFSAd()
         
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
@@ -372,7 +381,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         hero.hidden = false
 		countDownText.hidden = false
 		hero.removeAllActions()
-
+        
 		hero.movementSpeed = Hero().movementSpeed
 		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
 		hero.physicsBody!.affectedByGravity = false
@@ -541,8 +550,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false
 		enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
-		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue //| ColliderType.Enemy.rawValue
+		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue //| ColliderType.Enemy.rawValue
 		enemy.physicsBody!.allowsRotation = false
         
 		enemy.movementSpeed = movementSpeed
