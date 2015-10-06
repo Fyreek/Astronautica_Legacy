@@ -264,7 +264,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		menu.hidden = true
 		menu.alpha = 0
         
-        UIViewController.prepareInterstitialAds()
+        GameViewController.prepareInterstitialAds()
         
 		startGameNormal()
 		
@@ -272,7 +272,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func openGameOverMenu() {
 
-        NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
         showAds()
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
@@ -375,6 +374,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.hidden = false
 		hero.removeAllActions()
         
+        gamePaused = true
+        
 		hero.movementSpeed = Hero().movementSpeed
 		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
 		hero.physicsBody!.affectedByGravity = false
@@ -471,6 +472,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
 			gameOver = false
+            gamePaused = false
 			timer.invalidate()
 			countDownRunning = false
 			gamePause.hidden = false
@@ -939,10 +941,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gamePaused {
 			if !gameOver {
 				updateBGPosition()
-				updateEnemiesPosition()
+				//updateEnemiesPosition()
                 //updateBackgroundEmitter()
 			}
-            
+            updateEnemiesPosition()
             updateHeroEmitter()
             
         }
@@ -977,21 +979,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         }
         
-    }
-    
-    func updateBackgroundEmitterOld() {
-        if bgEmit == true {
-            bgEmit = false
-            bg.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05))
-            bg.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
-            
-                self.bg.texture = SKTexture(imageNamed: "Background188")
-                self.bg2.texture = SKTexture(imageNamed: "Background188")
-                self.bg3.texture = SKTexture(imageNamed: "Background188")
-            })
-            bg2.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05))
-            bg3.runAction(SKAction.animateWithTextures(backgroundAnimationFrames, timePerFrame: 0.05))
-        }
     }
     
     func updateBackgroundEmitter() {
@@ -1099,46 +1086,51 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     }
 					
 				} else {
-                    
-					if enemy.name == "Asteroid16" {
-						enemy.speed = totalSpeedAsteroid
-					} else if enemy.name == "Satellite15" {
-						enemy.speed = totalSpeedSatellite
-					} else if enemy.name == "Missile8" {
-						enemy.speed = totalSpeedRocket
-					}
-					
-					let upDown:Int = Int(arc4random_uniform(2))
-					let heightNumber:Int = Int((self.size.height / 2) - 15)
-					let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
-					
-					if upDown == 0 {
-                        enemy.position.y = CGFloat(-(height))
-					} else if upDown == 1 {
-                        enemy.position.y = CGFloat(height)
-					}
-					if enemy.name == "Missile8" {
-						
-						enemy.removeFromParent()
-						enemy.moving = false
-                        var number:Int
-                        number = enemiesIndex.find{ $0 == enemy.uniqueIndetifier}!
-                        enemies.removeAtIndex(number)
-                        enemiesIndex.removeAtIndex(number)
-						enemy.hidden = true
-						enemy.position.x = self.size.width + 200
-						
-					} else {
-						
-						enemy.position.x = endOfScreenRight
-						enemy.currentFrame = 0
-						enemy.setRandomFrame()
-						enemy.moving = false
-						//enemy.range = enemy.range + 0.1
-						
-					}
-					
-					enemy.scored = false
+                    if !gameOver {
+                        if enemy.name == "Asteroid16" {
+                            enemy.speed = totalSpeedAsteroid
+                        } else if enemy.name == "Satellite15" {
+                            enemy.speed = totalSpeedSatellite
+                        } else if enemy.name == "Missile8" {
+                            enemy.speed = totalSpeedRocket
+                        }
+                        
+                        let upDown:Int = Int(arc4random_uniform(2))
+                        let heightNumber:Int = Int((self.size.height / 2) - 15)
+                        let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
+                        
+                        if upDown == 0 {
+                            enemy.position.y = CGFloat(-(height))
+                        } else if upDown == 1 {
+                            enemy.position.y = CGFloat(height)
+                        }
+                        if enemy.name == "Missile8" {
+                            
+                            enemy.removeFromParent()
+                            enemy.moving = false
+                            var number:Int
+                            number = enemiesIndex.find{ $0 == enemy.uniqueIndetifier}!
+                            enemies.removeAtIndex(number)
+                            enemiesIndex.removeAtIndex(number)
+                            enemy.hidden = true
+                            enemy.position.x = self.size.width + 200
+                            
+                        } else {
+                            enemy.position.x = endOfScreenRight
+                            enemy.currentFrame = 0
+                            enemy.setRandomFrame()
+                            enemy.moving = false
+                            //enemy.range = enemy.range + 0.1
+                        }
+                        
+                        enemy.scored = false
+                    } else {
+                        enemy.moving = false
+                        enemy.hidden = true
+                        enemy.removeFromParent()
+                        //stopBGAnim()
+                        
+                    }
 					
 				}
                 if enemy.position.x < hero.position.x - enemy.size.width {

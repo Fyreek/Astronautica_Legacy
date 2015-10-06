@@ -8,7 +8,6 @@
 
 import UIKit
 import SpriteKit
-import MediaPlayer
 import iAd
 
 class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
@@ -27,8 +26,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFsAd", name: "showFSAd", object: nil)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideFullScreenAd", name: "hideFSAd", object: nil)
         
         UIiAd.delegate = self
         
