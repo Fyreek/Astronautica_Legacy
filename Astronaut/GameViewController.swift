@@ -19,6 +19,9 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
+        self.UIiAd.hidden = true
+        self.UIiAd.alpha = 0
+        
         UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
         
@@ -28,9 +31,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFsAd", name: "showFSAd", object: nil)
         
         UIiAd.delegate = self
-        
-        self.UIiAd.hidden = true
-        self.UIiAd.alpha = 0
         
 		// Init Easy Game Center
 		EasyGameCenter.sharedInstance(self)
@@ -100,8 +100,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 	}
     
     override func viewWillAppear(animated: Bool) {
-        UIiAd.delegate = self
-        self.view.addSubview(UIiAd)
+//        UIiAd.delegate = self
+//        self.view.addSubview(UIiAd)
         addAdConstraints()
     }
     
@@ -112,6 +112,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     
     func bannerViewDidLoadAd(banner: ADBannerView!) {
         //var BV = UIiAd.bounds.height
+        showBannerAd()
         self.view.addSubview(UIiAd)
         UIView.beginAnimations(nil, context: nil)
         UIView.setAnimationDuration(1) // Time it takes the animation to complete
@@ -125,6 +126,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     
     func showBannerAd() {
         UIiAd.hidden = false
+        UIiAd.alpha = 1.0
         
         UIView.animateWithDuration(0.25, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
         

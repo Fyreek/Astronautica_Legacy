@@ -25,6 +25,7 @@ class GameScene: SKScene, EasyGameCenterDelegate {
     var lastSpriteName:String = ""
     var scalingFactor:CGFloat = 1
     var scalingFactorX:CGFloat = 1
+    var tickCount:Int = 0
     
 	override func didMoveToView(view: SKView) {
         

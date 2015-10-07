@@ -20,7 +20,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var endOfScreenLeft = CGFloat()
 	var gamePaused = false
 	var enemyCount = 0
-	
+    var deathEnemy: Enemy!
+    
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
 	
@@ -286,52 +287,52 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    func heroGameEnding() {
-			
-			hero.physicsBody = nil
-			gameOver = true
-			gamePause.hidden = true
-			hero.removeAllActions()
-			scoreLabel.hidden = true
-			stopBGAnim()
-			
-			hero.emit = true
-			
-			let scoreBefore:Int = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
-			
-			if score <= scoreBefore {
-				
-				totalScore.hidden = false
-				totalScore.text = ("You reached ") + String(score) + (" points!")
-				totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-				
-			} else if score > scoreBefore {
-				
-				NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
-				NSUserDefaults.standardUserDefaults().synchronize()
-				//submit score to GameCenter
-				EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
-				
-				totalScore.hidden = false
-				totalScore.text = ("New Highscore: ") + String(score) + (" points!")
-				totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-				
-			}
+    func heroGameEnding(otherBody: Enemy) {
+        hero.physicsBody = nil
+        gameOver = true
+        gamePause.hidden = true
+        hero.removeAllActions()
+        scoreLabel.hidden = true
+        
+        deathEnemy = otherBody
+        deathEnemy.deathMoving = true
+        hero.emit = true
+        
+        let scoreBefore:Int = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+        
+        if score <= scoreBefore {
+            
+            totalScore.hidden = false
+            totalScore.text = ("You reached ") + String(score) + (" points!")
+            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+            
+        } else if score > scoreBefore {
+            
+            NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            //submit score to GameCenter
+            EasyGameCenter.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
+            
+            totalScore.hidden = false
+            totalScore.text = ("New Highscore: ") + String(score) + (" points!")
+            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+            
+        }
 	}
 	
 	func didBeginContact(contact: SKPhysicsContact) {
 		
-//        let firstNode = contact.bodyA.node as! Enemy
-//        let secondNode = contact.bodyB.node as! Enemy
+        let firstNode = contact.bodyA.node as? Enemy
+        let secondNode = contact.bodyB.node as? Enemy
         
         if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
 			
-            heroGameEnding()
+            heroGameEnding(secondNode!)
         
         } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue {
 			
-            heroGameEnding()
-        
+            heroGameEnding(firstNode!)
+            
 //        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
 //        
 //            print("Enemy collision")
@@ -369,6 +370,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func reloadGame() {
 		
+        stopBGAnim()
 		scoreLabel.hidden = false
         hero.hidden = false
 		countDownText.hidden = false
@@ -506,9 +508,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
-				addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount)
+                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount, deathMoving: false)
 			} else if upDown == 1 {
-                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount)
+                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount, deathMoving: false)
 			}
 			
 			
@@ -518,24 +520,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 //                if height >= Int((self.size.height / 2) - (90 * scalingFactor)) {
 //                    height = (height - 90)
 //                }
-                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount)
+                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount, deathMoving: false)
 			} else if upDown == 1 {
 //                if height <= Int(-(self.size.height / 2) + (90 * scalingFactor)) {
 //                    height = -(height - 90)
 //                }
-                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount)
+                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount, deathMoving: false)
 			}
 		} else if number == 10 {
 			if upDown == 0 {
-                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 1, uniqueIdentifier: enemyCount)
+                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 1, uniqueIdentifier: enemyCount, deathMoving: false)
 			} else if upDown == 1 {
-                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 1, uniqueIdentifier: enemyCount)
+                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 1, uniqueIdentifier: enemyCount, deathMoving: false)
 			}
 		}
 		
 	}
 	
-	func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int) {
+    func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int, deathMoving:Bool) {
 		
 		let enemy = Enemy(imageNamed: named)
 		
@@ -1008,6 +1010,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
         if hero.emit == true {
             hero.emit = false
+            deathEnemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+                
+                self.deathEnemy.hidden = true
+                
+            })
             hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 				
                 self.hero.hidden = true
@@ -1020,129 +1027,129 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	func updateEnemiesPosition(){
 		
 		for enemy in enemies {
-			
-			if enemy.moving == false {
-				
-				enemy.currentFrame = enemy.currentFrame + 1
-				if enemy.currentFrame > enemy.randomFrame{
-					
-					enemy.moving = true
-					
-				}
-			} else {
-                
-				if enemy.name == "Satellite15" {
-					
-					enemy.position.y = CGFloat((Double(enemy.position.y))) + CGFloat(sin(enemy.angle / 2) * enemy.range)
-                    if enemy.position.y > self.size.height / 2 - enemy.size.height / 2{
-                        enemy.angle = enemy.angle + Float(M_1_PI)
-                    } else if enemy.position.y < -(self.size.height / 2 - enemy.size.height / 2) {
-                        enemy.angle = enemy.angle + Float(M_1_PI)
+            if enemy.deathMoving == false {
+                if enemy.moving == false {
+                    
+                    enemy.currentFrame = enemy.currentFrame + 1
+                    if enemy.currentFrame > enemy.randomFrame{
+                        
+                        enemy.moving = true
+                        
                     }
-					enemy.angle = enemy.angle + 0.1
-                    //print(enemy.position.y)
-					
-				} else if enemy.name == "Missile8" {
+                } else {
+                    
+                    if enemy.name == "Satellite15" {
+                        
+                        enemy.position.y = CGFloat((Double(enemy.position.y))) + CGFloat(sin(enemy.angle / 2) * enemy.range)
+                        if enemy.position.y > self.size.height / 2 - enemy.size.height / 2{
+                            enemy.angle = enemy.angle + Float(M_1_PI)
+                        } else if enemy.position.y < -(self.size.height / 2 - enemy.size.height / 2) {
+                            enemy.angle = enemy.angle + Float(M_1_PI)
+                        }
+                        enemy.angle = enemy.angle + 0.1
+                        //print(enemy.position.y)
+                        
+                    } else if enemy.name == "Missile8" {
 
+                            if hero.position.y > enemy.position.y {
+
+                                enemy.position.y -= enemy.preLocation
+                                
+                            } else if hero.position.y < enemy.position.y {
+                                
+                                enemy.position.y -= enemy.preLocation
+                            
+                            }
+
+                    } else if enemy.name == "Asteroid16" {
+                        
+                        let degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+                        if enemy.rotationDirection == 0 {
+                             enemy.zRotation -= CGFloat(degreeRotation)
+                        } else {
+                             enemy.zRotation += CGFloat(degreeRotation)
+                        }
+                       
+                        enemy.angle = 0
                         if hero.position.y > enemy.position.y {
-
-                            enemy.position.y -= enemy.preLocation
+                            
+                            enemy.position.y = CGFloat(Double(enemy.position.y) + 0.05 )
                             
                         } else if hero.position.y < enemy.position.y {
                             
-                            enemy.position.y -= enemy.preLocation
-                        
+                            enemy.position.y = CGFloat(Double(enemy.position.y) - 0.05)
+                            
                         }
-
-				} else if enemy.name == "Asteroid16" {
+                    }
                     
-                    let degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
-                    if enemy.rotationDirection == 0 {
-                         enemy.zRotation -= CGFloat(degreeRotation)
-                    } else {
-                         enemy.zRotation += CGFloat(degreeRotation)
-                    }
-                   
-					enemy.angle = 0
-					if hero.position.y > enemy.position.y {
-						
-						enemy.position.y = CGFloat(Double(enemy.position.y) + 0.05 )
-						
-					} else if hero.position.y < enemy.position.y {
-						
-						enemy.position.y = CGFloat(Double(enemy.position.y) - 0.05)
-						
-					}
-				}
-				
-				if enemy.position.x > endOfScreenLeft{
-					
-					if enemy.name == "Asteroid16" {
-						enemy.position.x -= CGFloat(totalSpeedAsteroid)
-                    } else if enemy.name == "Satellite15" {
-						enemy.position.x -= CGFloat(totalSpeedSatellite)
-					} else if enemy.name == "Missile8" {
-						enemy.position.x -= CGFloat(totalSpeedRocket)
-                    }
-					
-				} else {
-                    if !gameOver {
+                    if enemy.position.x > endOfScreenLeft{
+                        
                         if enemy.name == "Asteroid16" {
-                            enemy.speed = totalSpeedAsteroid
+                            enemy.position.x -= CGFloat(totalSpeedAsteroid)
                         } else if enemy.name == "Satellite15" {
-                            enemy.speed = totalSpeedSatellite
+                            enemy.position.x -= CGFloat(totalSpeedSatellite)
                         } else if enemy.name == "Missile8" {
-                            enemy.speed = totalSpeedRocket
+                            enemy.position.x -= CGFloat(totalSpeedRocket)
                         }
                         
-                        let upDown:Int = Int(arc4random_uniform(2))
-                        let heightNumber:Int = Int((self.size.height / 2) - 15)
-                        let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
-                        
-                        if upDown == 0 {
-                            enemy.position.y = CGFloat(-(height))
-                        } else if upDown == 1 {
-                            enemy.position.y = CGFloat(height)
-                        }
-                        if enemy.name == "Missile8" {
-                            
-                            enemy.removeFromParent()
-                            enemy.moving = false
-                            var number:Int
-                            number = enemiesIndex.find{ $0 == enemy.uniqueIndetifier}!
-                            enemies.removeAtIndex(number)
-                            enemiesIndex.removeAtIndex(number)
-                            enemy.hidden = true
-                            enemy.position.x = self.size.width + 200
-                            
-                        } else {
-                            enemy.position.x = endOfScreenRight
-                            enemy.currentFrame = 0
-                            enemy.setRandomFrame()
-                            enemy.moving = false
-                            //enemy.range = enemy.range + 0.1
-                        }
-                        
-                        enemy.scored = false
                     } else {
-                        enemy.moving = false
-                        enemy.hidden = true
-                        enemy.removeFromParent()
-                        //stopBGAnim()
+                        if !gameOver {
+                            if enemy.name == "Asteroid16" {
+                                enemy.speed = totalSpeedAsteroid
+                            } else if enemy.name == "Satellite15" {
+                                enemy.speed = totalSpeedSatellite
+                            } else if enemy.name == "Missile8" {
+                                enemy.speed = totalSpeedRocket
+                            }
+                            
+                            let upDown:Int = Int(arc4random_uniform(2))
+                            let heightNumber:Int = Int((self.size.height / 2) - 15)
+                            let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
+                            
+                            if upDown == 0 {
+                                enemy.position.y = CGFloat(-(height))
+                            } else if upDown == 1 {
+                                enemy.position.y = CGFloat(height)
+                            }
+                            if enemy.name == "Missile8" {
+                                
+                                enemy.removeFromParent()
+                                enemy.moving = false
+                                var number:Int
+                                number = enemiesIndex.find{ $0 == enemy.uniqueIndetifier}!
+                                enemies.removeAtIndex(number)
+                                enemiesIndex.removeAtIndex(number)
+                                enemy.hidden = true
+                                enemy.position.x = self.size.width + 200
+                                
+                            } else {
+                                enemy.position.x = endOfScreenRight
+                                enemy.currentFrame = 0
+                                enemy.setRandomFrame()
+                                enemy.moving = false
+                                //enemy.range = enemy.range + 0.1
+                            }
+                            
+                            enemy.scored = false
+                        } else {
+                            enemy.moving = false
+                            enemy.hidden = true
+                            enemy.removeFromParent()
+                            //stopBGAnim()
+                            
+                        }
                         
                     }
-					
-				}
-                if enemy.position.x < hero.position.x - enemy.size.width {
-                    if enemy.scored == false {
-                        updateScore()
-                        enemy.scored = true
+                    if enemy.position.x < hero.position.x - enemy.size.width {
+                        if enemy.scored == false {
+                            updateScore()
+                            enemy.scored = true
+                        }
                     }
                 }
-			}
-			
-		}
-		
+                
+            }
+        }
 	}
 	
 	func updateScore(){
