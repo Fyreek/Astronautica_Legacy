@@ -86,8 +86,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var countDownText = SKLabelNode(text: "")
 	enum ColliderType:UInt32 {
 		
-		case Hero = 1
-		case Enemy = 2
+        case All = 0xFFFFFFFF
+		case Hero = 0b001
+		case Enemy = 0b010
 		
 	}
     
@@ -296,6 +297,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         deathEnemy = otherBody
         deathEnemy.deathMoving = true
+        //deathEnemy.physicsBody = nil
+        deathEnemy.removeFromParent()
         hero.emit = true
         
         let scoreBefore:Int = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
@@ -322,38 +325,92 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func didBeginContact(contact: SKPhysicsContact) {
 		
-        let firstNode = contact.bodyA.node as? Enemy
-        let secondNode = contact.bodyB.node as? Enemy
+        let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
-        if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
-			
-            heroGameEnding(secondNode!)
-        
-        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue {
-			
-            heroGameEnding(firstNode!)
+        switch contactMask {
+         
+        case ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue :
+            if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue {
+                let otherBody = contact.bodyB.node as? Enemy
+                heroGameEnding(otherBody!)
+            } else {
+                let otherBody = contact.bodyA.node as? Enemy
+                heroGameEnding(otherBody!)
+            }
+        case ColliderType.Enemy.rawValue | ColliderType.Enemy.rawValue :
+            print("Enemy Collision")
+            //let firstNode = contact.bodyA.node as? Enemy
+            let ship = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
+            let ship2 = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
+            //let secondNode = contact.bodyB.node as? Enemy
+            //firstNode!.physicsBody = nil
+            //secondNode!.physicsBody = nil
+            ship?.physicsBody = nil
+            ship2?.physicsBody = nil
+            ship?.deathMoving = true
+            ship2?.deathMoving = true
+            ship?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
+                ship?.hidden = true
+                ship?.removeFromParent()
+                var number:Int
+                number = self.enemiesIndex.find{ $0 == ship?.uniqueIndetifier}!
+                self.enemies.removeAtIndex(number)
+                self.enemiesIndex.removeAtIndex(number)
+                if !self.gameOver {
+                    self.addEnemies()
+                }
+            })
+            ship2?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+                
+                ship2?.hidden = true
+                ship2?.removeFromParent()
+                var number:Int
+                number = self.enemiesIndex.find{ $0 == ship2?.uniqueIndetifier}!
+                self.enemies.removeAtIndex(number)
+                self.enemiesIndex.removeAtIndex(number)
+                if !self.gameOver {
+                    self.addEnemies()
+                }
+            })
+        default :
+            fatalError("other collision: \(contactMask)")
+        }
+        
+        
+        
+        
+//        let firstNode = contact.bodyA.node as? Enemy
+//        let secondNode = contact.bodyB.node as? Enemy
+//        
+//        if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
+//            
+//            heroGameEnding(secondNode!)
+//        
+//        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue {
+//			
+//            heroGameEnding(firstNode!)
+//            
 //        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
 //        
 //            print("Enemy collision")
-//            firstNode.physicsBody = nil
-//            secondNode.physicsBody = nil
+//            firstNode!.physicsBody = nil
+//            secondNode!.physicsBody = nil
 //            
-//            firstNode.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+//            firstNode!.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 //                
-//                firstNode.hidden = true
-//                firstNode.removeFromParent()
+//                firstNode!.hidden = true
+//                firstNode!.removeFromParent()
 //                
 //            })
 //            
-//            secondNode.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+//            secondNode!.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 //                
-//                secondNode.hidden = true
-//                secondNode.removeFromParent()
+//                secondNode!.hidden = true
+//                secondNode!.removeFromParent()
 //                
 //            })
-//        
-        }
+//        }
 	}
     
     func enemyCollisionOnStart(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
@@ -547,8 +604,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
 		enemy.physicsBody!.affectedByGravity = false
 		enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue //| ColliderType.Enemy.rawValue
-		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue //| ColliderType.Enemy.rawValue
+        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+		enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
 		enemy.physicsBody!.allowsRotation = false
         
 		enemy.movementSpeed = movementSpeed
@@ -1010,12 +1067,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
         if hero.emit == true {
             hero.emit = false
-            deathEnemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+            deathEnemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
                 
                 self.deathEnemy.hidden = true
                 
             })
-            hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+            hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
 				
                 self.hero.hidden = true
                 self.openGameOverMenu()

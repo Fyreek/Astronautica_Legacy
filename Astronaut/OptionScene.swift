@@ -202,30 +202,37 @@ class OptionScene: SKScene {
     }
     
     func showAdMenu() {
-    
+        
         coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
             self.musicSprite.hidden = true
             self.soundSprite.hidden = true
             self.coloredSprite.hidden = true
             
-            UIView.animateWithDuration(1.0, animations: {
-                
-                self.redSlider.alpha = 0
-                self.greenSlider.alpha = 0
-                self.blueSlider.alpha = 0
-                
-                }, completion: {(finished: Bool) -> Void in
-                    
-                    self.redSlider.removeFromSuperview()
-                    self.greenSlider.removeFromSuperview()
-                    self.blueSlider.removeFromSuperview()
-                    
-                    self.noAdSprite.hidden = false
-                    self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
-            })
-
+            self.redSlider.removeFromSuperview()
+            self.greenSlider.removeFromSuperview()
+            self.blueSlider.removeFromSuperview()
             
+            self.noAdSprite.hidden = false
+            self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
+
         }
+        UIView.animateWithDuration(1.0, animations: {
+            
+            self.redSlider.alpha = 0
+            self.greenSlider.alpha = 0
+            self.blueSlider.alpha = 0
+            
+            }, completion: {(finished: Bool) -> Void in
+                
+//                self.redSlider.removeFromSuperview()
+//                self.greenSlider.removeFromSuperview()
+//                self.blueSlider.removeFromSuperview()
+//                
+//                self.noAdSprite.hidden = false
+//                self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
+        })
+
+        
         musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
         soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
     }
