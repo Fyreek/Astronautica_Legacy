@@ -145,7 +145,6 @@ class GameScene: SKScene, EasyGameCenterDelegate {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             if self.nodeAtPoint(location) == self.startGameButton {
-                //self.menuHSButton.removeAllActions()
                 removeButtonAnim()
                 if lastSpriteName == startGameButton.name {
                     self.startGameButton.runAction(buttonPressLight){
@@ -153,7 +152,6 @@ class GameScene: SKScene, EasyGameCenterDelegate {
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuHSButton {
-                //self.menuHSButton.removeAllActions()
                 removeButtonAnim()
                 if lastSpriteName == menuHSButton.name {
                     self.menuHSButton.runAction(buttonPressLight){

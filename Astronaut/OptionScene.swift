@@ -223,13 +223,6 @@ class OptionScene: SKScene {
             self.blueSlider.alpha = 0
             
             }, completion: {(finished: Bool) -> Void in
-                
-//                self.redSlider.removeFromSuperview()
-//                self.greenSlider.removeFromSuperview()
-//                self.blueSlider.removeFromSuperview()
-//                
-//                self.noAdSprite.hidden = false
-//                self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
         })
 
         

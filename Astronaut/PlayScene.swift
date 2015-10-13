@@ -339,34 +339,30 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
         case ColliderType.Enemy.rawValue | ColliderType.Enemy.rawValue :
             print("Enemy Collision")
-            //let firstNode = contact.bodyA.node as? Enemy
-            let ship = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
-            let ship2 = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
-            //let secondNode = contact.bodyB.node as? Enemy
-            //firstNode!.physicsBody = nil
-            //secondNode!.physicsBody = nil
-            ship?.physicsBody = nil
-            ship2?.physicsBody = nil
-            ship?.deathMoving = true
-            ship2?.deathMoving = true
-            ship?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+            let bodyOne = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
+            let bodyTwo = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
+            bodyOne?.physicsBody = nil
+            bodyTwo?.physicsBody = nil
+            bodyOne?.deathMoving = true
+            bodyTwo?.deathMoving = true
+            bodyOne?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
-                ship?.hidden = true
-                ship?.removeFromParent()
+                bodyOne?.hidden = true
+                bodyOne?.removeFromParent()
                 var number:Int
-                number = self.enemiesIndex.find{ $0 == ship?.uniqueIndetifier}!
+                number = self.enemiesIndex.find{ $0 == bodyOne?.uniqueIndetifier}!
                 self.enemies.removeAtIndex(number)
                 self.enemiesIndex.removeAtIndex(number)
                 if !self.gameOver {
                     self.addEnemies()
                 }
             })
-            ship2?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
+            bodyTwo?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
                 
-                ship2?.hidden = true
-                ship2?.removeFromParent()
+                bodyTwo?.hidden = true
+                bodyTwo?.removeFromParent()
                 var number:Int
-                number = self.enemiesIndex.find{ $0 == ship2?.uniqueIndetifier}!
+                number = self.enemiesIndex.find{ $0 == bodyTwo?.uniqueIndetifier}!
                 self.enemies.removeAtIndex(number)
                 self.enemiesIndex.removeAtIndex(number)
                 if !self.gameOver {
@@ -376,41 +372,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         default :
             fatalError("other collision: \(contactMask)")
         }
-        
-        
-        
-        
-//        let firstNode = contact.bodyA.node as? Enemy
-//        let secondNode = contact.bodyB.node as? Enemy
-//        
-//        if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
-//            
-//            heroGameEnding(secondNode!)
-//        
-//        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Hero.rawValue {
-//			
-//            heroGameEnding(firstNode!)
-//            
-//        } else if contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue && contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue {
-//        
-//            print("Enemy collision")
-//            firstNode!.physicsBody = nil
-//            secondNode!.physicsBody = nil
-//            
-//            firstNode!.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
-//                
-//                firstNode!.hidden = true
-//                firstNode!.removeFromParent()
-//                
-//            })
-//            
-//            secondNode!.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
-//                
-//                secondNode!.hidden = true
-//                secondNode!.removeFromParent()
-//                
-//            })
-//        }
 	}
     
     func enemyCollisionOnStart(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
@@ -573,15 +534,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			
 		} else if number == 6 || number == 7 || number == 8 || number == 9 {
 			if upDown == 0 {
-                //height = height - (90 * Int(scalingFactor))
-//                if height >= Int((self.size.height / 2) - (90 * scalingFactor)) {
-//                    height = (height - 90)
-//                }
                 addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount, deathMoving: false)
 			} else if upDown == 1 {
-//                if height <= Int(-(self.size.height / 2) + (90 * scalingFactor)) {
-//                    height = -(height - 90)
-//                }
                 addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount, deathMoving: false)
 			}
 		} else if number == 10 {
@@ -626,9 +580,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if enemy.name == "Missile8" {
             let yMovement:CGFloat = (hero.position.y - enemy.position.y) / (hero.position.x - enemy.position.x)
             enemy.preLocation = yMovement * 2
-            //let an:CGFloat = hero.position.x - enemy.position.x
-            //let geg:CGFloat = hero.position.y - enemy.position.y
-            //var angleBetween:CGFloat = sin(an / geg)
             let angle = atan2(hero.position.y - enemy.position.y, hero.position.x - enemy.position.x)
             let Pi = CGFloat(M_PI)
             if hero.position.y > enemy.position.y {
@@ -891,7 +842,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                     self.menu.runAction(buttonPressLight){
                                         self.showMenu()
                                         self.gameStarted = false
-                                        //self.lastSpriteName = "empty"
                                     }
                                 }
                             }
@@ -908,21 +858,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             self.lastSpriteName = "empty"
                             self.gamePause.runAction(buttonPressLight){
                                 self.pauseGame()
-                                //self.lastSpriteName = "emtpy"
                             }
                         }
                     } else {
                         if lastSpriteName == "empty" {
-                            //removeAllActions()
                             buttonRemoveAction()
                             self.heroMovement()
                         } else {
                             buttonRemoveAction()
                             self.lastSpriteName = "empty"
                         }
-                        //removeAllActions()
-                        //buttonRemoveAction()
-                        //self.heroMovement()
                     }
                 }
             } else if self.nodeAtPoint(location) == self.gamePlay {
@@ -932,7 +877,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         self.lastSpriteName = "empty"
                         self.gamePlay.runAction(buttonPressLight){
                             self.resumeGame()
-                            //self.lastSpriteName = "empty"
                         }
                     }
                 }
@@ -943,7 +887,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         self.lastSpriteName = "empty"
                         self.menuPause.runAction(buttonPressLight){
                             self.showMenu()
-                            //self.lastSpriteName = "empty"
                         }
                     }
                 }
@@ -1104,19 +1047,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             enemy.angle = enemy.angle + Float(M_1_PI)
                         }
                         enemy.angle = enemy.angle + 0.1
-                        //print(enemy.position.y)
                         
                     } else if enemy.name == "Missile8" {
 
-                            if hero.position.y > enemy.position.y {
-
-                                enemy.position.y -= enemy.preLocation
-                                
-                            } else if hero.position.y < enemy.position.y {
-                                
-                                enemy.position.y -= enemy.preLocation
-                            
-                            }
+                        if hero.position.y > enemy.position.y {
+                            enemy.position.y -= enemy.preLocation
+                        } else if hero.position.y < enemy.position.y {
+                            enemy.position.y -= enemy.preLocation
+                        }
 
                     } else if enemy.name == "Asteroid16" {
                         
@@ -1129,13 +1067,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                        
                         enemy.angle = 0
                         if hero.position.y > enemy.position.y {
-                            
                             enemy.position.y = CGFloat(Double(enemy.position.y) + 0.05 )
-                            
                         } else if hero.position.y < enemy.position.y {
-                            
                             enemy.position.y = CGFloat(Double(enemy.position.y) - 0.05)
-                            
                         }
                     }
                     
@@ -1184,7 +1118,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                 enemy.currentFrame = 0
                                 enemy.setRandomFrame()
                                 enemy.moving = false
-                                //enemy.range = enemy.range + 0.1
                             }
                             
                             enemy.scored = false

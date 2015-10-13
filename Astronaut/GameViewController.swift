@@ -92,7 +92,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
-		// Release any cached data, images, etc that aren't in use.
 	}
 	
 	override func prefersStatusBarHidden() -> Bool {
@@ -100,8 +99,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
 	}
     
     override func viewWillAppear(animated: Bool) {
-//        UIiAd.delegate = self
-//        self.view.addSubview(UIiAd)
         addAdConstraints()
     }
     
@@ -111,7 +108,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     }
     
     func bannerViewDidLoadAd(banner: ADBannerView!) {
-        //var BV = UIiAd.bounds.height
         showBannerAd()
         self.view.addSubview(UIiAd)
         UIView.beginAnimations(nil, context: nil)
