@@ -24,6 +24,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var spawnPoints:[CGFloat] = []
     var spawnPointStats:[Bool] = [true, true, true, true, true]
     var scoreBefore:Int = 0
+    var heroHeight:CGFloat = 0
     
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
@@ -97,7 +98,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
-		NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
+		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
         replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
@@ -772,7 +773,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
 		if !gamePaused {
 			if !gameOver {
-				heroMovement()
+                for touch: AnyObject in touches {
+                    touchLocation = touch.locationInNode(self).y
+                    if heroHeight < touchLocation - 10 {
+                        heroMovement()
+                        heroHeight = touchLocation
+                    } else if heroHeight > touchLocation + 10 {
+                        heroMovement()
+                        heroHeight = touchLocation
+                    }
+                }
 			}
 		}
     }
@@ -839,7 +849,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         if lastSpriteName == "empty" {
                             //removeAllActions()
                             buttonRemoveAction()
-                            self.heroMovement()
+                            //self.heroMovement()
                         } else {
                             buttonRemoveAction()
                         }
