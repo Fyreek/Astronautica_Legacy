@@ -209,6 +209,8 @@ class GameScene: SKScene, EasyGameCenterDelegate {
         scene.size = skView.bounds.size
         skView.presentScene(scene, transition: transition)
         
+        scene.scoreBefore = highScore
+        
 	}
 	
 	override func update(currentTime: CFTimeInterval) {

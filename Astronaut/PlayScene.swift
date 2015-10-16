@@ -23,6 +23,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var deathEnemy: Enemy!
     var spawnPoints:[CGFloat] = []
     var spawnPointStats:[Bool] = [true, true, true, true, true]
+    var scoreBefore:Int = 0
     
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
@@ -96,7 +97,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
-		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
+		NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
         replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
@@ -312,8 +313,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         deathEnemy.removeFromParent()
         hero.emit = true
         
-        let scoreBefore:Int = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
-        
         if score <= scoreBefore {
             
             totalScore.hidden = false
@@ -322,6 +321,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
         } else if score > scoreBefore {
             
+            scoreBefore = score
             NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
             NSUserDefaults.standardUserDefaults().synchronize()
             //submit score to GameCenter
@@ -618,11 +618,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
     func spawning(enemy: Enemy) {
         for var i = 0; i < spawnPoints.count; i++ {
-            print("Spawnpoint: \(i)")
-            print(spawnPointStats[i].boolValue)
+            //print("Spawnpoint: \(i)")
+            //print(spawnPointStats[i].boolValue)
             if enemy.spawned == false {
                 if spawnPointStats[i].boolValue == true {
-                    print("Spawned")
+                    //print("Spawned")
                     enemy.yPos = spawnPoints[i]
                     enemy.position.y = enemy.yPos
                     enemy.spawnHeight = enemy.yPos
@@ -634,7 +634,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
                     enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
                     enemy.physicsBody!.allowsRotation = false
-                    enemy.moving = true
                 }
             }
         }
