@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import iAd
 
-class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenterDelegate {
+class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     var UIiAd: ADBannerView = ADBannerView()
     var gotScore:Bool = false
@@ -33,7 +33,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
         UIiAd.delegate = self
         
 		// Init Easy Game Center
-		EasyGameCenter.sharedInstance(self)
+		EGC.sharedInstance(self)
 		
 		let scene = GameScene()
         
@@ -58,7 +58,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EasyGameCenter
     }
     
     func loadHighScore() {
-        EasyGameCenter.getHighScore(leaderboardIdentifier: "astronautgame_leaderboard") {
+        EGC.getHighScore(leaderboardIdentifier: "astronautgame_leaderboard") {
             (tupleHighScore) -> Void in
             if self.gotScore == false {
                 if let tupleIsOk = tupleHighScore {

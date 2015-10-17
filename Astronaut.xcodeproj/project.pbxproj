@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		14EA5C011BD1A1AC008A1924 /* BonusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14EA5C001BD1A1AC008A1924 /* BonusItem.swift */; settings = {ASSET_TAGS = (); }; };
 		812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 812FED241B905B2900A2A8C3 /* Minecraft.ttf */; };
 		812FED271B9063E800A2A8C3 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812FED261B9063E800A2A8C3 /* HexColor.swift */; };
 		8143166E1B8730B4008A3C81 /* GameCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8143166D1B8730B4008A3C81 /* GameCenter.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14EA5C001BD1A1AC008A1924 /* BonusItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BonusItem.swift; path = ../BonusItem.swift; sourceTree = "<group>"; };
 		812FED241B905B2900A2A8C3 /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Minecraft.ttf; sourceTree = "<group>"; };
 		812FED261B9063E800A2A8C3 /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
 		8143166D1B8730B4008A3C81 /* GameCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenter.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				81E445251B8667D900BC86B2 /* AppDelegate.swift */,
+				14EA5C001BD1A1AC008A1924 /* BonusItem.swift */,
 				81E445271B8667D900BC86B2 /* GameScene.sks */,
 				81E445291B8667D900BC86B2 /* GameScene.swift */,
 				81E445491B86680300BC86B2 /* Enemy.swift */,
@@ -260,6 +263,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				14EA5C011BD1A1AC008A1924 /* BonusItem.swift in Sources */,
 				81E4454A1B86680300BC86B2 /* Enemy.swift in Sources */,
 				81E4454C1B86686600BC86B2 /* PlayScene.swift in Sources */,
 				81E4452A1B8667D900BC86B2 /* GameScene.swift in Sources */,

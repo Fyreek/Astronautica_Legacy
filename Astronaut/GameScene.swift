@@ -9,7 +9,7 @@
 import SpriteKit
 import iAd
 
-class GameScene: SKScene, EasyGameCenterDelegate {
+class GameScene: SKScene, EGCDelegate {
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
@@ -155,7 +155,7 @@ class GameScene: SKScene, EasyGameCenterDelegate {
                 removeButtonAnim()
                 if lastSpriteName == menuHSButton.name {
                     self.menuHSButton.runAction(buttonPressLight){
-                        EasyGameCenter.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                        EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
