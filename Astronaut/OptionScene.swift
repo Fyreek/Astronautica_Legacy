@@ -268,7 +268,6 @@ class OptionScene: SKScene {
             soundOn = true
             soundSprite.texture = SKTexture(imageNamed: "SoundOnButton32")
         }
-        print(soundOn)
         NSUserDefaults.standardUserDefaults().setBool(soundOn, forKey: "soundBool")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
@@ -281,7 +280,6 @@ class OptionScene: SKScene {
             musicOn = true
             musicSprite.zRotation = 180
         }
-        print(musicOn)
         NSUserDefaults.standardUserDefaults().setBool(musicOn, forKey: "musicBool")
         NSUserDefaults.standardUserDefaults().synchronize()
     }

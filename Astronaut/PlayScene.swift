@@ -120,8 +120,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         totalScore = SKLabelNode(text: String(score))
         
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
-        print("Scaling Factor: ", terminator: "")
-        print(scalingFactor)
         
         oxygenBar.hidden = true
         oxygenBarBG.hidden = true
@@ -218,10 +216,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         hero.color = UIColor(red: heroColorRed , green: heroColorGreen , blue: heroColorBlue, alpha: 1.0)
 		hero.colorBlendFactor = 0.4
-		
-        print(heroColorRed)
-        print(heroColorGreen)
-        print(heroColorBlue)
 		
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -386,7 +380,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             bonusItem.removeFromParent()
             self.bonusItems = []
             if !self.gameOver {
-                self.addBonusItems("Oxygen")
+                self.addBonusItems("Oxygen8")
             }
         })
     }
@@ -399,6 +393,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItemAlive = false
         bonusItems = []
         oxygen = oxygen + 60
+        updateOxygenBar()
     }
     
 	func didBeginContact(contact: SKPhysicsContact) {
@@ -420,13 +415,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if didOxygenCollide == false {
                 didOxygenCollide = true
                 if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue {
-                    print(bonusItemAlive)
-                    print(bonusItems)
                     let otherBody = contact.bodyB.node as? BonusItem
                     collisionHeroBonusItem(otherBody!)
                 } else {
-                    print(bonusItemAlive)
-                    print(bonusItems)
                     let otherBody = contact.bodyA.node as? BonusItem
                     collisionHeroBonusItem(otherBody!)
                 }
@@ -493,18 +484,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
 	}
     
-    func enemyCollisionOnStart(firstNode firstNode: SKSpriteNode, secondNode: SKSpriteNode) {
-    
-        firstNode.removeAllActions()
-        firstNode.hidden = true
-        firstNode.position.x = endOfScreenRight + 200
-        firstNode.removeFromParent()
-        
-        print("reranged starting pos")
-        addEnemies()
-        
-    }
-    
 	func reloadGame() {
 		
         stopBGAnim()
@@ -538,7 +517,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         refresh.zPosition = 0.9
         menu.zPosition = 0.9
-        
 		hero.position.y = 0
 		hero.position.x = -(self.size.width/2)/3
 		
@@ -554,28 +532,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         totalSpeedBonusItem = normalSpeedBonusItem
 		
 		for enemy in enemies {
-			
 			resetEnemy(enemy, yPos: enemy.yPos)
 			enemy.hidden = true
             enemy.removeFromParent()
-			
 		}
-		
-		//enemies.removeAll(keepCapacity: false)
         enemies = []
-        //enemiesIndex.removeAll(keepCapacity: false)
         enemiesIndex = []
 		addEnemies()
 		
 		for var i = 1; i < startEnemy; i++ {
-			
 			self.addEnemies()
-			
 		}
         
         timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
-		
-		
 	}
 	
     func startBGAnim() {
@@ -640,8 +609,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func addBonusItems(itemType: String) {
     
         //For more Items later
-        if itemType == "Oxygen" {
-            addBonusItem(named: "Oxygen16", spawned: false, spawnHeight: 0, alive: false, moving: false)
+        if itemType == "Oxygen8" {
+            addBonusItem(named: "Oxygen8", spawned: false, spawnHeight: 0, alive: false, moving: false)
         }
     }
     
@@ -649,15 +618,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         let bonusItem = BonusItem(imageNamed: named)
         bonusItem.setScale(scalingFactor)
-        bonusItem.zPosition = 1.2
+        bonusItem.zPosition = 1.1
         bonusItem.name = named
         
         bonusItem.position.x = endOfScreenRight
         bonusItem.spawned = spawned
         bonusItem.spawnHeight = spawnHeight
         bonusItem.alive = alive
-        
-        print("Oxygen Step 2")
         
         bonusItems.append(bonusItem)
         bonusItemAlive = true
@@ -673,10 +640,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		let rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
         let rotationDirection:Int = Int(arc4random_uniform(2))
         let preLocation:CGFloat = 0
-
-		//number = 6
-		
-		print(number)
 		
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
@@ -738,10 +701,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180, duration: 0))
             }
         }
-        
 		addChild(enemy)
-        //spawning()
-
 	}
 	
     func spawning(enemy: Enemy) {
@@ -973,9 +933,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         self.gamePause.runAction(buttonPressDark)
                     } else {
                         if lastSpriteName == "empty" {
-                            //removeAllActions()
                             buttonRemoveAction()
-                            //self.heroMovement()
                         } else {
                             buttonRemoveAction()
                         }
@@ -1127,8 +1085,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gamePaused {
 			if !gameOver {
 				updateBGPosition()
-                //updateBonusItem()
-				//updateEnemiesPosition()
                 //updateBackgroundEmitter()
 			}
             updateEnemiesPosition()
@@ -1158,20 +1114,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
             if oxygen <= oxygenMax / 3 {
                 if bonusItemAlive == false {
-                    print("Oxygen Step 1")
                     didOxygenCollide = false
-                    addBonusItems("Oxygen")
+                    addBonusItems("Oxygen8")
                 }
             }
         }
         if bonusItems.count >= 1 {
-            print("Oxygen Step 3")
             for bonusItem in bonusItems {
                 for var i = 0; i < spawnPoints.count; i++ {
                     if bonusItem.spawned == false {
-                        print("Oxygen Step 4")
                         if spawnPointStats[i].boolValue == true {
-                            print("Oxygen Step 5")
                             bonusItem.position.y = spawnPoints[i]
                             bonusItem.spawnHeight = spawnPoints[i]
                             bonusItem.position.x = endOfScreenRight
@@ -1188,13 +1140,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     }
                 }
                 if bonusItem.moving == true {
-                    print("Oxygen Step 6")
                     if bonusItem.position.x > endOfScreenLeft {
                         bonusItem.position.x -= totalSpeedBonusItem
                     } else {
                         bonusItems = []
                         bonusItem.removeFromParent()
-                        addBonusItems("Oxygen")
+                        addBonusItems("Oxygen8")
                     }
                     if bonusItem.position.x < self.size.width / 2  - 200{
                         if bonusItem.spawnHeight == 9999 {
