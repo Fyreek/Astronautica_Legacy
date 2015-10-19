@@ -19,9 +19,9 @@ class OptionScene: SKScene {
     let bg = SKSpriteNode(imageNamed: "Background188")
     let coloredSprite = SKSpriteNode(imageNamed: "Astronaut25")
     let backSprite = SKSpriteNode(imageNamed: "BackButton32")
-    let menuColorSprite = SKSpriteNode(imageNamed: "BackButton32")
-    let menuSoundSprite = SKSpriteNode(imageNamed: "BackButton32")
-    let menuThemeSprite = SKSpriteNode(imageNamed: "BackButton32")
+    let menuColorSprite = SKSpriteNode(imageNamed: "SecretButton32")
+    let menuSoundSprite = SKSpriteNode(imageNamed: "SettingsButton32")
+    let menuThemeSprite = SKSpriteNode(imageNamed: "ThemeButton32")
     let noAdSprite = SKSpriteNode(imageNamed: "BackButton32")
     let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
     let musicSprite = SKSpriteNode(imageNamed: "BackButton32")
@@ -36,6 +36,13 @@ class OptionScene: SKScene {
     var blue:Float = 0
     var lastSpriteName:String = ""
     var scalingFactor:CGFloat = 1
+    var secretStep1:Bool = false
+    var secretStep2:Bool = false
+    var secretStep3:Bool = false
+    var secretStep4:Bool = false
+    var secretStep5:Bool = false
+    var secretStep6:Bool = false
+    var isSecretUnlocked:Bool = false
     
     override func didMoveToView(view: SKView) {
         
@@ -45,6 +52,7 @@ class OptionScene: SKScene {
         bg.setScale(scalingFactor)
         addChild(bg)
         
+        isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
         musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
         
@@ -135,8 +143,12 @@ class OptionScene: SKScene {
         menuColorSprite.zPosition = 1.2
         menuColorSprite.name = "menuColorSprite"
         addChild(menuColorSprite)
-        menuColorSprite.hidden = true
-        
+        if isSecretUnlocked == true {
+            menuColorSprite.hidden = false
+        } else {
+            menuColorSprite.hidden = true
+        }
+            
         menuSoundSprite.setScale(scalingFactor)
         menuSoundSprite.position.x = (self.size.width / 2) - (menuSoundSprite.size.width / 2) - 20
         menuSoundSprite.position.y = -(menuSoundSprite.size.height)
@@ -155,11 +167,21 @@ class OptionScene: SKScene {
     }
     
     func showThemeMenu() {
+        resetSecret()
+        
+    }
     
+    func resetSecret() {
+        secretStep1 = false
+        secretStep2 = false
+        secretStep3 = false
+        secretStep4 = false
+        secretStep5 = false
+        secretStep6 = false
     }
     
     func showHeroColorMenu() {
-    
+        resetSecret()
         soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
         musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
         noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
@@ -183,6 +205,17 @@ class OptionScene: SKScene {
     
     func showSoundMenu() {
     
+        if secretStep1 == true && secretStep5 == true {
+            secretStep6 = true
+            toggleSecret()
+        } else if secretStep1 == false {
+            secretStep1 = true
+        } else if secretStep1 == true {
+        
+        } else {
+            resetSecret()
+        }
+
         coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
         //noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
             self.coloredSprite.hidden = true
@@ -208,7 +241,7 @@ class OptionScene: SKScene {
     }
     
     func showAdMenu() {
-        
+        resetSecret()
         coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
             self.musicSprite.hidden = true
             self.soundSprite.hidden = true
@@ -262,11 +295,32 @@ class OptionScene: SKScene {
         }
     }
     
-    func hideAds() {
+    func toggleSecret() {
+        resetSecret()
+        if menuColorSprite.hidden == true {
+            menuColorSprite.hidden = false
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "secretUnlocked")
+        } else {
+            menuColorSprite.hidden = true
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "secretUnlocked")
+        }
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
     
+    func hideAds() {
+        resetSecret()
+        
     }
     
     func soundManagment() {
+        if secretStep2 == true && secretStep4 == true{
+            secretStep5 = true
+        } else if secretStep2 == true {
+            secretStep3 = true
+        } else {
+            resetSecret()
+        }
+        
         if soundOn == true {
             soundOn = false
             soundSprite.texture = SKTexture(imageNamed: "SoundOffButton32")
@@ -279,12 +333,20 @@ class OptionScene: SKScene {
     }
     
     func musicManagement() {
+        if secretStep1 == true && secretStep3 == true {
+            secretStep4 = true
+        } else if secretStep1 == true {
+            secretStep2 = true
+        } else {
+            resetSecret()
+        }
+        
         if musicOn == true {
             musicOn = false
-            soundSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
+            musicSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
         } else {
             musicOn = true
-            soundSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
+            musicSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
         }
         NSUserDefaults.standardUserDefaults().setBool(musicOn, forKey: "musicBool")
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -373,6 +435,7 @@ class OptionScene: SKScene {
                     }
                 }
             } else {
+                resetSecret()
                 backSprite.removeAllActions()
                 menuColorSprite.removeAllActions()
                 menuThemeSprite.removeAllActions()

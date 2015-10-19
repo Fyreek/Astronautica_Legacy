@@ -15,6 +15,7 @@ class BonusItem: SKSpriteNode {
     var spawnHeight:CGFloat!
     var alive:Bool!
     var moving:Bool!
+    var rotationDirection:Int!
     
     override init(texture: SKTexture?, color: UIColor, size: CGSize) {
         
@@ -22,11 +23,12 @@ class BonusItem: SKSpriteNode {
         self.spawnHeight = 9999
         self.alive = false
         self.moving = false
+        self.rotationDirection = 0
         
         super.init(texture: texture, color: color, size: size)
     }
 
-    convenience init(spawned: Bool = false, spawnHeight: CGFloat = 9999, alive: Bool = false, moving: Bool = false) {
+    convenience init(spawned: Bool = false, spawnHeight: CGFloat = 9999, alive: Bool = false, moving: Bool = false, rotationDirection: Int = 0) {
     
         let size = CGSize(width: SKSpriteNode(imageNamed: "Oxygen15").size.width, height: SKSpriteNode(imageNamed: "Oxygen15").size.height)
         let color:SKColor = SKColor.clearColor()
@@ -36,6 +38,7 @@ class BonusItem: SKSpriteNode {
         self.spawnHeight = spawnHeight
         self.alive = alive
         self.moving = moving
+        self.rotationDirection = rotationDirection
     
     }
     

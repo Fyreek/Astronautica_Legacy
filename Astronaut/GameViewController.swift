@@ -68,7 +68,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
                     NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
                     NSUserDefaults.standardUserDefaults().synchronize()
                     self.gotScore = true
-                    print(self.gcScore)
                 }
             }
         }

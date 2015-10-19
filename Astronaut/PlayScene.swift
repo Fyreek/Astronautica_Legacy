@@ -37,6 +37,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var oxygenBar:SKSpriteNode = SKSpriteNode(color: SKColor.blueColor(), size: CGSizeMake(50, 100))
     var oxygenBarBG:SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeMake(50, 100))
     var didOxygenCollide:Bool = false
+    var didOxygenCollideEnemy:Bool = false
     
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
@@ -432,16 +433,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
             
         case ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue :
-            if contact.bodyA.categoryBitMask == ColliderType.bonusItem.rawValue {
-                let otherBody = contact.bodyB.node as? Enemy
-                let bonusItem = contact.bodyA.node as? BonusItem
-                collisionEnemyBonusItem(otherBody!, bonusItem: bonusItem!)
-            } else {
-                let otherBody = contact.bodyA.node as? Enemy
-                let bonusItem = contact.bodyB.node as? BonusItem
-                collisionEnemyBonusItem(otherBody!, bonusItem: bonusItem!)
+            if didOxygenCollideEnemy == false {
+                didOxygenCollideEnemy = true
+                if contact.bodyA.categoryBitMask == ColliderType.bonusItem.rawValue {
+                    let otherBody = contact.bodyB.node as? Enemy
+                    let bonusItem = contact.bodyA.node as? BonusItem
+                    collisionEnemyBonusItem(otherBody!, bonusItem: bonusItem!)
+                } else {
+                    let otherBody = contact.bodyA.node as? Enemy
+                    let bonusItem = contact.bodyB.node as? BonusItem
+                    collisionEnemyBonusItem(otherBody!, bonusItem: bonusItem!)
+                }
             }
-            
         case ColliderType.Enemy.rawValue | ColliderType.Enemy.rawValue :
             let bodyOne = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
             let bodyTwo = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
@@ -503,6 +506,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero.removeAllActions()
         setSpawnPoints()
         oxygen = oxygenMax
+        bonusItemAlive = false
+        for bonusItem in bonusItems {
+            bonusItem.hidden = true
+            bonusItem.removeFromParent()
+            bonusItems = []
+        }
         
         gamePaused = true
         
@@ -619,12 +628,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func addBonusItems(itemType: String) {
     
         //For more Items later
+        let direction:Int = Int(arc4random_uniform(2))
         if itemType == "Oxygen15" {
-            addBonusItem(named: "Oxygen15", spawned: false, spawnHeight: 0, alive: false, moving: false)
+            addBonusItem(named: "Oxygen15", spawned: false, spawnHeight: 0, alive: false, moving: false, rotationDirection: direction)
         }
     }
     
-    func addBonusItem(named named: String, spawned: Bool, spawnHeight: CGFloat, alive: Bool, moving: Bool) {
+    func addBonusItem(named named: String, spawned: Bool, spawnHeight: CGFloat, alive: Bool, moving: Bool, rotationDirection: Int) {
         
         let bonusItem = BonusItem(imageNamed: named)
         bonusItem.setScale(scalingFactor)
@@ -635,6 +645,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.spawned = spawned
         bonusItem.spawnHeight = spawnHeight
         bonusItem.alive = alive
+        bonusItem.rotationDirection = rotationDirection
         
         bonusItems.append(bonusItem)
         bonusItemAlive = true
@@ -1125,6 +1136,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if oxygen <= oxygenMax / 2 {
                 if bonusItemAlive == false {
                     didOxygenCollide = false
+                    didOxygenCollideEnemy = false
                     addBonusItems("Oxygen15")
                 }
             }
@@ -1152,6 +1164,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if bonusItem.moving == true {
                     if bonusItem.position.x > endOfScreenLeft {
                         bonusItem.position.x -= totalSpeedBonusItem
+                        if bonusItem.rotationDirection == 0 {
+                            bonusItem.zRotation = bonusItem.zRotation + 0.08
+                        } else {
+                            bonusItem.zRotation = bonusItem.zRotation - 0.08
+                        }
                     } else {
                         bonusItems = []
                         bonusItem.removeFromParent()

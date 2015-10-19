@@ -166,7 +166,7 @@ class GameScene: SKScene, EGCDelegate {
                     }
                 }
             } else  {
-            
+        
                 menuHSButton.removeAllActions()
                 menuOptionButton.removeAllActions()
                 startGameButton.removeAllActions()
