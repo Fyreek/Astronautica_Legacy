@@ -8,6 +8,7 @@
 
 import SpriteKit
 import iAd
+import AVFoundation
 
 struct interScene {
     static var playSceneDidLoad:Bool = false
@@ -15,6 +16,7 @@ struct interScene {
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
+    var satelliteSound:AVAudioPlayer = AVAudioPlayer()
     var touchLocation = CGFloat()
 	var gameOver = true
 	var gameStarted = false
@@ -1383,8 +1385,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                         if enemy.position.x < self.size.width / 2  - 200{
+                            if enemy.name == "Satellite15" {
+                                if !gameOver {
+                                    playSatelliteSound()
+                                }
+                            }
                             if enemy.spawnHeight == 9999 {
-                                
                             } else {
                                 for var i = 0; i < spawnPointStats.count; i++ {
                                     if spawnPoints[i] == enemy.spawnHeight {
@@ -1436,6 +1442,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			addEnemies()
 		}
 	}
+    
+    func  playSatelliteSound() {
+        let number:Int = Int(arc4random_uniform(1000))
+        if number == 1 {
+            let satelliteSoundURL:NSURL = NSBundle.mainBundle().URLForResource("satellite", withExtension: "m4a")!
+            do { satelliteSound = try AVAudioPlayer(contentsOfURL: satelliteSoundURL, fileTypeHint: nil) } catch _ { return }
+            satelliteSound.numberOfLoops = 1
+            satelliteSound.prepareToPlay()
+            satelliteSound.play()
+        }
+    }
 }
 
 extension Array {

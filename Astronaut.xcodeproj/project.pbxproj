@@ -23,6 +23,7 @@
 		81E4454C1B86686600BC86B2 /* PlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4454B1B86686600BC86B2 /* PlayScene.swift */; };
 		81E445501B86689100BC86B2 /* Hero.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4454F1B86689100BC86B2 /* Hero.swift */; };
 		81E445521B866B0500BC86B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E445511B866B0500BC86B2 /* Images.xcassets */; };
+		A17FFCD31BD506EA0047EC80 /* satellite.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A17FFCD21BD506EA0047EC80 /* satellite.m4a */; settings = {ASSET_TAGS = (); }; };
 		D9088E041B8B83880067CEAB /* OptionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9088E031B8B83880067CEAB /* OptionScene.swift */; };
 		D93159291B8A12600085390A /* explosion.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D93159281B8A12600085390A /* explosion.atlas */; };
 		D97A92061BAE01D200C0027C /* background.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D97A92051BAE01D200C0027C /* background.atlas */; settings = {ASSET_TAGS = (); }; };
@@ -59,6 +60,7 @@
 		81E4454B1B86686600BC86B2 /* PlayScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayScene.swift; sourceTree = "<group>"; };
 		81E4454F1B86689100BC86B2 /* Hero.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hero.swift; sourceTree = "<group>"; };
 		81E445511B866B0500BC86B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A17FFCD21BD506EA0047EC80 /* satellite.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = satellite.m4a; sourceTree = "<group>"; };
 		D9088E031B8B83880067CEAB /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
 		D93159281B8A12600085390A /* explosion.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = explosion.atlas; sourceTree = "<group>"; };
 		D97A92051BAE01D200C0027C /* background.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = background.atlas; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				8143166F1B873162008A3C81 /* GameKit.framework */,
 				8143166D1B8730B4008A3C81 /* GameCenter.swift */,
 				812FED261B9063E800A2A8C3 /* HexColor.swift */,
+				A17FFCD21BD506EA0047EC80 /* satellite.m4a */,
 				812FED241B905B2900A2A8C3 /* Minecraft.ttf */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
 			);
@@ -246,6 +249,7 @@
 				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
 				D93159291B8A12600085390A /* explosion.atlas in Resources */,
 				D97A92061BAE01D200C0027C /* background.atlas in Resources */,
+				A17FFCD31BD506EA0047EC80 /* satellite.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
