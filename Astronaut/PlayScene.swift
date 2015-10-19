@@ -15,6 +15,7 @@ struct interScene {
     static var soundState:Bool = true
     static var musicState:Bool = true
     static var adState:Bool = true
+    static var smallAdLoad:Bool = false
 }
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
@@ -121,6 +122,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
         
+        prepareSatelliteSound()
         interScene.playSceneDidLoad = true
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
@@ -316,7 +318,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func openGameOverMenu() {
 
-        showAds()
+        whichAd()
+        
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
             self.gameOverMenuLoaded = true
@@ -369,6 +372,77 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
 	}
 	
+    func showGameInfo() {
+        
+        let infoHero:SKSpriteNode = SKSpriteNode(imageNamed: "Astronaut25")
+        let infoEnemy1:SKSpriteNode = SKSpriteNode(imageNamed: "Satellite15")
+        let infoEnemy2:SKSpriteNode = SKSpriteNode(imageNamed: "Asteroid16")
+        let infoEnemy3:SKSpriteNode = SKSpriteNode(imageNamed: "Missile8")
+        let infoOxygen:SKSpriteNode = SKSpriteNode(imageNamed: "Oxygen15")
+        let infoHeroLabel:SKLabelNode = SKLabelNode(text: "You!")
+        let infoEnemy1Label:SKLabelNode = SKLabelNode(text: "Enemy")
+        let infoEnemy2Label:SKLabelNode = SKLabelNode(text: "Enemy")
+        let infoEnemy3Label:SKLabelNode = SKLabelNode(text: "Enemy")
+        let infoOxygenLabel:SKLabelNode = SKLabelNode(text: "Oxygen")
+        
+        infoEnemy1.zPosition = 1.2
+        infoEnemy1.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
+        infoEnemy1.position.y = self.size.height / 4
+        infoEnemy1.setScale(scalingFactor)
+        
+        infoEnemy1Label.zPosition = 1.2
+        infoEnemy1Label.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
+        infoEnemy1Label.position.y = self.size.height / 4
+        
+        infoEnemy2.zPosition = 1.2
+        infoEnemy2.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
+        infoEnemy2.position.y = self.size.height / 4 - infoEnemy1.size.height * 2
+        infoEnemy2.setScale(scalingFactor)
+        
+        infoEnemy2Label.zPosition = 1.2
+        infoEnemy2Label.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
+        infoEnemy2Label.position.y = self.size.height / 4 - infoEnemy1.size.height * 2
+        
+        infoEnemy3.zPosition = 1.2
+        infoEnemy3.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
+        infoEnemy3.position.y = self.size.height / 4 + infoEnemy1.size.height * 2
+        infoEnemy3.setScale(scalingFactor)
+        
+        infoEnemy3Label.zPosition = 1.2
+        infoEnemy3Label.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
+        infoEnemy3Label.position.y = self.size.height / 4 + infoEnemy1.size.height * 2
+        
+        infoHero.zPosition = 1.2
+        infoHero.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
+        infoHero.position.y = -(infoEnemy1.size.height)
+        infoHero.setScale(scalingFactor)
+        
+        infoHeroLabel.zPosition = 1.2
+        infoHeroLabel.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
+        infoHeroLabel.position.y = -(infoEnemy1.size.height)
+        
+        infoOxygen.zPosition = 1.2
+        infoOxygen.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
+        infoOxygen.position.y = -(self.size.height / 4)
+        infoOxygen.setScale(scalingFactor)
+        
+        infoOxygenLabel.zPosition = 1.2
+        infoOxygenLabel.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
+        infoOxygenLabel.position.y = -(self.size.height / 4)
+        
+        addChild(infoEnemy1)
+        addChild(infoEnemy1Label)
+        addChild(infoEnemy2)
+        addChild(infoEnemy2Label)
+        addChild(infoEnemy3)
+        addChild(infoEnemy3Label)
+        //addChild(infoHero)
+        //addChild(infoHeroLabel)
+        addChild(infoOxygen)
+        addChild(infoOxygenLabel)
+        
+    }
+    
     func collisionEnemyBonusItem(otherBody: Enemy, bonusItem: BonusItem) {
     
         bonusItem.moving = false
@@ -568,6 +642,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			self.addEnemies()
 		}
         
+        //showGameInfo() Maybe later for Ingame Tutorial
+        
         timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
 	}
 	
@@ -758,10 +834,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	func startGameNormal() {
-		
+        
 		gameStarted = true
 		reloadGame()
-		
 	}
 	
 	func showMenu() {
@@ -781,8 +856,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
+    func whichAd() {
+        let number:Int = Int(arc4random_uniform(5))
+        if number == 0 {
+            showFSAd()
+        } else {
+            showAds()
+        }
+    }
+    
+    func showFSAd() {
+        if interScene.adState == true {
+            NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
+        }
+    }
+    
     func showAds(){
         if interScene.adState == true {
+            interScene.smallAdLoad = true
             NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
         } else {
             hideAds()
@@ -790,6 +881,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func hideAds(){
+        interScene.smallAdLoad = false
         NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     }
     
@@ -998,9 +1090,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                 if lastSpriteName == self.refresh.name {
                                     self.lastSpriteName = "empty"
                                     self.refresh.runAction(buttonPressLight){
-                                        self.reloadGame()
-                                        self.countDownRunning = true
-                                        //self.lastSpriteName = "empty"
+                                        self.showPlayScene()
+                                        //self.reloadGame() 1337
+                                        //self.countDownRunning = true
                                     }
                                 }
                             }
@@ -1174,9 +1266,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     if bonusItem.position.x > endOfScreenLeft {
                         bonusItem.position.x -= totalSpeedBonusItem
                         if bonusItem.rotationDirection == 0 {
-                            bonusItem.zRotation = bonusItem.zRotation + 0.08
+                            bonusItem.zRotation = bonusItem.zRotation + 0.05
                         } else {
-                            bonusItem.zRotation = bonusItem.zRotation - 0.08
+                            bonusItem.zRotation = bonusItem.zRotation - 0.05
                         }
                     } else {
                         bonusItems = []
@@ -1200,6 +1292,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         }
+    }
+    
+    func showPlayScene() {
+        
+        hideAds()
+        
+        let transition = SKTransition.fadeWithDuration(1)
+        let scene = PlayScene(size: self.size)
+        let skView = self.view as SKView!
+        skView.ignoresSiblingOrder = true
+        scene.scaleMode = .ResizeFill
+        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        scene.size = skView.bounds.size
+        skView.presentScene(scene, transition: transition)
+        
     }
     
     func updateBGPosition() {
@@ -1450,14 +1557,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		}
 	}
     
-    func  playSatelliteSound() {
+    func prepareSatelliteSound() {
+        let satelliteSoundURL:NSURL = NSBundle.mainBundle().URLForResource("satellite", withExtension: "m4a")!
+        do { satelliteSound = try AVAudioPlayer(contentsOfURL: satelliteSoundURL, fileTypeHint: nil) } catch _ { return }
+        satelliteSound.numberOfLoops = 1
+        satelliteSound.prepareToPlay()
+    }
+    
+    func playSatelliteSound() {
         if interScene.soundState == true {
             let number:Int = Int(arc4random_uniform(1000))
             if number == 1 {
-                let satelliteSoundURL:NSURL = NSBundle.mainBundle().URLForResource("satellite", withExtension: "m4a")!
-                do { satelliteSound = try AVAudioPlayer(contentsOfURL: satelliteSoundURL, fileTypeHint: nil) } catch _ { return }
-                satelliteSound.numberOfLoops = 1
-                satelliteSound.prepareToPlay()
                 satelliteSound.play()
             }
         }

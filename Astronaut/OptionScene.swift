@@ -339,11 +339,10 @@ class OptionScene: SKScene {
     }
     
     func hideAds() {
-        resetSecret()
-        NSNotificationCenter.defaultCenter().postNotificationName("removeAds", object: nil)
-//        interScene.adState = false
-//        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
-//        NSUserDefaults.standardUserDefaults().synchronize()
+        if interScene.adState == true {
+            resetSecret()
+            NSNotificationCenter.defaultCenter().postNotificationName("removeAds", object: nil)
+        }
     }
     
     func hideAdsSuccses() {

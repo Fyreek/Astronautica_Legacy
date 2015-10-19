@@ -102,7 +102,9 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 	}
     
     override func viewWillAppear(animated: Bool) {
-        addAdConstraints()
+        if interScene.smallAdLoad == true {
+            addAdConstraints()
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
