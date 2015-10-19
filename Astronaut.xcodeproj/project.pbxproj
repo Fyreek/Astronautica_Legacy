@@ -23,6 +23,8 @@
 		81E4454C1B86686600BC86B2 /* PlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4454B1B86686600BC86B2 /* PlayScene.swift */; };
 		81E445501B86689100BC86B2 /* Hero.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E4454F1B86689100BC86B2 /* Hero.swift */; };
 		81E445521B866B0500BC86B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E445511B866B0500BC86B2 /* Images.xcassets */; };
+		A10C22621BD51EF700BD79F1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10C22611BD51EF700BD79F1 /* StoreKit.framework */; };
+		A10C22641BD51F6500BD79F1 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */; settings = {ASSET_TAGS = (); }; };
 		A17FFCD31BD506EA0047EC80 /* satellite.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A17FFCD21BD506EA0047EC80 /* satellite.m4a */; settings = {ASSET_TAGS = (); }; };
 		D9088E041B8B83880067CEAB /* OptionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9088E031B8B83880067CEAB /* OptionScene.swift */; };
 		D93159291B8A12600085390A /* explosion.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D93159281B8A12600085390A /* explosion.atlas */; };
@@ -60,6 +62,8 @@
 		81E4454B1B86686600BC86B2 /* PlayScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayScene.swift; sourceTree = "<group>"; };
 		81E4454F1B86689100BC86B2 /* Hero.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Hero.swift; sourceTree = "<group>"; };
 		81E445511B866B0500BC86B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		A10C22611BD51EF700BD79F1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
 		A17FFCD21BD506EA0047EC80 /* satellite.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = satellite.m4a; sourceTree = "<group>"; };
 		D9088E031B8B83880067CEAB /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
 		D93159281B8A12600085390A /* explosion.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = explosion.atlas; sourceTree = "<group>"; };
@@ -71,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10C22621BD51EF700BD79F1 /* StoreKit.framework in Frameworks */,
 				81B8D4501B906D340065615B /* iAd.framework in Frameworks */,
 				814316701B873162008A3C81 /* GameKit.framework in Frameworks */,
 			);
@@ -130,7 +135,9 @@
 				D93159281B8A12600085390A /* explosion.atlas */,
 				81B8D44F1B906D340065615B /* iAd.framework */,
 				8143166F1B873162008A3C81 /* GameKit.framework */,
+				A10C22611BD51EF700BD79F1 /* StoreKit.framework */,
 				8143166D1B8730B4008A3C81 /* GameCenter.swift */,
+				A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */,
 				812FED261B9063E800A2A8C3 /* HexColor.swift */,
 				A17FFCD21BD506EA0047EC80 /* satellite.m4a */,
 				812FED241B905B2900A2A8C3 /* Minecraft.ttf */,
@@ -207,8 +214,12 @@
 				TargetAttributes = {
 					81E4451F1B8667D900BC86B2 = {
 						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = ZA57B2W688;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
+								enabled = 1;
+							};
+							com.apple.InAppPurchase = {
 								enabled = 1;
 							};
 						};
@@ -267,6 +278,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A10C22641BD51F6500BD79F1 /* InAppPurchase.swift in Sources */,
 				14E9A15C1BD4DF80009E358B /* BonusItem.swift in Sources */,
 				81E4454A1B86680300BC86B2 /* Enemy.swift in Sources */,
 				81E4454C1B86686600BC86B2 /* PlayScene.swift in Sources */,

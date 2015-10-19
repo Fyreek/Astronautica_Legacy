@@ -52,6 +52,8 @@ class OptionScene: SKScene {
         bg.setScale(scalingFactor)
         addChild(bg)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccses", name: "InAppProductPurchasedNotification", object: nil)
+        
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
         musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
@@ -338,6 +340,13 @@ class OptionScene: SKScene {
     
     func hideAds() {
         resetSecret()
+        NSNotificationCenter.defaultCenter().postNotificationName("removeAds", object: nil)
+//        interScene.adState = false
+//        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
+//        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func hideAdsSuccses() {
         interScene.adState = false
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
         NSUserDefaults.standardUserDefaults().synchronize()

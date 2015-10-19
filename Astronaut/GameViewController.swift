@@ -29,6 +29,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFsAd", name: "showFSAd", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeAds", name: "removeAds", object: nil)
         
         UIiAd.delegate = self
         
@@ -151,6 +152,10 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func showFsAd() {
         self.interstitialPresentationPolicy = ADInterstitialPresentationPolicy.Manual
         self.requestInterstitialAdPresentation()
+    }
+    
+    func removeAds() {
+        InAppPurchase.sharedInstance.buyRemoveAds()
     }
     
 }
