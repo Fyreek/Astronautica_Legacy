@@ -12,6 +12,8 @@ import AVFoundation
 
 struct interScene {
     static var playSceneDidLoad:Bool = false
+    static var soundState:Bool = true
+    static var musicState:Bool = true
 }
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
@@ -1444,13 +1446,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
     
     func  playSatelliteSound() {
-        let number:Int = Int(arc4random_uniform(1000))
-        if number == 1 {
-            let satelliteSoundURL:NSURL = NSBundle.mainBundle().URLForResource("satellite", withExtension: "m4a")!
-            do { satelliteSound = try AVAudioPlayer(contentsOfURL: satelliteSoundURL, fileTypeHint: nil) } catch _ { return }
-            satelliteSound.numberOfLoops = 1
-            satelliteSound.prepareToPlay()
-            satelliteSound.play()
+        if interScene.soundState == true {
+            let number:Int = Int(arc4random_uniform(1000))
+            if number == 1 {
+                let satelliteSoundURL:NSURL = NSBundle.mainBundle().URLForResource("satellite", withExtension: "m4a")!
+                do { satelliteSound = try AVAudioPlayer(contentsOfURL: satelliteSoundURL, fileTypeHint: nil) } catch _ { return }
+                satelliteSound.numberOfLoops = 1
+                satelliteSound.prepareToPlay()
+                satelliteSound.play()
+            }
         }
     }
 }

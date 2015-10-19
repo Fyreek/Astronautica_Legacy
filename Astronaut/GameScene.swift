@@ -30,7 +30,8 @@ class GameScene: SKScene, EGCDelegate {
 	override func didMoveToView(view: SKView) {
         
         showAds()
-            
+        loadSoundState()
+        
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
         
@@ -99,6 +100,11 @@ class GameScene: SKScene, EGCDelegate {
     
         NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     
+    }
+    
+    func loadSoundState() {
+        interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+        interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
     }
     
 	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {

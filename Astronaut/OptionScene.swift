@@ -168,7 +168,36 @@ class OptionScene: SKScene {
     
     func showThemeMenu() {
         resetSecret()
-        
+        soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
+        musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
+        coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0))
+        noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
+            self.noAdSprite.hidden = true
+            self.musicSprite.hidden = true
+            self.soundSprite.hidden = true
+            self.coloredSprite.hidden = true
+        }
+        UIView.animateWithDuration(1.0, animations: {
+            
+            self.redSlider.alpha = 0
+            self.greenSlider.alpha = 0
+            self.blueSlider.alpha = 0
+            
+            }, completion: {(finished: Bool) -> Void in
+        })
+                    //Load new Stuff
+            
+//            self.view?.addSubview(self.redSlider)
+//            self.view?.addSubview(self.greenSlider)
+//            self.view?.addSubview(self.blueSlider)
+//            self.coloredSprite.hidden = false
+//            self.coloredSprite.runAction(SKAction.fadeInWithDuration(1.0))
+//            
+//            UIView.animateWithDuration(1.0, animations: {
+//                self.redSlider.alpha = 1.0
+//                self.greenSlider.alpha = 1.0
+//                self.blueSlider.alpha = 1.0
+//            })
     }
     
     func resetSecret() {
@@ -328,6 +357,7 @@ class OptionScene: SKScene {
             soundOn = true
             soundSprite.texture = SKTexture(imageNamed: "SoundOnButton32")
         }
+        interScene.soundState = soundOn
         NSUserDefaults.standardUserDefaults().setBool(soundOn, forKey: "soundBool")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
@@ -348,6 +378,7 @@ class OptionScene: SKScene {
             musicOn = true
             musicSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
         }
+        interScene.musicState = musicOn
         NSUserDefaults.standardUserDefaults().setBool(musicOn, forKey: "musicBool")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
