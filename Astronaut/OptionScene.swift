@@ -21,7 +21,7 @@ class OptionScene: SKScene {
     let backSprite = SKSpriteNode(imageNamed: "BackButton32")
     let menuColorSprite = SKSpriteNode(imageNamed: "BackButton32")
     let menuSoundSprite = SKSpriteNode(imageNamed: "BackButton32")
-    let menuInAppSprite = SKSpriteNode(imageNamed: "BackButton32")
+    let menuThemeSprite = SKSpriteNode(imageNamed: "BackButton32")
     let noAdSprite = SKSpriteNode(imageNamed: "BackButton32")
     let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
     let musicSprite = SKSpriteNode(imageNamed: "BackButton32")
@@ -93,27 +93,26 @@ class OptionScene: SKScene {
         
         noAdSprite.setScale(scalingFactor)
         noAdSprite.position.x = 0
-        noAdSprite.position.y = 0
+        noAdSprite.position.y = -(self.size.height / 4 - noAdSprite.size.height / 4)
         noAdSprite.zPosition = 1.2
         noAdSprite.name = "noAdSprite"
         addChild(noAdSprite)
-        noAdSprite.hidden = true
         
         musicSprite.setScale(scalingFactor)
-        musicSprite.position.x = 0
-        musicSprite.position.y = musicSprite.size.height
+        musicSprite.position.x = -(self.size.width / 4 - musicSprite.size.width)
+        musicSprite.position.y = self.size.height / 4 - musicSprite.size.height / 4
         musicSprite.zPosition = 1.2
         musicSprite.name = "musicSprite"
         if musicOn == true {
-            musicSprite.zRotation = 180
+            musicSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
         } else {
-            musicSprite.zRotation = 0
+            musicSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
         }
         addChild(musicSprite)
         
         soundSprite.setScale(scalingFactor)
-        soundSprite.position.x = 0
-        soundSprite.position.y = -soundSprite.size.height
+        soundSprite.position.x = self.size.width / 4 - soundSprite.size.width
+        soundSprite.position.y = self.size.height / 4 - soundSprite.size.height / 4
         soundSprite.zPosition = 1.2
         soundSprite.name = "soundSprite"
         if soundOn == true {
@@ -131,27 +130,32 @@ class OptionScene: SKScene {
         addChild(backSprite)
         
         menuColorSprite.setScale(scalingFactor)
-        menuColorSprite.position.x = (self.size.width / 2) - (menuColorSprite.size.width / 2) - 20
-        menuColorSprite.position.y = self.size.height / 4
+        menuColorSprite.position.x = -((self.size.width / 2) - (backSprite.size.width / 2) - 20)
+        menuColorSprite.position.y = menuColorSprite.size.height
         menuColorSprite.zPosition = 1.2
         menuColorSprite.name = "menuColorSprite"
         addChild(menuColorSprite)
+        menuColorSprite.hidden = true
         
         menuSoundSprite.setScale(scalingFactor)
         menuSoundSprite.position.x = (self.size.width / 2) - (menuSoundSprite.size.width / 2) - 20
-        menuSoundSprite.position.y = 0
+        menuSoundSprite.position.y = -(menuSoundSprite.size.height)
         menuSoundSprite.zPosition = 1.2
         menuSoundSprite.name = "menuSoundSprite"
         addChild(menuSoundSprite)
         
-        menuInAppSprite.setScale(scalingFactor)
-        menuInAppSprite.position.x = (self.size.width / 2) - (menuInAppSprite.size.width / 2) - 20
-        menuInAppSprite.position.y = -(self.size.height / 4)
-        menuInAppSprite.zPosition = 1.2
-        menuInAppSprite.name = "menuInAppSprite"
-        addChild(menuInAppSprite)
+        menuThemeSprite.setScale(scalingFactor)
+        menuThemeSprite.position.x = (self.size.width / 2) - (menuThemeSprite.size.width / 2) - 20
+        menuThemeSprite.position.y = menuThemeSprite.size.height
+        menuThemeSprite.zPosition = 1.2
+        menuThemeSprite.name = "menuThemeSprite"
+        addChild(menuThemeSprite)
         
         sliderValueDidChange()
+    }
+    
+    func showThemeMenu() {
+    
     }
     
     func showHeroColorMenu() {
@@ -179,10 +183,10 @@ class OptionScene: SKScene {
     
     func showSoundMenu() {
     
-        coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0))
-        noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
+        coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
+        //noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
             self.coloredSprite.hidden = true
-            self.noAdSprite.hidden = true
+            //self.noAdSprite.hidden = true
             
             self.redSlider.removeFromSuperview()
             self.greenSlider.removeFromSuperview()
@@ -192,6 +196,8 @@ class OptionScene: SKScene {
             self.musicSprite.runAction(SKAction.fadeInWithDuration(1.0))
             self.soundSprite.hidden = false
             self.soundSprite.runAction(SKAction.fadeInWithDuration(1.0))
+            self.noAdSprite.hidden = false
+            self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
         }
         UIView.animateWithDuration(1.0, animations: {
             
@@ -238,9 +244,9 @@ class OptionScene: SKScene {
         } else if lastSpriteName == self.menuColorSprite.name {
             menuColorSprite.removeAllActions()
             menuColorSprite.runAction(buttonPressLight)
-        } else if lastSpriteName == menuInAppSprite.name {
-            menuInAppSprite.removeAllActions()
-            menuInAppSprite.runAction(buttonPressLight)
+        } else if lastSpriteName == menuThemeSprite.name {
+            menuThemeSprite.removeAllActions()
+            menuThemeSprite.runAction(buttonPressLight)
         } else if lastSpriteName == menuSoundSprite.name {
             menuSoundSprite.removeAllActions()
             menuSoundSprite.runAction(buttonPressLight)
@@ -275,10 +281,10 @@ class OptionScene: SKScene {
     func musicManagement() {
         if musicOn == true {
             musicOn = false
-            musicSprite.zRotation = 0
+            soundSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
         } else {
             musicOn = true
-            musicSprite.zRotation = 180
+            soundSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
         }
         NSUserDefaults.standardUserDefaults().setBool(musicOn, forKey: "musicBool")
         NSUserDefaults.standardUserDefaults().synchronize()
@@ -297,9 +303,9 @@ class OptionScene: SKScene {
             } else if self.nodeAtPoint(location) == self.menuSoundSprite {
                 lastSpriteName = self.menuSoundSprite.name!
                 self.menuSoundSprite.runAction(buttonPressDark)
-            } else if self.nodeAtPoint(location) == self.menuInAppSprite {
-                lastSpriteName = self.menuInAppSprite.name!
-                self.menuInAppSprite.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.menuThemeSprite {
+                lastSpriteName = self.menuThemeSprite.name!
+                self.menuThemeSprite.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.noAdSprite {
                 lastSpriteName = self.noAdSprite.name!
                 self.noAdSprite.runAction(buttonPressDark)
@@ -331,11 +337,11 @@ class OptionScene: SKScene {
                         self.showHeroColorMenu()
                     }
                 }
-            } else if self.nodeAtPoint(location) == self.menuInAppSprite {
+            } else if self.nodeAtPoint(location) == self.menuThemeSprite {
                 removeButtonAnim()
-                if lastSpriteName == self.menuInAppSprite.name {
-                    self.menuInAppSprite.runAction(buttonPressLight) {
-                        self.showAdMenu()
+                if lastSpriteName == self.menuThemeSprite.name {
+                    self.menuThemeSprite.runAction(buttonPressLight) {
+                        self.showThemeMenu()
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuSoundSprite {
@@ -369,14 +375,14 @@ class OptionScene: SKScene {
             } else {
                 backSprite.removeAllActions()
                 menuColorSprite.removeAllActions()
-                menuInAppSprite.removeAllActions()
+                menuThemeSprite.removeAllActions()
                 menuSoundSprite.removeAllActions()
                 noAdSprite.removeAllActions()
                 musicSprite.removeAllActions()
                 soundSprite.removeAllActions()
                 self.backSprite.runAction(buttonPressLight)
                 self.menuColorSprite.runAction(buttonPressLight)
-                self.menuInAppSprite.runAction(buttonPressLight)
+                self.menuThemeSprite.runAction(buttonPressLight)
                 self.menuSoundSprite.runAction(buttonPressLight)
                 self.noAdSprite.runAction(buttonPressLight)
                 self.musicSprite.runAction(buttonPressLight)

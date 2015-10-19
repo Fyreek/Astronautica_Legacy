@@ -159,7 +159,6 @@ class GameScene: SKScene, EGCDelegate {
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
-                //self.menuHSButton.removeAllActions()
                 removeButtonAnim()
                 if lastSpriteName == menuOptionButton.name {
                     self.menuOptionButton.runAction(buttonPressLight) {

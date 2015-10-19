@@ -9,6 +9,10 @@
 import SpriteKit
 import iAd
 
+struct interScene {
+    static var playSceneDidLoad:Bool = false
+}
+
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
     var touchLocation = CGFloat()
@@ -110,6 +114,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     override func didMoveToView(view: SKView) {
         
 		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
+        
+        interScene.playSceneDidLoad = true
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
         replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
@@ -334,6 +340,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         hero.emit = true
         
+        interScene.playSceneDidLoad = false
+        
         if score <= scoreBefore {
             
             totalScore.hidden = false
@@ -380,7 +388,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             bonusItem.removeFromParent()
             self.bonusItems = []
             if !self.gameOver {
-                self.addBonusItems("Oxygen8")
+                self.addBonusItems("Oxygen15")
             }
         })
     }
@@ -485,7 +493,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
     
 	func reloadGame() {
-		
+        
+        interScene.playSceneDidLoad = true
+        
         stopBGAnim()
 		scoreLabel.hidden = false
         hero.hidden = false
@@ -609,8 +619,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func addBonusItems(itemType: String) {
     
         //For more Items later
-        if itemType == "Oxygen8" {
-            addBonusItem(named: "Oxygen8", spawned: false, spawnHeight: 0, alive: false, moving: false)
+        if itemType == "Oxygen15" {
+            addBonusItem(named: "Oxygen15", spawned: false, spawnHeight: 0, alive: false, moving: false)
         }
     }
     
@@ -861,10 +871,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			if !gameOver {
                 for touch: AnyObject in touches {
                     touchLocation = touch.locationInNode(self).y
-                    if heroHeight < touchLocation - 10 {
+                    if heroHeight < touchLocation - 20 {
                         heroMovement()
                         heroHeight = touchLocation
-                    } else if heroHeight > touchLocation + 10 {
+                    } else if heroHeight > touchLocation + 20 {
                         heroMovement()
                         heroHeight = touchLocation
                     }
@@ -1112,10 +1122,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     heroGameEnding(nil)
                 }
             }
-            if oxygen <= oxygenMax / 3 {
+            if oxygen <= oxygenMax / 2 {
                 if bonusItemAlive == false {
                     didOxygenCollide = false
-                    addBonusItems("Oxygen8")
+                    addBonusItems("Oxygen15")
                 }
             }
         }
@@ -1145,7 +1155,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     } else {
                         bonusItems = []
                         bonusItem.removeFromParent()
-                        addBonusItems("Oxygen8")
+                        if !gameOver {
+                            addBonusItems("Oxygen15")
+                        }
                     }
                     if bonusItem.position.x < self.size.width / 2  - 200{
                         if bonusItem.spawnHeight == 9999 {

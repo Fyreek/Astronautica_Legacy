@@ -53,8 +53,10 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         
 	}
     
-    func easyGameCenterAuthentified() {
-        loadHighScore()
+    func EGCAuthentified(authentified:Bool) {
+        if authentified {
+            loadHighScore()
+        }
     }
     
     func loadHighScore() {
@@ -62,10 +64,11 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
             (tupleHighScore) -> Void in
             if self.gotScore == false {
                 if let tupleIsOk = tupleHighScore {
-                self.gcScore = tupleIsOk.score
-                NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
-                NSUserDefaults.standardUserDefaults().synchronize()
-                self.gotScore = true
+                    self.gcScore = tupleIsOk.score
+                    NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
+                    NSUserDefaults.standardUserDefaults().synchronize()
+                    self.gotScore = true
+                    print(self.gcScore)
                 }
             }
         }
@@ -108,12 +111,14 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func bannerViewDidLoadAd(banner: ADBannerView!) {
-        showBannerAd()
-        self.view.addSubview(UIiAd)
-        UIView.beginAnimations(nil, context: nil)
-        UIView.setAnimationDuration(1) // Time it takes the animation to complete
-        UIiAd.alpha = 1 // Fade in the animation
-        UIView.commitAnimations()
+        if interScene.playSceneDidLoad == false {
+            showBannerAd()
+            self.view.addSubview(UIiAd)
+            UIView.beginAnimations(nil, context: nil)
+            UIView.setAnimationDuration(1) // Time it takes the animation to complete
+            UIiAd.alpha = 1 // Fade in the animation
+            UIView.commitAnimations()
+        }
     }
     
     func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {

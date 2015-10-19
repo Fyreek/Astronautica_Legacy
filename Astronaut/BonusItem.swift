@@ -28,7 +28,7 @@ class BonusItem: SKSpriteNode {
 
     convenience init(spawned: Bool = false, spawnHeight: CGFloat = 9999, alive: Bool = false, moving: Bool = false) {
     
-        let size = CGSize(width: SKSpriteNode(imageNamed: "Asteroid16").size.width, height: SKSpriteNode(imageNamed: "Asteroid16").size.height)
+        let size = CGSize(width: SKSpriteNode(imageNamed: "Oxygen15").size.width, height: SKSpriteNode(imageNamed: "Oxygen15").size.height)
         let color:SKColor = SKColor.clearColor()
         self.init(texture:nil, color: color, size: size)
         
