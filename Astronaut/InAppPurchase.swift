@@ -15,7 +15,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
     let kInAppProductRestoredNotification  = "InAppProductRestoredNotification"
     let kInAppPurchasingErrorNotification  = "InAppPurchasingErrorNotification"
     
-    let unlockTestInAppPurchase1ProductId = "astronautica.removeads"
+    let unlockRemoveAds = "astronautica.removeads"
     //let unlockTestInAppPurchase2ProductId = "com.testing.iap2"
     
     class var sharedInstance : InAppPurchase {
@@ -119,7 +119,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
     }
     
     func buyRemoveAds() {
-        unlockProduct(unlockTestInAppPurchase1ProductId)
+        unlockProduct(unlockRemoveAds)
     }
     
     /*func buyUnlockTestInAppPurchase2() {

@@ -26,6 +26,8 @@ class GameScene: SKScene, EGCDelegate {
     var scalingFactor:CGFloat = 1
     var scalingFactorX:CGFloat = 1
     var tickCount:Int = 0
+    var spawnActive = false
+    var enemies:[Enemy] = []
     
 	override func didMoveToView(view: SKView) {
         if NSUserDefaults.standardUserDefaults().boolForKey("Ads") {
@@ -92,6 +94,29 @@ class GameScene: SKScene, EGCDelegate {
 		menuHSButton.zPosition = 1.2
 		
 	}
+    
+    func whichEnemy() {
+        let number:Int = Int(arc4random_uniform(2))
+        if number == 0 {
+            randomEnemyShow("Asteroid16")
+        } else {
+            randomEnemyShow("Satellite15")
+        }
+    }
+    
+    func randomEnemyShow(named: String) {
+        let enemy:Enemy = Enemy(imageNamed: named)
+        enemy.name = named
+        
+        enemy.zPosition = 1.3
+        enemy.setScale(scalingFactor)
+        enemy.position.x = (self.size.width / 2) + ((SKSpriteNode(imageNamed: named).size.width / 2) * scalingFactor)
+        enemy.position.y = self.size.height / 4.5
+        enemy.hidden = false
+        enemy.moving = true
+        enemies.append(enemy)
+        addChild(enemy)
+    }
     
     func showAds(){
         if interScene.adState == true {
@@ -223,13 +248,57 @@ class GameScene: SKScene, EGCDelegate {
         
 	}
 	
+    func updateEnemyPosition() {
+        for enemy in enemies {
+            if enemy.moving == true {
+                if enemy.position.x > (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * scalingFactor) {
+                    if enemy.name == "Asteroid16" {
+                        let degreeRotation = (CDouble(self.speed) * M_PI / 180) * CDouble(enemy.rotationSpeed)
+                        if enemy.rotationDirection == 0 {
+                            enemy.zRotation -= CGFloat(degreeRotation)
+                        } else {
+                            enemy.zRotation += CGFloat(degreeRotation)
+                        }
+                    } else if enemy.name == "Satellite15" {
+                        enemy.position.y = CGFloat((Double(enemy.position.y))) + CGFloat(sin(enemy.angle / 2) * enemy.range)
+                        if enemy.position.y > self.size.height / 2 - enemy.size.height / 2{
+                            enemy.angle = enemy.angle + Float(M_1_PI)
+                        } else if enemy.position.y < -(self.size.height / 2 - enemy.size.height / 2) {
+                            enemy.angle = enemy.angle + Float(M_1_PI)
+                        }
+                        enemy.angle = enemy.angle + 0.1
+                    }
+                    if enemy.name == "Asteroid16" {
+                        enemy.position.x -= 3.5
+                    } else if enemy.name == "Satellite15" {
+                        enemy.position.x -= 2.5
+                    }
+                } else {
+                    enemy.spawned = false
+                    enemy.moving = false
+                    enemy.hidden = true
+                    enemy.removeFromParent()
+                    spawnActive = false
+                }
+            }
+        }
+    }
+    
 	override func update(currentTime: CFTimeInterval) {
+        updateEnemyPosition()
         if ticks == 20 {
             highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
             if highScore > highScoreBefore {
         
                 highScoreLabel.text = "Highscore: " + String(highScore)
             
+            }
+            if spawnActive == false {
+                let number:Int = Int(arc4random_uniform(10))
+                if number == 0 {
+                    spawnActive = true
+                    whichEnemy()
+                }
             }
             
             highScoreBefore = highScore
