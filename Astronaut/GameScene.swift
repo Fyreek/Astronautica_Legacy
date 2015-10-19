@@ -29,6 +29,8 @@ class GameScene: SKScene, EGCDelegate {
     
 	override func didMoveToView(view: SKView) {
         
+        interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads")
+        
         showAds()
         loadSoundState()
         
@@ -91,15 +93,15 @@ class GameScene: SKScene, EGCDelegate {
 	}
     
     func showAds(){
-    
-        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
-        
+        if interScene.adState == true {
+            NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+        } else {
+            hideAds()
+        }
     }
     
     func hideAds(){
-    
         NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
-    
     }
     
     func loadSoundState() {

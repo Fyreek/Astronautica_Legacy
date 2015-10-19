@@ -14,6 +14,7 @@ struct interScene {
     static var playSceneDidLoad:Bool = false
     static var soundState:Bool = true
     static var musicState:Bool = true
+    static var adState:Bool = true
 }
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
@@ -781,7 +782,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
     func showAds(){
-        NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+        if interScene.adState == true {
+            NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+        } else {
+            hideAds()
+        }
     }
     
     func hideAds(){

@@ -338,7 +338,9 @@ class OptionScene: SKScene {
     
     func hideAds() {
         resetSecret()
-        
+        interScene.adState = false
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
     
     func soundManagment() {
