@@ -55,7 +55,7 @@ class GameScene: SKScene, EGCDelegate {
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
-		highScoreLabel.fontSize = 20
+		highScoreLabel.fontSize = 15
         highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
 		highScoreLabel.text = "Highscore: " + String(highScore)
 		

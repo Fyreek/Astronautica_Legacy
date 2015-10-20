@@ -234,15 +234,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
-		scoreLabel.fontSize = 20
+		scoreLabel.fontSize = 15
         scoreLabel.fontColor = UIColor(rgba: "#5F6575")
 		scoreLabel.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 35
 		scoreLabel.position.x = -(self.size.width / 2) + 40
         scoreLabel.zPosition = 1.2
 		
 		countDownText = SKLabelNode(fontNamed: "Minecraft")
-		countDownText.fontSize = 22
-		countDownText.fontColor = UIColor.whiteColor()
+		countDownText.fontSize = 15
+		countDownText.fontColor = UIColor(rgba: "#5F6575")
 		countDownText.position.y = (self.size.height / 8)
         countDownText.zPosition = 1.2
 		
@@ -267,7 +267,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         menuPause.zPosition = 1.2
 		
 		totalScore = SKLabelNode(fontNamed: "Minecraft")
-		totalScore.fontSize = 18
+		totalScore.fontSize = 15
+        totalScore.fontColor = UIColor(rgba: "#5F6575")
 		totalScore.position.x = 0
 		totalScore.position.y = self.size.height / 8
         totalScore.zPosition = 1.2
@@ -299,7 +300,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		gamePause.alpha = 0
 		
 		totalScore.name = "totalScore"
-		totalScore.fontColor = UIColor.whiteColor()
 		totalScore.hidden = true
 		totalScore.alpha = 0
 		
