@@ -56,7 +56,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let oxygenMax = 100
     var bonusItems:[BonusItem] = []
     var updateBonusTick:Int = 10
-    var oxygenBar:SKSpriteNode = SKSpriteNode(imageNamed: "OxygenBar_0")
+    var oxygenBar:SKSpriteNode = SKSpriteNode(imageNamed: "OxygenBar8_0")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     
@@ -794,9 +794,86 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if hero.position.y > enemy.position.y {
                 enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180 , duration: 0))
             } else if hero.position.y < enemy.position.y {
-                enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180, duration: 0))
+                enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180 , duration: 0))
             }
         }
+        //                    if enemy.name == "Missile8" {
+        //                        var heightDif:CGFloat = 0
+        //                        if hero.position.y > enemy.position.y {
+        //                            heightDif = enemy.position.y - hero.position.y
+        //
+        //                            if heightDif > self.size.height / 2 {
+        //
+        //                            }
+        //                        } else {
+        //                            heightDif = hero.position.y - enemy.position.y
+        //                        }
+        //
+        //                        let Pi = CGFloat(M_PI)
+        //                        let DegreesToRadians = Pi / 180
+        //                        let RadiansToDegrees = 180 / Pi
+        //
+        //                        let widthDif:CGFloat = enemy.position.x - hero.position.x
+        //                        //sqr(b * b + c * c - 2 * b * c * cos(alpha))
+        //                        let lineA1 = widthDif * widthDif + heightDif * heightDif
+        //                        let lineA2 = 2 * widthDif * heightDif * cos(90)
+        //                        let lineA = sqrt(lineA1 - lineA2)
+        //                        //acos((b * b - c * c - a * a) / (-2 * c * a))
+        //                        let angle1 = widthDif * widthDif - heightDif * heightDif - lineA * lineA
+        //                        let angle2 = -2 * heightDif * lineA
+        //                        let angle = acos(angle1 / angle2)
+        //
+        //                        print(widthDif)
+        //                        print(heightDif)
+        //                        print(lineA)
+        //                        print("____")
+        //
+        //                        if hero.position.y > enemy.position.y {
+        //                            enemy.zRotation = -angle
+        //                        } else {
+        //                            enemy.zRotation = angle
+        //                        }
+        //
+        //                        print("Angle: \(angle)")
+        //                  )
+        
+        //                    if enemy.name == "Missile8" {
+        //                        var heightDif:CGFloat = 0
+        //                        if hero.position.y > enemy.position.y {
+        //                            heightDif = enemy.position.y - hero.position.y
+        //                        } else {
+        //                            heightDif = hero.position.y - enemy.position.y
+        //                        }
+        //                        let widthDif:CGFloat = enemy.position.x - hero.position.x
+        //
+        //                        var angle = atan2(heightDif, widthDif)
+        //                        angle = angle * 100
+        //                        print(heightDif)
+        //                        print(widthDif)
+        //                        print(angle)
+        //                        print("-----")
+        //
+        //                        let Pi = CGFloat(M_PI)
+        //                        let DegreesToRadians = Pi / 180
+        //
+        //                        if hero.position.y > enemy.position.y {
+        //                            enemy.zRotation = angle * DegreesToRadians
+        //                        } else {
+        //                            enemy.zRotation = -angle * DegreesToRadians
+        //                        }
+        //                        if heightDif != 0 {
+        //                            let yMovement:CGFloat = round(widthDif / heightDif)
+        //                            print(yMovement)
+        //                            if hero.position.y > enemy.position.y {
+        //                                enemy.preLocation = yMovement
+        //                            } else {
+        //                                enemy.preLocation = -yMovement
+        //                            }
+        //                            
+        //                            print("----")
+        //                        }
+        //                    }
+
 		addChild(enemy)
 	}
 	
