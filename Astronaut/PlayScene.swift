@@ -18,6 +18,16 @@ struct interScene {
     static var smallAdLoad:Bool = false
 }
 
+struct secretUnlock {
+    static var secretStep1:Bool = false
+    static var secretStep2:Bool = false
+    static var secretStep3:Bool = false
+    static var secretStep4:Bool = false
+    static var secretStep5:Bool = false
+    static var secretStep6:Bool = false
+    static var secretUnlocked:Bool = false
+}
+
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
     var satelliteSound:AVAudioPlayer = AVAudioPlayer()
@@ -245,6 +255,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText.fontColor = UIColor.whiteColor()
 		countDownText.position.y = (self.size.height / 8)
         countDownText.zPosition = 1.2
+        countDownText.fontColor = UIColor(rgba: "#5F6575")
 		
 		refresh.position.y = -(self.size.height / 4.5)
 		refresh.position.x = -(self.size.width / 8)

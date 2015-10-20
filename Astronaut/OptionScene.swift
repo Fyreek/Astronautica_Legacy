@@ -36,12 +36,6 @@ class OptionScene: SKScene {
     var blue:Float = 0
     var lastSpriteName:String = ""
     var scalingFactor:CGFloat = 1
-    var secretStep1:Bool = false
-    var secretStep2:Bool = false
-    var secretStep3:Bool = false
-    var secretStep4:Bool = false
-    var secretStep5:Bool = false
-    var secretStep6:Bool = false
     var isSecretUnlocked:Bool = false
     
     override func didMoveToView(view: SKView) {
@@ -66,9 +60,6 @@ class OptionScene: SKScene {
         } else {
             musicOn = true
         }
-        
-//        soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-//        musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
@@ -169,6 +160,7 @@ class OptionScene: SKScene {
         menuSoundSprite.zPosition = 1.2
         menuSoundSprite.name = "menuSoundSprite"
         addChild(menuSoundSprite)
+        menuSoundSprite.hidden = true
         
         menuThemeSprite.setScale(scalingFactor)
         menuThemeSprite.position.x = (self.size.width / 2) - (menuThemeSprite.size.width / 2) - 20
@@ -176,6 +168,7 @@ class OptionScene: SKScene {
         menuThemeSprite.zPosition = 1.2
         menuThemeSprite.name = "menuThemeSprite"
         addChild(menuThemeSprite)
+        menuThemeSprite.hidden = true
         
         sliderValueDidChange()
         adButtonSwitch()
@@ -207,29 +200,17 @@ class OptionScene: SKScene {
             self.blueSlider.alpha = 0
             
             }, completion: {(finished: Bool) -> Void in
+                //Load new Stuff
         })
-                    //Load new Stuff
-            
-//            self.view?.addSubview(self.redSlider)
-//            self.view?.addSubview(self.greenSlider)
-//            self.view?.addSubview(self.blueSlider)
-//            self.coloredSprite.hidden = false
-//            self.coloredSprite.runAction(SKAction.fadeInWithDuration(1.0))
-//            
-//            UIView.animateWithDuration(1.0, animations: {
-//                self.redSlider.alpha = 1.0
-//                self.greenSlider.alpha = 1.0
-//                self.blueSlider.alpha = 1.0
-//            })
     }
     
     func resetSecret() {
-        secretStep1 = false
-        secretStep2 = false
-        secretStep3 = false
-        secretStep4 = false
-        secretStep5 = false
-        secretStep6 = false
+        secretUnlock.secretStep1 = false
+        secretUnlock.secretStep2 = false
+        secretUnlock.secretStep3 = false
+        secretUnlock.secretStep4 = false
+        secretUnlock.secretStep5 = false
+        secretUnlock.secretStep6 = false
     }
     
     func showHeroColorMenu() {
@@ -256,22 +237,9 @@ class OptionScene: SKScene {
     }
     
     func showSoundMenu() {
-    
-        if secretStep1 == true && secretStep5 == true {
-            secretStep6 = true
-            toggleSecret()
-        } else if secretStep1 == false {
-            secretStep1 = true
-        } else if secretStep1 == true {
-        
-        } else {
-            resetSecret()
-        }
 
         coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
-        //noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
             self.coloredSprite.hidden = true
-            //self.noAdSprite.hidden = true
             
             self.redSlider.removeFromSuperview()
             self.greenSlider.removeFromSuperview()
@@ -291,35 +259,6 @@ class OptionScene: SKScene {
             self.blueSlider.alpha = 0
         })
     }
-    
-//    func showAdMenu() {
-//        resetSecret()
-//        coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
-//            self.musicSprite.hidden = true
-//            self.soundSprite.hidden = true
-//            self.coloredSprite.hidden = true
-//            
-//            self.redSlider.removeFromSuperview()
-//            self.greenSlider.removeFromSuperview()
-//            self.blueSlider.removeFromSuperview()
-//            
-//            self.noAdSprite.hidden = false
-//            self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
-//
-//        }
-//        UIView.animateWithDuration(1.0, animations: {
-//            
-//            self.redSlider.alpha = 0
-//            self.greenSlider.alpha = 0
-//            self.blueSlider.alpha = 0
-//            
-//            }, completion: {(finished: Bool) -> Void in
-//        })
-//
-//        
-//        musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
-//        soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
-//    }
     
     func removeButtonAnim() {
     
@@ -347,18 +286,6 @@ class OptionScene: SKScene {
         }
     }
     
-    func toggleSecret() {
-        resetSecret()
-        if menuColorSprite.hidden == true {
-            menuColorSprite.hidden = false
-            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "secretUnlocked")
-        } else {
-            menuColorSprite.hidden = true
-            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "secretUnlocked")
-        }
-        NSUserDefaults.standardUserDefaults().synchronize()
-    }
-    
     func hideAds() {
         if interScene.adState == true {
             resetSecret()
@@ -377,10 +304,10 @@ class OptionScene: SKScene {
     }
     
     func soundManagment() {
-        if secretStep2 == true && secretStep4 == true{
-            secretStep5 = true
-        } else if secretStep2 == true {
-            secretStep3 = true
+        if secretUnlock.secretStep2 == true && secretUnlock.secretStep4 == true{
+            secretUnlock.secretStep5 = true
+        } else if secretUnlock.secretStep2 == true {
+            secretUnlock.secretStep3 = true
         } else {
             resetSecret()
         }
@@ -398,10 +325,10 @@ class OptionScene: SKScene {
     }
     
     func musicManagement() {
-        if secretStep1 == true && secretStep3 == true {
-            secretStep4 = true
-        } else if secretStep1 == true {
-            secretStep2 = true
+        if secretUnlock.secretStep1 == true && secretUnlock.secretStep3 == true {
+            secretUnlock.secretStep4 = true
+        } else if secretUnlock.secretStep1 == true {
+            secretUnlock.secretStep2 = true
         } else {
             resetSecret()
         }
