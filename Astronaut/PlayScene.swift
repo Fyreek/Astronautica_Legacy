@@ -136,7 +136,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         
         oxygenBar.position.x = self.size.width / 2 - 40 - oxygenBar.size.width / 2
-        oxygenBar.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 20
+        oxygenBar.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 25
         oxygenBar.zPosition = 1.3
         oxygenBar.setScale(scalingFactor)
         addChild(oxygenBar)
@@ -234,8 +234,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
-		scoreLabel.fontSize = 22
-		scoreLabel.fontColor = UIColor.whiteColor()
+		scoreLabel.fontSize = 20
+        scoreLabel.fontColor = UIColor(rgba: "#5F6575")
 		scoreLabel.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 35
 		scoreLabel.position.x = -(self.size.width / 2) + 40
         scoreLabel.zPosition = 1.2
@@ -1213,7 +1213,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
 	
     func updateOxygenBar() {
-        print(oxygen)
         if oxygen > 99 {
             oxygen = 99
         }
