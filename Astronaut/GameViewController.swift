@@ -84,7 +84,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 	override func shouldAutorotate() -> Bool {
 		return true
 	}
-	
+    
 	override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
 		if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
 			return UIInterfaceOrientationMask.AllButUpsideDown
@@ -103,7 +103,11 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     override func viewWillAppear(animated: Bool) {
         if interScene.smallAdLoad == true {
-            addAdConstraints()
+                if interScene.adState == true {
+                self.view!.addSubview(UIiAd)
+                showBannerAd()
+                addAdConstraints()
+            }
         }
     }
     

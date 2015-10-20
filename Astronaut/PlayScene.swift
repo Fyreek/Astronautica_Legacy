@@ -40,8 +40,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let oxygenMax = 100
     var bonusItems:[BonusItem] = []
     var updateBonusTick:Int = 10
-    var oxygenBar:SKSpriteNode = SKSpriteNode(color: SKColor.blueColor(), size: CGSizeMake(50, 100))
-    var oxygenBarBG:SKSpriteNode = SKSpriteNode(color: SKColor.whiteColor(), size: CGSizeMake(50, 100))
+    var oxygenBar:SKSpriteNode = SKSpriteNode(imageNamed: "OxygenBar_0")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     
@@ -61,6 +60,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     var explosionAnimationFrames = [SKTexture]()
     var backgroundAnimationFrames = [SKTexture]()
+    var oxygenBarAnimationFrames = [SKTexture]()
     
 	var gameSpeed:Float = 1
 	var totalSpeedAsteroid:CGFloat = 3.5
@@ -135,16 +135,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         
-        oxygenBar.hidden = true
-        oxygenBarBG.hidden = true
-        oxygenBar.position.x = -(self.size.width / 2) + 40
-        oxygenBar.position.y = 0
+        oxygenBar.position.x = self.size.width / 2 - 40 - oxygenBar.size.width / 2
+        oxygenBar.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 20
         oxygenBar.zPosition = 1.3
+        oxygenBar.setScale(scalingFactor)
         addChild(oxygenBar)
-        oxygenBarBG.position.x = -(self.size.width / 2) + 40
-        oxygenBarBG.position.y = 0
-        oxygenBarBG.zPosition = 1.2
-        addChild(oxygenBarBG)
         
         spawnPoints.append(0)
         spawnPoints.append(self.size.height / 2 - SKSpriteNode(imageNamed: "Satellite15").size.height * scalingFactor)
@@ -191,6 +186,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
 		
         let explosionAtlas = SKTextureAtlas(named: "explosion")
+        let oxygenBarAtlas = SKTextureAtlas(named: "oxygenBar")
         let backgroundAtlas = SKTextureAtlas(named: "background")
         
         let numImagesExplosion = explosionAtlas.textureNames.count
@@ -198,7 +194,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
             let explosionTextureName = "explosion32-\(i)"
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
+        }
         
+        let numImagesOxygenBar = oxygenBarAtlas.textureNames.count
+        for var i=1; i<(numImagesOxygenBar / 3); i++ {
+            
+            let oxygenBarTextureName = "OxygenBar8_\(i)"
+            oxygenBarAnimationFrames.append(oxygenBarAtlas.textureNamed(oxygenBarTextureName))
         }
         
         let numImagesBackground = backgroundAtlas.textureNames.count
@@ -206,22 +208,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
             let backgroundTextureName = "background107_\(i)"
             backgroundAnimationFrames.append(backgroundAtlas.textureNamed(backgroundTextureName))
-        
         }
         
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed") != 0.0 {
+        if (NSUserDefaults.standardUserDefaults().objectForKey("heroColorRed") == nil) {
             heroColorRed = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed"))
         } else {
             heroColorRed = 1
             NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorRed")
         }
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen") != 0.0 {
+        if NSUserDefaults.standardUserDefaults().objectForKey("heroColorGreen") == nil {
             heroColorGreen = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen"))
         } else {
             heroColorGreen = 1
             NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorGreen")
         }
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue") != 0.0 {
+        if NSUserDefaults.standardUserDefaults().objectForKey("heroColorBlue") == nil {
             heroColorBlue = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue"))
         } else {
             heroColorBlue = 1
@@ -235,7 +236,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
 		scoreLabel.fontSize = 22
 		scoreLabel.fontColor = UIColor.whiteColor()
-		scoreLabel.position.y = (self.size.height / 2) - 40
+		scoreLabel.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 35
 		scoreLabel.position.x = -(self.size.width / 2) + 40
         scoreLabel.zPosition = 1.2
 		
@@ -337,10 +338,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         hero.physicsBody = nil
         gameOver = true
         gamePause.hidden = true
-        oxygenBar.hidden = true
-        oxygenBarBG.hidden = true
         hero.removeAllActions()
         scoreLabel.hidden = true
+        oxygenBar.hidden = true
         
         if otherBody != nil {
             deathEnemy = otherBody
@@ -577,9 +577,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	func reloadGame() {
         
         interScene.playSceneDidLoad = true
+        oxygenBar.texture = oxygenBarAnimationFrames[49]
         
         stopBGAnim()
 		scoreLabel.hidden = false
+        oxygenBar.hidden = false
         hero.hidden = false
 		countDownText.hidden = false
 		hero.removeAllActions()
@@ -682,8 +684,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             startBGAnim()
 			
-            oxygenBar.hidden = false
-            oxygenBarBG.hidden = false
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -895,8 +895,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             stopBGAnim()
             
 			gamePaused = true
-            oxygenBar.hidden = true
-            oxygenBarBG.hidden = true
 			gamePlay.hidden = false
 			gamePlay.alpha = 1
             gamePlay.zPosition = 1.2
@@ -941,8 +939,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             startBGAnim()
             
-            oxygenBar.hidden = false
-            oxygenBarBG.hidden = false
             countDown = 3
             countDownText.text = String(countDown)
             countDownText.hidden = true
@@ -1217,8 +1213,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
 	
     func updateOxygenBar() {
-        oxygenBar.size.height = CGFloat(oxygen)
-        oxygenBar.position.y = CGFloat((oxygen / 2) - 50)
+        print(oxygen)
+        if oxygen > 99 {
+            oxygen = 99
+        }
+        if oxygen % 2 == 0 {
+            oxygenBar.texture = oxygenBarAnimationFrames[(oxygen + 1) / 2]
+        } else {
+            oxygenBar.texture = oxygenBarAnimationFrames[(oxygen) / 2]
+        }
     }
     
     func updateBonusItem() {

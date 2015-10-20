@@ -24,7 +24,7 @@ class OptionScene: SKScene {
     let menuThemeSprite = SKSpriteNode(imageNamed: "ThemeButton32")
     var noAdSprite = SKSpriteNode(imageNamed: "RemoveAdsButton32")
     let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
-    let musicSprite = SKSpriteNode(imageNamed: "BackButton32")
+    let musicSprite = SKSpriteNode(imageNamed: "MusicOnButton32")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var soundOn:Bool = true
@@ -55,8 +55,20 @@ class OptionScene: SKScene {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccess", name: "AdRemoveSuccess", object: nil)
         
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
-        soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-        musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
+            soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+        } else {
+            soundOn = true
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("musicBool") {
+            musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+        } else {
+            musicOn = true
+        }
+        
+//        soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+//        musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0
@@ -280,34 +292,34 @@ class OptionScene: SKScene {
         })
     }
     
-    func showAdMenu() {
-        resetSecret()
-        coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
-            self.musicSprite.hidden = true
-            self.soundSprite.hidden = true
-            self.coloredSprite.hidden = true
-            
-            self.redSlider.removeFromSuperview()
-            self.greenSlider.removeFromSuperview()
-            self.blueSlider.removeFromSuperview()
-            
-            self.noAdSprite.hidden = false
-            self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
-
-        }
-        UIView.animateWithDuration(1.0, animations: {
-            
-            self.redSlider.alpha = 0
-            self.greenSlider.alpha = 0
-            self.blueSlider.alpha = 0
-            
-            }, completion: {(finished: Bool) -> Void in
-        })
-
-        
-        musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
-        soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
-    }
+//    func showAdMenu() {
+//        resetSecret()
+//        coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
+//            self.musicSprite.hidden = true
+//            self.soundSprite.hidden = true
+//            self.coloredSprite.hidden = true
+//            
+//            self.redSlider.removeFromSuperview()
+//            self.greenSlider.removeFromSuperview()
+//            self.blueSlider.removeFromSuperview()
+//            
+//            self.noAdSprite.hidden = false
+//            self.noAdSprite.runAction(SKAction.fadeInWithDuration(1.0))
+//
+//        }
+//        UIView.animateWithDuration(1.0, animations: {
+//            
+//            self.redSlider.alpha = 0
+//            self.greenSlider.alpha = 0
+//            self.blueSlider.alpha = 0
+//            
+//            }, completion: {(finished: Bool) -> Void in
+//        })
+//
+//        
+//        musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
+//        soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
+//    }
     
     func removeButtonAnim() {
     
@@ -423,8 +435,10 @@ class OptionScene: SKScene {
                 lastSpriteName = self.menuThemeSprite.name!
                 self.menuThemeSprite.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.noAdSprite {
-                lastSpriteName = self.noAdSprite.name!
-                self.noAdSprite.runAction(buttonPressDark)
+                if interScene.adState == true {
+                    lastSpriteName = self.noAdSprite.name!
+                    self.noAdSprite.runAction(buttonPressDark)
+                }
             } else if self.nodeAtPoint(location) == self.soundSprite {
                 lastSpriteName = self.soundSprite.name!
                 self.soundSprite.runAction(buttonPressDark)
