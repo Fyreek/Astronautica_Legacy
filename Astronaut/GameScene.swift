@@ -31,8 +31,18 @@ class GameScene: SKScene, EGCDelegate {
     var explosionAnimationFrames = [SKTexture]()
     
 	override func didMoveToView(view: SKView) {
-        if NSUserDefaults.standardUserDefaults().boolForKey("Ads") {
-          interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
+//        if NSUserDefaults.standardUserDefaults().boolForKey("Ads") {
+//            let bool:Bool = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
+//            print("AdState: \(bool)")
+//            interScene.adState = bool
+//        } else {
+//            interScene.adState = true
+//        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
+            interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
+        } else {
+            interScene.adState = true
         }
         
         showAds()

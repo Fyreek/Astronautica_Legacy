@@ -114,12 +114,14 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     func bannerViewDidLoadAd(banner: ADBannerView!) {
         if interScene.playSceneDidLoad == false {
-            showBannerAd()
-            self.view.addSubview(UIiAd)
-            UIView.beginAnimations(nil, context: nil)
-            UIView.setAnimationDuration(1) // Time it takes the animation to complete
-            UIiAd.alpha = 1 // Fade in the animation
-            UIView.commitAnimations()
+            if interScene.adState == true {
+                showBannerAd()
+                self.view.addSubview(UIiAd)
+                UIView.beginAnimations(nil, context: nil)
+                UIView.setAnimationDuration(1) // Time it takes the animation to complete
+                UIiAd.alpha = 1 // Fade in the animation
+                UIView.commitAnimations()
+            }
         }
     }
     

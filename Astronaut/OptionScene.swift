@@ -22,7 +22,7 @@ class OptionScene: SKScene {
     let menuColorSprite = SKSpriteNode(imageNamed: "SecretButton32")
     let menuSoundSprite = SKSpriteNode(imageNamed: "SettingsButton32")
     let menuThemeSprite = SKSpriteNode(imageNamed: "ThemeButton32")
-    let noAdSprite = SKSpriteNode(imageNamed: "BackButton32")
+    var noAdSprite = SKSpriteNode(imageNamed: "RemoveAdsButton32")
     let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
     let musicSprite = SKSpriteNode(imageNamed: "BackButton32")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
@@ -52,7 +52,7 @@ class OptionScene: SKScene {
         bg.setScale(scalingFactor)
         addChild(bg)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccses", name: "InAppProductPurchasedNotification", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccess", name: "AdRemoveSuccess", object: nil)
         
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
@@ -166,6 +166,15 @@ class OptionScene: SKScene {
         addChild(menuThemeSprite)
         
         sliderValueDidChange()
+        adButtonSwitch()
+    }
+    
+    func adButtonSwitch() {
+        if interScene.adState == true {
+            self.noAdSprite.texture = SKTexture(imageNamed: "RemoveAdsButton32")
+        } else {
+            self.noAdSprite.texture = SKTexture(imageNamed: "DRemoveAdsButton32")
+        }
     }
     
     func showThemeMenu() {
@@ -345,10 +354,14 @@ class OptionScene: SKScene {
         }
     }
     
-    func hideAdsSuccses() {
+    func hideAdsSuccess() {
+        print("yes")
         interScene.adState = false
+        interScene.smallAdLoad = false
+        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
         NSUserDefaults.standardUserDefaults().synchronize()
+        adButtonSwitch()
     }
     
     func soundManagment() {
