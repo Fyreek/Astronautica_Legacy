@@ -67,9 +67,7 @@ class OptionScene: SKScene {
         redSlider.value = 1.0
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed") != 1.0 {
-            redSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed")
-        }
+        redSlider.value = heroColor.heroColorRed
         redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         redSlider.alpha = 0
         
@@ -79,9 +77,7 @@ class OptionScene: SKScene {
         greenSlider.value = 1.0
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen") != 1.0 {
-            self.greenSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen")
-        }
+        greenSlider.value = heroColor.heroColorGreen
         greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         greenSlider.alpha = 0
         
@@ -91,9 +87,7 @@ class OptionScene: SKScene {
         blueSlider.value = 1.0
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
-        if NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue") != 1.0 {
-           self.blueSlider.value = NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue")
-        }
+        blueSlider.value = heroColor.heroColorBlue
         blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         blueSlider.alpha = 0
         
@@ -487,6 +481,10 @@ class OptionScene: SKScene {
             blue = Float(blueSlider.value)
             let color = UIColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: 1.0)
         
+            heroColor.heroColorRed = red
+            heroColor.heroColorGreen = green
+            heroColor.heroColorBlue = blue
+            
             NSUserDefaults.standardUserDefaults().setFloat(red, forKey: "heroColorRed")
             NSUserDefaults.standardUserDefaults().setFloat(green, forKey: "heroColorGreen")
             NSUserDefaults.standardUserDefaults().setFloat(blue, forKey: "heroColorBlue")

@@ -28,6 +28,12 @@ struct secretUnlock {
     static var secretUnlocked:Bool = false
 }
 
+struct heroColor {
+    static var heroColorRed:Float = 1.0
+    static var heroColorGreen:Float = 1.0
+    static var heroColorBlue:Float = 1.0
+}
+
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
     var satelliteSound:AVAudioPlayer = AVAudioPlayer()
@@ -58,10 +64,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var bgAnimSpeed:CGFloat = 16
 	
     var gameOverMenuLoaded = false
-    
-    var heroColorRed:CGFloat = 1
-    var heroColorGreen:CGFloat = 1
-    var heroColorBlue:CGFloat = 1
     var heroBlendFactor:Float = 0.4
     
     var lastSpriteName:String = "empty"
@@ -220,26 +222,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             backgroundAnimationFrames.append(backgroundAtlas.textureNamed(backgroundTextureName))
         }
         
-        if (NSUserDefaults.standardUserDefaults().objectForKey("heroColorRed") == nil) {
-            heroColorRed = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed"))
-        } else {
-            heroColorRed = 1
-            NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorRed")
-        }
-        if NSUserDefaults.standardUserDefaults().objectForKey("heroColorGreen") == nil {
-            heroColorGreen = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen"))
-        } else {
-            heroColorGreen = 1
-            NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorGreen")
-        }
-        if NSUserDefaults.standardUserDefaults().objectForKey("heroColorBlue") == nil {
-            heroColorBlue = CGFloat(NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue"))
-        } else {
-            heroColorBlue = 1
-            NSUserDefaults.standardUserDefaults().setFloat(1, forKey: "heroColorBlue")
-        }
-        
-        hero.color = UIColor(red: heroColorRed , green: heroColorGreen , blue: heroColorBlue, alpha: 1.0)
+        hero.color = UIColor(red: CGFloat(heroColor.heroColorRed) , green: CGFloat(heroColor.heroColorGreen) , blue: CGFloat(heroColor.heroColorBlue), alpha: 1.0)
 		hero.colorBlendFactor = 0.4
 		
 		scoreLabel = SKLabelNode(text: "0")
