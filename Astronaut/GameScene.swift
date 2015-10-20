@@ -28,6 +28,7 @@ class GameScene: SKScene, EGCDelegate {
     var tickCount:Int = 0
     var spawnActive = false
     var enemies:[Enemy] = []
+    var explosionAnimationFrames = [SKTexture]()
     
 	override func didMoveToView(view: SKView) {
         if NSUserDefaults.standardUserDefaults().boolForKey("Ads") {
@@ -93,6 +94,14 @@ class GameScene: SKScene, EGCDelegate {
 		menuHSButton.position.x = -(self.size.width / 3)
 		menuHSButton.zPosition = 1.2
 		
+        let explosionAtlas = SKTextureAtlas(named: "explosion")
+        
+        let numImagesExplosion = explosionAtlas.textureNames.count
+        for var i=1; i<(numImagesExplosion + 3) / 3; i++ {
+            
+            let explosionTextureName = "explosion32-\(i)"
+            explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
+        }
 	}
     
     func whichEnemy() {
@@ -152,6 +161,12 @@ class GameScene: SKScene, EGCDelegate {
                 lastSpriteName = self.menuOptionButton.name!
                 self.menuOptionButton.runAction(buttonPressDark)
             }
+            for enemy in enemies {
+                if self.nodeAtPoint(location) == enemy {
+                    enemy.moving = false
+                    explosionEmit(enemy)
+                }
+            }
         }
 	}
     
@@ -202,7 +217,7 @@ class GameScene: SKScene, EGCDelegate {
                     }
                 }
             } else  {
-        
+                
                 menuHSButton.removeAllActions()
                 menuOptionButton.removeAllActions()
                 startGameButton.removeAllActions()
@@ -215,7 +230,19 @@ class GameScene: SKScene, EGCDelegate {
         }
         
     }
-	
+    
+    func explosionEmit(enemy: Enemy) {
+        enemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
+            
+            enemy.hidden = true
+            enemy.spawned = false
+            enemy.moving = false
+            enemy.removeFromParent()
+            self.spawnActive = false
+            
+        })
+    }
+    
     func showOptionScene() {
         
         let transition = SKTransition.fadeWithDuration(1)
