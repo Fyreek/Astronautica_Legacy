@@ -31,18 +31,17 @@ class GameScene: SKScene, EGCDelegate {
     var explosionAnimationFrames = [SKTexture]()
     
 	override func didMoveToView(view: SKView) {
-//        if NSUserDefaults.standardUserDefaults().boolForKey("Ads") {
-//            let bool:Bool = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
-//            print("AdState: \(bool)")
-//            interScene.adState = bool
-//        } else {
-//            interScene.adState = true
-//        }
         
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
             interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
         } else {
             interScene.adState = true
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
+            secretUnlock.secretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
+        } else {
+            secretUnlock.secretUnlocked = false
         }
         
         showAds()
@@ -210,6 +209,7 @@ class GameScene: SKScene, EGCDelegate {
                 removeButtonAnim()
                 if lastSpriteName == startGameButton.name {
                     self.startGameButton.runAction(buttonPressLight){
+                        self.resetSecret()
                         self.showPlayScene()
                     }
                 }
@@ -217,6 +217,7 @@ class GameScene: SKScene, EGCDelegate {
                 removeButtonAnim()
                 if lastSpriteName == menuHSButton.name {
                     self.menuHSButton.runAction(buttonPressLight){
+                        self.resetSecret()
                         EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                     }
                 }
@@ -228,7 +229,7 @@ class GameScene: SKScene, EGCDelegate {
                     }
                 }
             } else  {
-                
+
                 menuHSButton.removeAllActions()
                 menuOptionButton.removeAllActions()
                 startGameButton.removeAllActions()
@@ -242,7 +243,43 @@ class GameScene: SKScene, EGCDelegate {
         
     }
     
+    func toggleSecret() {
+        resetSecret()
+        if secretUnlock.secretUnlocked == true {
+            secretUnlock.secretUnlocked = false
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "secretUnlocked")
+        } else {
+            secretUnlock.secretUnlocked = true
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "secretUnlocked")
+        }
+        NSUserDefaults.standardUserDefaults().synchronize()
+    }
+    
+    func resetSecret() {
+        secretUnlock.secretStep1 = false
+        secretUnlock.secretStep2 = false
+        secretUnlock.secretStep3 = false
+        secretUnlock.secretStep4 = false
+        secretUnlock.secretStep5 = false
+        secretUnlock.secretStep6 = false
+    }
+    
     func explosionEmit(enemy: Enemy) {
+        
+        if secretUnlock.secretStep1 == true && secretUnlock.secretStep5 == true {
+            secretUnlock.secretStep6 = true
+            toggleSecret()
+        } else if secretUnlock.secretStep1 == false {
+            secretUnlock.secretStep1 = true
+        } else if secretUnlock.secretStep1 == true {
+            
+        } else {
+            resetSecret()
+        }
+        
+        print("Step 1: \(secretUnlock.secretStep1)")
+        print("Step 6: \(secretUnlock.secretStep6)")
+        
         enemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
             
             enemy.hidden = true
