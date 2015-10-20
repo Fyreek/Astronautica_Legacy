@@ -32,17 +32,7 @@ class GameScene: SKScene, EGCDelegate {
     
 	override func didMoveToView(view: SKView) {
         
-        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
-            interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
-        } else {
-            interScene.adState = true
-        }
-        
-        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
-            secretUnlock.secretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
-        } else {
-            secretUnlock.secretUnlocked = false
-        }
+        loadingNSUser()
         
         showAds()
         loadSoundState()
@@ -113,6 +103,38 @@ class GameScene: SKScene, EGCDelegate {
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
         }
 	}
+    
+    func loadingNSUser() {
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
+            interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
+        } else {
+            interScene.adState = true
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
+            secretUnlock.secretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
+        } else {
+            secretUnlock.secretUnlocked = false
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("heroColorRed") {
+            heroColor.heroColorRed = NSUserDefaults.standardUserDefaults().floatForKey("heroColorRed")
+        } else {
+            heroColor.heroColorRed = 1.0
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("heroColorGreen") {
+            heroColor.heroColorGreen = NSUserDefaults.standardUserDefaults().floatForKey("heroColorGreen")
+        } else {
+            heroColor.heroColorGreen = 1.0
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("heroColorBlue") {
+            heroColor.heroColorBlue = NSUserDefaults.standardUserDefaults().floatForKey("heroColorBlue")
+        } else {
+            heroColor.heroColorBlue = 1.0
+        }
+    }
     
     func whichEnemy() {
         let number:Int = Int(arc4random_uniform(2))
@@ -266,19 +288,20 @@ class GameScene: SKScene, EGCDelegate {
     
     func explosionEmit(enemy: Enemy) {
         
-        if secretUnlock.secretStep1 == true && secretUnlock.secretStep5 == true {
-            secretUnlock.secretStep6 = true
-            toggleSecret()
-        } else if secretUnlock.secretStep1 == false {
-            secretUnlock.secretStep1 = true
-        } else if secretUnlock.secretStep1 == true {
-            
+        if enemy.name == "Satellite15" {
+            if secretUnlock.secretStep1 == true && secretUnlock.secretStep5 == true {
+                secretUnlock.secretStep6 = true
+                toggleSecret()
+            } else if secretUnlock.secretStep1 == false {
+                secretUnlock.secretStep1 = true
+            } else if secretUnlock.secretStep1 == true {
+                
+            } else {
+                resetSecret()
+            }
         } else {
             resetSecret()
         }
-        
-        print("Step 1: \(secretUnlock.secretStep1)")
-        print("Step 6: \(secretUnlock.secretStep6)")
         
         enemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
             
