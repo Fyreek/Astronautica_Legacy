@@ -40,6 +40,8 @@ class OptionScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         
+        loadSoundState()
+        
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
 
         bg.zPosition = 0.9
@@ -481,6 +483,14 @@ class OptionScene: SKScene {
         scene.size = skView.bounds.size
         skView.presentScene(scene, transition: transition)
 
+    }
+    
+    func loadSoundState() {
+        if interScene.musicState == true {
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+        } else {
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+        }
     }
     
     func sliderValueDidChange() {

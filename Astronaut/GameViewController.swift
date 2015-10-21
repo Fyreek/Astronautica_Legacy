@@ -19,6 +19,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
+        updateSoundState()
+        
         loadAds()
         
         self.UIiAd.hidden = true
@@ -57,6 +59,16 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 		skView.presentScene(scene)
         
 	}
+    
+    func updateSoundState() {
+        if interScene.musicState == true {
+            extMusicOn()
+        } else {
+            extMusicOff()
+        }
+        interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+        interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+    }
     
     func EGCAuthentified(authentified:Bool) {
         if authentified {
@@ -140,7 +152,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func extMusicOn() {
         let sess = AVAudioSession.sharedInstance()
         if sess.otherAudioPlaying {
-            _ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient, withOptions: .DuckOthers)
+            _ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient, withOptions: .MixWithOthers)
             _ = try? sess.setActive(true, withOptions: [])
         }
     }
@@ -148,7 +160,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func extMusicOff() {
         let sess = AVAudioSession.sharedInstance()
         if sess.otherAudioPlaying {
-            _ = try? sess.setCategory(AVAudioSessionCategoryAmbient, withOptions: .DuckOthers)
+            _ = try? sess.setCategory(AVAudioSessionCategoryAmbient, withOptions: .MixWithOthers)
             _ = try? sess.setActive(true, withOptions: [])
         }
     }

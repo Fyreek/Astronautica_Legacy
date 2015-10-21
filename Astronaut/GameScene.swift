@@ -36,6 +36,8 @@ class GameScene: SKScene, EGCDelegate {
         
         loadingNSUser()
         
+        interScene.adState = false // Delete
+        
         showAds()
         loadSoundState()
         
@@ -181,8 +183,6 @@ class GameScene: SKScene, EGCDelegate {
         } else {
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         }
-        interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-        interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
     }
     
 	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
