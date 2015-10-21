@@ -144,6 +144,7 @@ class OptionScene: SKScene {
         addChild(menuColorSprite)
         if isSecretUnlocked == true {
             menuColorSprite.hidden = false
+            achievementSecretMenu()
         } else {
             menuColorSprite.hidden = true
         }
@@ -196,6 +197,10 @@ class OptionScene: SKScene {
             }, completion: {(finished: Bool) -> Void in
                 //Load new Stuff
         })
+    }
+    
+    func achievementSecretMenu() {
+        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_secret", showBannnerIfCompleted: true, addToExisting: false)
     }
     
     func resetSecret() {

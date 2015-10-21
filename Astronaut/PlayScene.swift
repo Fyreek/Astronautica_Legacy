@@ -59,6 +59,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var oxygenBar:SKSpriteNode = SKSpriteNode(imageNamed: "OxygenBar8_0")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
+    var achievementOxygenCount:Int = 0
     
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
@@ -346,6 +347,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         interScene.playSceneDidLoad = false
         
+        if score >= 100 {
+            achievement100Points()
+        }
+        
         if score <= scoreBefore {
             
             totalScore.hidden = false
@@ -445,6 +450,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         otherBody.deathMoving = true
         otherBody.physicsBody = nil
     
+        achievementOxygenCount = 0
+        
         otherBody.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
             otherBody.hidden = true
@@ -475,6 +482,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.removeFromParent()
         bonusItemAlive = false
         bonusItems = []
+        
+        if achievementOxygenCount < 10 {
+            achievementOxygenCount++
+        } else {
+            achievementOxygenCount = 10
+            achievementOxygenItem()
+        }
+        
         oxygen = oxygen + 60
         updateOxygenBar()
     }
@@ -679,6 +694,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             startBGAnim()
 			
+            EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_startup", showBannnerIfCompleted: true, addToExisting: false)
+            
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -701,6 +718,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
+    func achievementOxygenItem() {
+        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_10oxygen", showBannnerIfCompleted: true, addToExisting: false)
+    }
+    
+    func achievement100Points() {
+        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_100points", showBannnerIfCompleted: true, addToExisting: false)
+    }
+    
     func addBonusItems(itemType: String) {
     
         //For more Items later
@@ -1343,6 +1368,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     } else {
                         bonusItems = []
                         bonusItem.removeFromParent()
+                        achievementOxygenCount = 0
                         if !gameOver {
                             addBonusItems("Oxygen15")
                         }

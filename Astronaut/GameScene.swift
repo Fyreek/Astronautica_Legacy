@@ -29,6 +29,8 @@ class GameScene: SKScene, EGCDelegate {
     var spawnActive = false
     var enemies:[Enemy] = []
     var explosionAnimationFrames = [SKTexture]()
+    var achievementEwokBool:Bool = false
+    var achievementEwokCount:Int = 0
     
 	override func didMoveToView(view: SKView) {
         
@@ -286,7 +288,21 @@ class GameScene: SKScene, EGCDelegate {
         secretUnlock.secretStep6 = false
     }
     
+    func unlockEwokAchievement() {
+        print("Unlocked Star Destroyer Achievement!")
+        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_20enemies", showBannnerIfCompleted: true, addToExisting: false)
+    }
+    
     func explosionEmit(enemy: Enemy) {
+        if achievementEwokBool == false {
+            if achievementEwokCount < 20 {
+                achievementEwokCount++
+            } else {
+                achievementEwokBool = true
+                achievementEwokCount = 20
+                unlockEwokAchievement()
+            }
+        }
         
         if enemy.name == "Satellite15" {
             if secretUnlock.secretStep1 == true && secretUnlock.secretStep5 == true {
