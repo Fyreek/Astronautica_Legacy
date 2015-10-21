@@ -1403,6 +1403,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         scene.size = skView.bounds.size
         skView.presentScene(scene, transition: transition)
         
+        scene.scoreBefore = highScore
     }
     
     func updateBGPosition() {
