@@ -288,7 +288,6 @@ class OptionScene: SKScene {
     }
     
     func hideAdsSuccess() {
-        print("yes")
         interScene.adState = false
         interScene.smallAdLoad = false
         NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
@@ -405,8 +404,10 @@ class OptionScene: SKScene {
             } else if self.nodeAtPoint(location) == self.noAdSprite {
                 removeButtonAnim()
                 if lastSpriteName == self.noAdSprite.name {
-                    self.noAdSprite.runAction(buttonPressLight){
-                        self.hideAds()
+                    if interScene.adState == true {
+                        self.noAdSprite.runAction(buttonPressLight){
+                            self.hideAds()
+                        }
                     }
                 }
             } else if self.nodeAtPoint(location) == self.soundSprite {
@@ -436,7 +437,9 @@ class OptionScene: SKScene {
                 self.menuColorSprite.runAction(buttonPressLight)
                 self.menuThemeSprite.runAction(buttonPressLight)
                 self.menuSoundSprite.runAction(buttonPressLight)
-                self.noAdSprite.runAction(buttonPressLight)
+                if interScene.adState == true {
+                    self.noAdSprite.runAction(buttonPressLight)
+                }
                 self.musicSprite.runAction(buttonPressLight)
                 self.soundSprite.runAction(buttonPressLight)
             }

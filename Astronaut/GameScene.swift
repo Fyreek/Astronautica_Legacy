@@ -389,6 +389,7 @@ class GameScene: SKScene, EGCDelegate {
             if highScore > highScoreBefore {
         
                 highScoreLabel.text = "Highscore: " + String(highScore)
+                NSUserDefaults.standardUserDefaults().setInteger(highScore, forKey: "highScore")
             
             }
             if spawnActive == false {

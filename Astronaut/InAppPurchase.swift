@@ -16,6 +16,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
     let kInAppPurchasingErrorNotification  = "InAppPurchasingErrorNotification"
     
     let unlockRemoveAds = "astronautica.removeads"
+    var unlockRemoveAdsVar:SKProduct!
     //let unlockTestInAppPurchase2ProductId = "com.testing.iap2"
     
     class var sharedInstance : InAppPurchase {
@@ -59,7 +60,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
             print(validProduct.localizedTitle)
             print(validProduct.localizedDescription)
             print(validProduct.price)
-            buyProduct(validProduct);
+            unlockRemoveAdsVar = validProduct
         }
         else {
             print("No products")
@@ -126,6 +127,12 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
     }
     
     func buyRemoveAds() {
+        if unlockRemoveAdsVar != nil {
+            buyProduct(unlockRemoveAdsVar)
+        }
+    }
+    
+    func loadAds() {
         unlockProduct(unlockRemoveAds)
     }
     

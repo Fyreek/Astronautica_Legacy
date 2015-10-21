@@ -19,6 +19,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
+        loadAds()
+        
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
         
@@ -102,9 +104,9 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 	}
     
     override func viewWillAppear(animated: Bool) {
+        self.view!.addSubview(UIiAd)
         if interScene.smallAdLoad == true {
                 if interScene.adState == true {
-                self.view!.addSubview(UIiAd)
                 showBannerAd()
                 addAdConstraints()
             }
@@ -134,6 +136,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func showBannerAd() {
+        addAdConstraints()
         UIiAd.hidden = false
         UIiAd.alpha = 1.0
         
@@ -164,6 +167,10 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     func removeAds() {
         InAppPurchase.sharedInstance.buyRemoveAds()
+    }
+    
+    func loadAds() {
+        InAppPurchase.sharedInstance.loadAds()
     }
     
 }

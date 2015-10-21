@@ -313,7 +313,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func openGameOverMenu() {
 
-        whichAd()
+        showAds()
+        showFSAd()
         
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
@@ -789,8 +790,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if enemy.name == "Missile8" {
             let yMovement:CGFloat = (hero.position.y - enemy.position.y) / (hero.position.x - enemy.position.x)
             enemy.preLocation = yMovement * 2
-            let angle = atan2(hero.position.y - enemy.position.y, hero.position.x - enemy.position.x)
+            var angle = atan2(hero.position.y - enemy.position.y, hero.position.x - enemy.position.x)
             let Pi = CGFloat(M_PI)
+            if angle > 3 {
+                angle = 3
+            } else if angle < -3 {
+                angle = -3
+            }
             if hero.position.y > enemy.position.y {
                 enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180 , duration: 0))
             } else if hero.position.y < enemy.position.y {
@@ -926,15 +932,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scene.highScoreLabel.text = "Highscore: " + String(highScore)
 		
 	}
-	
-    func whichAd() {
-        let number:Int = Int(arc4random_uniform(5))
-        if number == 0 {
-            showFSAd()
-        } else {
-            showAds()
-        }
-    }
     
     func showFSAd() {
         if interScene.adState == true {
