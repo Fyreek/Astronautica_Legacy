@@ -72,7 +72,9 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     func EGCAuthentified(authentified:Bool) {
         if authentified {
+            interScene.connectedToGC = true
             loadHighScore()
+            NSNotificationCenter.defaultCenter().postNotificationName("switchLbButton", object: nil)
         }
     }
     
@@ -152,7 +154,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func extMusicOn() {
         let sess = AVAudioSession.sharedInstance()
         if sess.otherAudioPlaying {
-            _ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient, withOptions: .MixWithOthers)
+            //_ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient, withOptions: .MixWithOthers)
+            _ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient)
             _ = try? sess.setActive(true, withOptions: [])
         }
     }
@@ -160,7 +163,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func extMusicOff() {
         let sess = AVAudioSession.sharedInstance()
         if sess.otherAudioPlaying {
-            _ = try? sess.setCategory(AVAudioSessionCategoryAmbient, withOptions: .MixWithOthers)
+            //_ = try? sess.setCategory(AVAudioSessionCategoryAmbient, withOptions: .MixWithOthers)
+            _ = try? sess.setCategory(AVAudioSessionCategoryAmbient)
             _ = try? sess.setActive(true, withOptions: [])
         }
     }

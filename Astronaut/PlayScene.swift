@@ -16,6 +16,7 @@ struct interScene {
     static var musicState:Bool = true
     static var adState:Bool = true
     static var smallAdLoad:Bool = false
+    static var connectedToGC:Bool = false
 }
 
 struct secretUnlock {
@@ -54,6 +55,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var bonusItemAlive:Bool = false
     var oxygen = 100
     let oxygenMax = 100
+    var upOxygen:Bool = false
+    var upOxygenCount:Int = 0
     var bonusItems:[BonusItem] = []
     var updateBonusTick:Int = 10
     var oxygenBar:SKSpriteNode = SKSpriteNode(imageNamed: "OxygenBar8_0")
@@ -501,6 +504,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         
         oxygen = oxygen + 60
+        //upOxygen = true
         updateOxygenBar()
     }
     
@@ -1241,7 +1245,20 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 	
+    func increaseOxygen() {
+        if upOxygen == true {
+            if upOxygenCount < 60 {
+                upOxygenCount++
+                oxygen++
+            } else {
+                upOxygenCount = 0
+                upOxygen = false
+            }
+        }
+    }
+    
     func updateOxygenBar() {
+        //increaseOxygen()
         if oxygen > 99 {
             oxygen = 99
         }

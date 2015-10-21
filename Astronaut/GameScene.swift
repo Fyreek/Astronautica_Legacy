@@ -41,6 +41,8 @@ class GameScene: SKScene, EGCDelegate {
         showAds()
         loadSoundState()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
+        
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
         
@@ -98,6 +100,8 @@ class GameScene: SKScene, EGCDelegate {
 		menuHSButton.position.x = -(self.size.width / 3)
 		menuHSButton.zPosition = 1.2
         
+        switchLsButton()
+        
         let explosionAtlas = SKTextureAtlas(named: "explosion")
         
         let numImagesExplosion = explosionAtlas.textureNames.count
@@ -107,6 +111,14 @@ class GameScene: SKScene, EGCDelegate {
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
         }
 	}
+    
+    func switchLsButton() {
+        if interScene.connectedToGC == true {
+            menuHSButton.runAction(SKAction.animateWithTextures([SKTexture(imageNamed: "LeaderboardsButton32")], timePerFrame: 1.0))
+        } else {
+            menuHSButton.texture = SKTexture(imageNamed: "DLeaderboardsButton32")
+        }
+    }
     
     func loadingNSUser() {
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
@@ -193,8 +205,9 @@ class GameScene: SKScene, EGCDelegate {
                 lastSpriteName = self.startGameButton.name!
                 self.startGameButton.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.menuHSButton {
-                lastSpriteName = self.menuHSButton.name!
-                self.menuHSButton.runAction(buttonPressDark){
+                if interScene.connectedToGC == true {
+                    lastSpriteName = self.menuHSButton.name!
+                    self.menuHSButton.runAction(buttonPressDark)
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
                 lastSpriteName = self.menuOptionButton.name!
@@ -217,10 +230,12 @@ class GameScene: SKScene, EGCDelegate {
             startGameButton.runAction(buttonPressLight)
         
         } else if lastSpriteName == self.menuHSButton.name  {
-        
-            menuHSButton.removeAllActions()
-            menuHSButton.runAction(buttonPressLight)
-        
+            
+            if interScene.connectedToGC == true {
+                menuHSButton.removeAllActions()
+                menuHSButton.runAction(buttonPressLight)
+            }
+            
         } else if lastSpriteName == self.menuOptionButton.name {
         
             menuOptionButton.removeAllActions()
@@ -245,9 +260,11 @@ class GameScene: SKScene, EGCDelegate {
             } else if self.nodeAtPoint(location) == self.menuHSButton {
                 removeButtonAnim()
                 if lastSpriteName == menuHSButton.name {
-                    self.menuHSButton.runAction(buttonPressLight){
-                        self.resetSecret()
-                        EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                    if interScene.connectedToGC == true {
+                        self.menuHSButton.runAction(buttonPressLight){
+                            self.resetSecret()
+                            EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                        }
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
