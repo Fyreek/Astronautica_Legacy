@@ -176,6 +176,11 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func loadSoundState() {
+        if interScene.musicState == true {
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+        } else {
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+        }
         interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
         interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
     }

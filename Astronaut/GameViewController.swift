@@ -32,6 +32,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFsAd", name: "showFSAd", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeAds", name: "removeAds", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOn", name: "MusicOn", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOff", name: "MusicOff", object: nil)
         
         UIiAd.delegate = self
         
@@ -133,6 +135,22 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     func bannerView(banner: ADBannerView!, didFailToReceiveAdWithError error: NSError!) {
         UIiAd.alpha = 0
+    }
+    
+    func extMusicOn() {
+        let sess = AVAudioSession.sharedInstance()
+        if sess.otherAudioPlaying {
+            _ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient, withOptions: .DuckOthers)
+            _ = try? sess.setActive(true, withOptions: [])
+        }
+    }
+    
+    func extMusicOff() {
+        let sess = AVAudioSession.sharedInstance()
+        if sess.otherAudioPlaying {
+            _ = try? sess.setCategory(AVAudioSessionCategoryAmbient, withOptions: .DuckOthers)
+            _ = try? sess.setActive(true, withOptions: [])
+        }
     }
     
     func showBannerAd() {
