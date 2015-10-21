@@ -100,7 +100,7 @@ class OptionScene: SKScene {
         
         noAdSprite.setScale(scalingFactor)
         noAdSprite.position.x = 0
-        noAdSprite.position.y = -(self.size.height / 4 - noAdSprite.size.height / 4)
+        noAdSprite.position.y = -(self.size.height / 4)
         noAdSprite.zPosition = 1.2
         noAdSprite.name = "noAdSprite"
         addChild(noAdSprite)

@@ -95,7 +95,7 @@ class GameScene: SKScene, EGCDelegate {
 		menuHSButton.position.y = -(self.size.height / 4.5)
 		menuHSButton.position.x = -(self.size.width / 3)
 		menuHSButton.zPosition = 1.2
-		
+        
         let explosionAtlas = SKTextureAtlas(named: "explosion")
         
         let numImagesExplosion = explosionAtlas.textureNames.count

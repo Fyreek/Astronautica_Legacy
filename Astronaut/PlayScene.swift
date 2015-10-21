@@ -589,6 +589,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         interScene.playSceneDidLoad = true
         oxygenBar.texture = oxygenBarAnimationFrames[49]
         
+        achievementOxygenCount = 0
+        
         stopBGAnim()
 		scoreLabel.hidden = false
         oxygenBar.hidden = false
