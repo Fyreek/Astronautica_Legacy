@@ -35,9 +35,6 @@ class GameScene: SKScene, EGCDelegate {
 	override func didMoveToView(view: SKView) {
         
         loadingNSUser()
-        
-        interScene.adState = false // Delete
-        
         showAds()
         loadSoundState()
         
