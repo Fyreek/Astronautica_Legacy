@@ -55,6 +55,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var bonusItemAlive:Bool = false
     var oxygen = 100
     let oxygenMax = 100
+    var oxygenTemp = 100
+    var oxygenTempUp = 0
     var upOxygen:Bool = false
     var upOxygenCount:Int = 0
     var bonusItems:[BonusItem] = []
@@ -503,9 +505,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             achievementOxygenItem()
         }
         
-        oxygen = oxygen + 60
-        //upOxygen = true
-        updateOxygenBar()
+        print("collision")
+        oxygenTemp = oxygen
+        if oxygen + 60 > 99 {
+            oxygenTempUp = 99 - oxygen
+            oxygen = 99
+        } else {
+            oxygenTempUp = 60
+            oxygen = oxygen + 60
+        }
+        upOxygen = true
+        renderOxygenBar()
     }
     
 	func didBeginContact(contact: SKPhysicsContact) {
@@ -1244,28 +1254,35 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
         }
     }
-	
-    func increaseOxygen() {
+    
+    func renderOxygenBar() {
+        
         if upOxygen == true {
-            if upOxygenCount < 60 {
-                upOxygenCount++
-                oxygen++
+            if upOxygenCount < oxygenTempUp {
+                print(oxygenTemp)
+                upOxygenCount = upOxygenCount + 5
+                oxygenTemp = oxygenTemp + 5
+                print("increasing oxy")
+                if oxygenTemp > 100 {
+                    oxygenTemp = 99
+                }
+                if oxygenTemp % 2 == 0 {
+                    oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
+                } else {
+                    oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp) / 2]
+                }
             } else {
+                oxygenTemp = 0
                 upOxygenCount = 0
                 upOxygen = false
             }
-        }
-    }
-    
-    func updateOxygenBar() {
-        //increaseOxygen()
-        if oxygen > 99 {
-            oxygen = 99
-        }
-        if oxygen % 2 == 0 {
-            oxygenBar.texture = oxygenBarAnimationFrames[(oxygen + 1) / 2]
+            
         } else {
-            oxygenBar.texture = oxygenBarAnimationFrames[(oxygen) / 2]
+            if oxygen % 2 == 0 {
+                oxygenBar.texture = oxygenBarAnimationFrames[(oxygen + 1) / 2]
+            } else {
+                oxygenBar.texture = oxygenBarAnimationFrames[(oxygen) / 2]
+            }
         }
     }
     
@@ -1276,8 +1293,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             } else {
                 updateBonusTick = 10
                 if oxygen > 0 {
-                    oxygen--
-                    updateOxygenBar()
+                    if upOxygen == false {
+                        oxygen--
+                    }
+                    renderOxygenBar()
                 } else {
                     heroGameEnding(nil)
                 }
