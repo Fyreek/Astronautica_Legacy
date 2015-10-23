@@ -806,15 +806,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func addEnemies() {
 		enemyCount++
-		var number:Int = Int(arc4random_uniform(11))
+		let number:Int = Int(arc4random_uniform(11))
 		let upDown:Int = Int(arc4random_uniform(2))
 		let heightNumber:Int = Int((self.size.height / 2) - (SKSpriteNode(imageNamed: "Asteroid16").size.height / 2))
 		let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
 		let rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
         let rotationDirection:Int = Int(arc4random_uniform(2))
         let preLocation:CGFloat = 0
-        
-        number = 6
         
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
