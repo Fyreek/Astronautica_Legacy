@@ -17,6 +17,10 @@ struct interScene {
     static var adState:Bool = true
     static var smallAdLoad:Bool = false
     static var connectedToGC:Bool = false
+    static var explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: false)
+    static var satelliteSound = SKAction.playSoundFileNamed("satellite.m4a", waitForCompletion: false)
+    static var oxygenSound = SKAction.playSoundFileNamed("oxygen.mp3", waitForCompletion: false)
+    static var backgroundMusicP: AVAudioPlayer!
 }
 
 struct secretUnlock {
@@ -37,7 +41,6 @@ struct heroColor {
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
-    var satelliteSound:AVAudioPlayer = AVAudioPlayer()
     var touchLocation = CGFloat()
 	var gameOver = true
 	var gameStarted = false
@@ -65,6 +68,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     var achievementOxygenCount:Int = 0
+    var enemySound:Bool = false
     
     var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
@@ -142,7 +146,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         loadSoundState()
         
-        prepareSatelliteSound()
+        //prepareSatelliteSound()
+        //prepareExplosionSound()
+        //explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: false)
+        
         interScene.playSceneDidLoad = true
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
@@ -464,8 +471,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.physicsBody = nil
         otherBody.deathMoving = true
         otherBody.physicsBody = nil
-    
+        
         achievementOxygenCount = 0
+        playExplosionSound()
         
         otherBody.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
@@ -504,8 +512,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             achievementOxygenCount = 10
             achievementOxygenItem()
         }
-        
-        print("collision")
         oxygenTemp = oxygen
         if oxygen + 60 > 99 {
             oxygenTempUp = 99 - oxygen
@@ -515,6 +521,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             oxygen = oxygen + 60
         }
         upOxygen = true
+        playOxygenSound()
         renderOxygenBar()
     }
     
@@ -579,6 +586,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             bodyTwo?.physicsBody = nil
             bodyOne?.deathMoving = true
             bodyTwo?.deathMoving = true
+            
+            playExplosionSound()
+            
             bodyOne?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
                 bodyOne?.hidden = true
@@ -607,6 +617,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             fatalError("other collision: \(contactMask)")
         }
 	}
+    
+    func testSoundPlay() {
+        var foundSound:Bool = false
+        for enemy in enemies {
+            if enemy.name == "Satellite15" {
+                if enemy.didPlaySound == true {
+                    enemy.didPlaySound = false
+                    enemySound = false
+                    foundSound = true
+                }
+            }
+        }
+        if foundSound == false {
+            enemySound = false
+        }
+        
+        
+    }
     
 	func reloadGame() {
         
@@ -788,7 +816,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		let rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
         let rotationDirection:Int = Int(arc4random_uniform(2))
         let preLocation:CGFloat = 0
-		
+
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
                 addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999)
@@ -813,12 +841,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 	}
 	
-    func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int, deathMoving:Bool, spawned: Bool, spawnHeight: CGFloat) {
+    func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int, deathMoving:Bool, spawned: Bool, spawnHeight: CGFloat, didPlaySound : Bool = false) {
 		
 		let enemy = Enemy(imageNamed: named)
 		
         enemy.setScale(scalingFactor)
         enemy.zPosition = 1.1
+        
+        testSoundPlay()
         
 		enemy.movementSpeed = movementSpeed
 		enemy.yPos = yPos
@@ -832,6 +862,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         enemy.spawned = false
         enemy.moving = false
         enemy.spawnHeight = spawnHeight
+        enemy.didPlaySound = didPlaySound
 		enemies.append(enemy)
 		enemiesIndex.append(uniqueIdentifier)
 		
@@ -1259,10 +1290,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if upOxygen == true {
             if upOxygenCount < oxygenTempUp {
-                print(oxygenTemp)
-                upOxygenCount = upOxygenCount + 5
-                oxygenTemp = oxygenTemp + 5
-                print("increasing oxy")
+                upOxygenCount = upOxygenCount + 10
+                oxygenTemp = oxygenTemp + 10
                 if oxygenTemp > 100 {
                     oxygenTemp = 99
                 }
@@ -1436,6 +1465,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
         if hero.emit == true {
             hero.emit = false
+            playExplosionSound()
             if deathEnemy != nil {
                 deathEnemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
                     
@@ -1541,8 +1571,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                     enemiesIndex.removeAtIndex(number)
                                     enemy.hidden = true
                                     enemy.position.x = self.size.width + 200
-                                    
+                                
                                 } else {
+                                    
+                                    if enemy.name == "Satellite15" {
+                                        if enemy.didPlaySound == true {
+                                            enemy.didPlaySound = false
+                                            enemySound = false
+                                        }
+                                    }
+                                    
                                     enemy.physicsBody = nil
                                     enemy.position.x = endOfScreenRight
                                     enemy.currentFrame = 0
@@ -1556,10 +1594,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                 enemy.moving = false
                                 enemy.hidden = true
                                 enemy.removeFromParent()
-                                //stopBGAnim()
-                                
                             }
-                            
                         }
                         if enemy.position.x < hero.position.x - enemy.size.width {
                             if enemy.scored == false {
@@ -1570,7 +1605,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         if enemy.position.x < self.size.width / 2  - 200{
                             if enemy.name == "Satellite15" {
                                 if !gameOver {
-                                    playSatelliteSound()
+                                    playSatelliteSound(enemy)
                                 }
                             }
                             if enemy.spawnHeight == 9999 {
@@ -1626,18 +1661,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		}
 	}
     
-    func prepareSatelliteSound() {
-        let satelliteSoundURL:NSURL = NSBundle.mainBundle().URLForResource("satellite", withExtension: "m4a")!
-        do { satelliteSound = try AVAudioPlayer(contentsOfURL: satelliteSoundURL, fileTypeHint: nil) } catch _ { return }
-        satelliteSound.numberOfLoops = 1
-        satelliteSound.prepareToPlay()
+    func playExplosionSound() {
+        if interScene.soundState == true {
+            self.runAction(interScene.explosionSound)
+        }
     }
     
-    func playSatelliteSound() {
+    func playOxygenSound() {
+        if interScene.soundState == true {
+            self.runAction(interScene.oxygenSound)
+        }
+    }
+    
+    func playSatelliteSound(enemy: Enemy) {
         if interScene.soundState == true {
             let number:Int = Int(arc4random_uniform(1000))
             if number == 1 {
-                satelliteSound.play()
+                if enemySound == false {
+                    enemySound = true
+                    enemy.didPlaySound = true
+                    self.runAction(interScene.satelliteSound)
+                }
             }
         }
     }

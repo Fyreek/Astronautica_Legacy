@@ -8,6 +8,7 @@
 
 import SpriteKit
 import iAd
+import AVFoundation
 
 class GameScene: SKScene, EGCDelegate {
     
@@ -31,6 +32,7 @@ class GameScene: SKScene, EGCDelegate {
     var explosionAnimationFrames = [SKTexture]()
     var achievementEwokBool:Bool = false
     var achievementEwokCount:Int = 0
+    var satelliteSoundPlay:Bool = false
     
 	override func didMoveToView(view: SKView) {
         
@@ -155,6 +157,7 @@ class GameScene: SKScene, EGCDelegate {
             randomEnemyShow("Asteroid16")
         } else {
             randomEnemyShow("Satellite15")
+            satelliteSoundPlay = false
         }
     }
     
@@ -313,6 +316,8 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func explosionEmit(enemy: Enemy) {
+        playExplosionSound()
+        satelliteSoundPlay = false
         if achievementEwokBool == false {
             if achievementEwokCount < 20 {
                 achievementEwokCount++
@@ -381,6 +386,18 @@ class GameScene: SKScene, EGCDelegate {
         
 	}
 	
+    func playSatelliteSound() {
+        if interScene.soundState == true {
+            if satelliteSoundPlay == false {
+                let number:Int = Int(arc4random_uniform(1000))
+                if number == 1 {
+                    satelliteSoundPlay = true
+                    self.runAction(interScene.satelliteSound)
+                }
+            }
+        }
+    }
+    
     func updateEnemyPosition() {
         for enemy in enemies {
             if enemy.moving == true {
@@ -400,6 +417,9 @@ class GameScene: SKScene, EGCDelegate {
                             enemy.angle = enemy.angle + Float(M_1_PI)
                         }
                         enemy.angle = enemy.angle + 0.1
+                        if enemy.position.x < self.size.width / 2  - 200 {
+                            playSatelliteSound()
+                        }
                     }
                     if enemy.name == "Asteroid16" {
                         enemy.position.x -= 3.5
@@ -414,6 +434,12 @@ class GameScene: SKScene, EGCDelegate {
                     spawnActive = false
                 }
             }
+        }
+    }
+    
+    func playExplosionSound() {
+        if interScene.soundState == true {
+            self.runAction(interScene.explosionSound)
         }
     }
     

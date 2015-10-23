@@ -336,10 +336,12 @@ class OptionScene: SKScene {
         if musicOn == true {
             musicOn = false
             musicSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
+            interScene.backgroundMusicP.stop()
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         } else {
             musicOn = true
             musicSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
+            interScene.backgroundMusicP.play()
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         }
         interScene.musicState = musicOn

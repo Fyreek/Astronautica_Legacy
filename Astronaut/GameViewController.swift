@@ -23,6 +23,12 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         
         loadAds()
         
+        interScene.explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: true)
+        interScene.satelliteSound = SKAction.playSoundFileNamed("satellite.m4a", waitForCompletion: true)
+        interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.mp3", waitForCompletion: true)
+        
+        playBackgroundMusic("astronautica.mp3")
+        
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
         
@@ -75,6 +81,32 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
             interScene.connectedToGC = true
             loadHighScore()
             NSNotificationCenter.defaultCenter().postNotificationName("switchLbButton", object: nil)
+        }
+    }
+    
+    func playBackgroundMusic(filename: String) {
+        let url = NSBundle.mainBundle().URLForResource(
+            filename, withExtension: nil)
+        if (url == nil) {
+            print("Could not find file: \(filename)")
+            return
+        }
+        
+        do {
+            
+            interScene.backgroundMusicP = try AVAudioPlayer(contentsOfURL: url!)
+        } catch {
+            
+        }
+        if interScene.backgroundMusicP == nil {
+            print("Could not create audio player!")
+            return
+        }
+        if interScene.musicState == true {
+            interScene.backgroundMusicP.numberOfLoops = -1
+            interScene.backgroundMusicP.prepareToPlay()
+            interScene.backgroundMusicP.volume = 0.95
+            interScene.backgroundMusicP.play()
         }
     }
     
