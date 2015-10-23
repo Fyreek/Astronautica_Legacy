@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		145CD2901BDA3E9F0074E543 /* oxygen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 145CD28F1BDA3E9F0074E543 /* oxygen.mp3 */; };
+		145CD2921BDA40270074E543 /* astronautica.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 145CD2911BDA40270074E543 /* astronautica.mp3 */; };
+		145CD2961BDA58AF0074E543 /* explosion.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 145CD2951BDA58AF0074E543 /* explosion.mp3 */; };
 		14E9A15C1BD4DF80009E358B /* BonusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9A15B1BD4DF80009E358B /* BonusItem.swift */; };
 		14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 14F702A31BD692C6004ADE9A /* oxygenBar.atlas */; };
 		812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 812FED241B905B2900A2A8C3 /* Minecraft.ttf */; };
@@ -43,6 +46,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		145CD28F1BDA3E9F0074E543 /* oxygen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = oxygen.mp3; sourceTree = "<group>"; };
+		145CD2911BDA40270074E543 /* astronautica.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = astronautica.mp3; sourceTree = "<group>"; };
+		145CD2951BDA58AF0074E543 /* explosion.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = explosion.mp3; sourceTree = "<group>"; };
 		14E9A15B1BD4DF80009E358B /* BonusItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusItem.swift; sourceTree = "<group>"; };
 		14F702A31BD692C6004ADE9A /* oxygenBar.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = oxygenBar.atlas; sourceTree = "<group>"; };
 		812FED241B905B2900A2A8C3 /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Minecraft.ttf; sourceTree = "<group>"; };
@@ -143,6 +149,9 @@
 				A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */,
 				812FED261B9063E800A2A8C3 /* HexColor.swift */,
 				A17FFCD21BD506EA0047EC80 /* satellite.m4a */,
+				145CD2951BDA58AF0074E543 /* explosion.mp3 */,
+				145CD2911BDA40270074E543 /* astronautica.mp3 */,
+				145CD28F1BDA3E9F0074E543 /* oxygen.mp3 */,
 				812FED241B905B2900A2A8C3 /* Minecraft.ttf */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
 			);
@@ -217,7 +226,7 @@
 				TargetAttributes = {
 					81E4451F1B8667D900BC86B2 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = ZA57B2W688;
+						DevelopmentTeam = 9C545A2GHY;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
 								enabled = 1;
@@ -263,7 +272,10 @@
 				812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */,
 				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
 				D93159291B8A12600085390A /* explosion.atlas in Resources */,
+				145CD2901BDA3E9F0074E543 /* oxygen.mp3 in Resources */,
+				145CD2961BDA58AF0074E543 /* explosion.mp3 in Resources */,
 				D97A92061BAE01D200C0027C /* background.atlas in Resources */,
+				145CD2921BDA40270074E543 /* astronautica.mp3 in Resources */,
 				A17FFCD31BD506EA0047EC80 /* satellite.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,7 +433,7 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronaut;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronautica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -442,7 +454,7 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronaut;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronautica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
