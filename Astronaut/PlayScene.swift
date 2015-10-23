@@ -769,9 +769,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         addChild(bonusItem)
     }
     
+    
 	func addEnemies() {
 		enemyCount++
-		let number:Int = Int(arc4random_uniform(11))
+		var number:Int = Int(arc4random_uniform(11))
 		let upDown:Int = Int(arc4random_uniform(2))
 		let heightNumber:Int = Int((self.size.height / 2) - (SKSpriteNode(imageNamed: "Asteroid16").size.height / 2))
 		let height:Int = Int(arc4random_uniform(UInt32(heightNumber)))
@@ -779,6 +780,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         let rotationDirection:Int = Int(arc4random_uniform(2))
         let preLocation:CGFloat = 0
 		
+        number = 10
+        
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
                 addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999)
@@ -839,9 +842,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 angle = -3
             }
             if hero.position.y > enemy.position.y {
-                enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180 , duration: 0))
+                //enemy.runAction(SKAction.rotateToAngle(360 - angle * Pi / 180 , duration: 0))
+                enemy.runAction(SKAction.rotateToAngle(((0) * Pi) / 180, duration: 0))
             } else if hero.position.y < enemy.position.y {
-                enemy.runAction(SKAction.rotateToAngle(angle - 180 * Pi / 180 , duration: 0))
+                //enemy.runAction(SKAction.rotateToAngle(360 - angle * Pi / 180 , duration: 0))
+                enemy.runAction(SKAction.rotateToAngle(((0) * Pi) / 180, duration: 0))
             }
         }
 
