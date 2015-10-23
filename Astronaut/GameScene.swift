@@ -17,7 +17,14 @@ class GameScene: SKScene, EGCDelegate {
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
 	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardsButton32")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
-	let bg = SKSpriteNode(imageNamed: "Background188")
+    let bg = SKSpriteNode(imageNamed: "Background188")
+    let bg2 = SKSpriteNode(imageNamed: "Background188")
+    let bg3 = SKSpriteNode(imageNamed: "Background188")
+    let bgAn = SKSpriteNode(imageNamed: "Background188")
+    let bg2An = SKSpriteNode(imageNamed: "Background188")
+    let bg3An = SKSpriteNode(imageNamed: "Background188")
+    var bgAnCount:Int = 0
+    var bgAnimSpeed:CGFloat = 4
     var ticks:Int = 0
 	var highScore:Int = 0
     var highScoreBefore:Int = 0
@@ -33,19 +40,32 @@ class GameScene: SKScene, EGCDelegate {
     var achievementEwokBool:Bool = false
     var achievementEwokCount:Int = 0
     var satelliteSoundPlay:Bool = false
+    var shiftBackground = SKAction()
+    var replaceBackground = SKAction()
+    var movingAndReplacingBackground = SKAction()
+    var gameSpeed:Float = 1
+    var endOfScreenRight = CGFloat()
+    var endOfScreenLeft = CGFloat()
     
 	override func didMoveToView(view: SKView) {
         
         loadingNSUser()
         showAds()
         loadSoundState()
+        startBGAnim()
+        
+        shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
+        replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
+        movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
+        
+        endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * scalingFactor)
+        endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(imageNamed: "Satellite15").size.width / 2) * scalingFactor)
+
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
         
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
-        
-        bg.setScale(scalingFactor)
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -53,8 +73,35 @@ class GameScene: SKScene, EGCDelegate {
         highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
 		highScoreLabel.text = "Highscore: " + String(highScore)
 		
-		addChild(bg)
-		bg.zPosition = 1.0
+        bg.zPosition = 0.9
+        bg2.zPosition = 0.9
+        bg3.zPosition = 0.9
+        bgAn.zPosition = 0.95
+        bg2An.zPosition = 0.95
+        bg3An.zPosition = 0.95
+        
+        bg.setScale(scalingFactor)
+        bg2.setScale(scalingFactor)
+        bg3.setScale(scalingFactor)
+        bgAn.setScale(scalingFactor)
+        bg2An.setScale(scalingFactor)
+        bg3An.setScale(scalingFactor)
+        
+        bgAn.alpha = 0
+        bg2An.alpha = 0
+        bg3An.alpha = 0
+        
+        addChild(bg)
+        addChild(bgAn)
+        bg.position.x = 0
+        bgAn.position.x = bg.position.x
+        bg2.position.x = self.size.width
+        bg2An.position.x = bg2.position.x
+        bg3.position.x = self.size.width * 2
+        bg3An.position.x = bg3.position.x
+        addChild(bg2)
+        addChild(bg3)
+
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
         nameLabel.zPosition = 1.2
@@ -109,7 +156,9 @@ class GameScene: SKScene, EGCDelegate {
             let explosionTextureName = "explosion32-\(i)"
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
         }
+
 	}
+
     
     func switchLsButton() {
         if interScene.connectedToGC == true {
@@ -443,7 +492,59 @@ class GameScene: SKScene, EGCDelegate {
         }
     }
     
+    func startBGAnim() {
+        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        //        bgAn.runAction(SKAction.moveToX(bgAn.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        //        bg2An.runAction(SKAction.moveToX(bg2An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        //        bg3An.runAction(SKAction.moveToX(bg3An.position.x - self.size.width * 2 - SKSpriteNode(imageNamed: "Satellite15").size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+    }
+    
+    func stopBGAnim() {
+        bg.removeAllActions()
+        bgAn.removeAllActions()
+        bg2.removeAllActions()
+        bg2An.removeAllActions()
+        bg3.removeAllActions()
+        bg3An.removeAllActions()
+    }
+
+    func updateBGPosition() {
+        
+        if bg.position.x <= endOfScreenLeft - self.size.width / 2{
+            
+            bg.position.x = self.size.width * 2
+            bgAn.position.x = bg.position.x
+            stopBGAnim()
+            startBGAnim()
+            
+        }
+        
+        if bg2.position.x <= endOfScreenLeft - self.size.width / 2{
+            
+            bg2.position.x = self.size.width * 2
+            bg2An.position.x = bg2.position.x
+            stopBGAnim()
+            startBGAnim()
+            
+        }
+        
+        if bg3.position.x <= endOfScreenLeft - self.size.width / 2{
+            
+            bg3.position.x = self.size.width * 2
+            bg3An.position.x = bg3.position.x
+            stopBGAnim()
+            startBGAnim()
+            
+        }
+        
+    }
+    
 	override func update(currentTime: CFTimeInterval) {
+        
+        updateBGPosition()
+        
         updateEnemyPosition()
         if ticks == 20 {
             highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
@@ -466,5 +567,5 @@ class GameScene: SKScene, EGCDelegate {
         }
         ticks = ticks + 1
 	}
-	
+        
 }
