@@ -22,7 +22,7 @@ class GameScene: SKScene, EGCDelegate {
     let bg3 = SKSpriteNode(imageNamed: "Background188")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     var bgAnCount:Int = 0
-    var bgAnimSpeed:CGFloat = 16
+    var bgAnimSpeed:CGFloat = 4
     var ticks:Int = 0
 	var highScore:Int = 0
     var highScoreBefore:Int = 0
