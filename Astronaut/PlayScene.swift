@@ -146,10 +146,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         loadSoundState()
         
-        //prepareSatelliteSound()
-        //prepareExplosionSound()
-        //explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: false)
-        
         interScene.playSceneDidLoad = true
         
         shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
@@ -817,8 +813,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		let rotationSpeedRandom:CGFloat = CGFloat(arc4random_uniform(2)  + 1)
         let rotationDirection:Int = Int(arc4random_uniform(2))
         let preLocation:CGFloat = 0
-		
-        number = 10
+        
+        number = 6
         
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
@@ -1472,13 +1468,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             hero.emit = false
             playExplosionSound()
             if deathEnemy != nil {
-                deathEnemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
+                deathEnemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
                     
                     self.deathEnemy.hidden = true
                     
                 })
             }
-            hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
+            hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 				
                 self.hero.hidden = true
                 self.openGameOverMenu()

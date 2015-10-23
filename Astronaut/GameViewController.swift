@@ -105,7 +105,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         if interScene.musicState == true {
             interScene.backgroundMusicP.numberOfLoops = -1
             interScene.backgroundMusicP.prepareToPlay()
-            interScene.backgroundMusicP.volume = 0.95
+            interScene.backgroundMusicP.volume = 1
             interScene.backgroundMusicP.play()
         }
     }

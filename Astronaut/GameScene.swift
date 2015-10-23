@@ -343,7 +343,7 @@ class GameScene: SKScene, EGCDelegate {
             resetSecret()
         }
         
-        enemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.08, resize: true, restore: true), completion: {
+        enemy.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
             enemy.hidden = true
             enemy.spawned = false
