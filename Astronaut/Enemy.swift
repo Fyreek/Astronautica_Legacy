@@ -46,6 +46,7 @@ class Enemy : SKSpriteNode {
         self.spawned = false
         self.spawnHeight = 9999
         self.didPlaySound = false
+        
 		
 		super.init(texture: texture, color: color, size: size)
 	}
