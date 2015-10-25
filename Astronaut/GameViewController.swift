@@ -23,11 +23,11 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         
         loadAds()
         
-        interScene.explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: true)
-        interScene.satelliteSound = SKAction.playSoundFileNamed("satellite.m4a", waitForCompletion: true)
-        interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.mp3", waitForCompletion: true)
+        interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
+        interScene.satelliteSound = SKAction.playSoundFileNamed("satellite.caf", waitForCompletion: true)
+        interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
         
-        playBackgroundMusic("astronautica.mp3")
+        playBackgroundMusic("music.aifc")
         
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0

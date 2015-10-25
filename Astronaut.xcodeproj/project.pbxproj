@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		145CD2921BDA40270074E543 /* astronautica.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 145CD2911BDA40270074E543 /* astronautica.mp3 */; };
 		14E9A15C1BD4DF80009E358B /* BonusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9A15B1BD4DF80009E358B /* BonusItem.swift */; };
 		14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 14F702A31BD692C6004ADE9A /* oxygenBar.atlas */; };
 		812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 812FED241B905B2900A2A8C3 /* Minecraft.ttf */; };
@@ -27,9 +26,10 @@
 		81E445521B866B0500BC86B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E445511B866B0500BC86B2 /* Images.xcassets */; };
 		A10C22621BD51EF700BD79F1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10C22611BD51EF700BD79F1 /* StoreKit.framework */; };
 		A10C22641BD51F6500BD79F1 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */; };
-		A178DE7F1BDA723B00083491 /* explosion.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A178DE7D1BDA723B00083491 /* explosion.mp3 */; };
-		A178DE801BDA723B00083491 /* oxygen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = A178DE7E1BDA723B00083491 /* oxygen.mp3 */; };
-		A17FFCD31BD506EA0047EC80 /* satellite.m4a in Resources */ = {isa = PBXBuildFile; fileRef = A17FFCD21BD506EA0047EC80 /* satellite.m4a */; };
+		A16B41281BDD209900CC809C /* oxygen.caf in Resources */ = {isa = PBXBuildFile; fileRef = A16B41241BDD209900CC809C /* oxygen.caf */; };
+		A16B41291BDD209900CC809C /* music.aifc in Resources */ = {isa = PBXBuildFile; fileRef = A16B41251BDD209900CC809C /* music.aifc */; };
+		A16B412A1BDD209900CC809C /* satellite.caf in Resources */ = {isa = PBXBuildFile; fileRef = A16B41261BDD209900CC809C /* satellite.caf */; };
+		A16B412B1BDD209900CC809C /* explosion.caf in Resources */ = {isa = PBXBuildFile; fileRef = A16B41271BDD209900CC809C /* explosion.caf */; };
 		D9088E041B8B83880067CEAB /* OptionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9088E031B8B83880067CEAB /* OptionScene.swift */; };
 		D93159291B8A12600085390A /* explosion.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D93159281B8A12600085390A /* explosion.atlas */; };
 		D97A92061BAE01D200C0027C /* background.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D97A92051BAE01D200C0027C /* background.atlas */; };
@@ -46,7 +46,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		145CD2911BDA40270074E543 /* astronautica.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = astronautica.mp3; sourceTree = "<group>"; };
 		14E9A15B1BD4DF80009E358B /* BonusItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusItem.swift; sourceTree = "<group>"; };
 		14F702A31BD692C6004ADE9A /* oxygenBar.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = oxygenBar.atlas; sourceTree = "<group>"; };
 		812FED241B905B2900A2A8C3 /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Minecraft.ttf; sourceTree = "<group>"; };
@@ -70,9 +69,10 @@
 		81E445511B866B0500BC86B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A10C22611BD51EF700BD79F1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
-		A178DE7D1BDA723B00083491 /* explosion.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = explosion.mp3; sourceTree = "<group>"; };
-		A178DE7E1BDA723B00083491 /* oxygen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = oxygen.mp3; sourceTree = "<group>"; };
-		A17FFCD21BD506EA0047EC80 /* satellite.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = satellite.m4a; sourceTree = "<group>"; };
+		A16B41241BDD209900CC809C /* oxygen.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = oxygen.caf; sourceTree = "<group>"; };
+		A16B41251BDD209900CC809C /* music.aifc */ = {isa = PBXFileReference; lastKnownFileType = file; path = music.aifc; sourceTree = "<group>"; };
+		A16B41261BDD209900CC809C /* satellite.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = satellite.caf; sourceTree = "<group>"; };
+		A16B41271BDD209900CC809C /* explosion.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = explosion.caf; sourceTree = "<group>"; };
 		D9088E031B8B83880067CEAB /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
 		D93159281B8A12600085390A /* explosion.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = explosion.atlas; sourceTree = "<group>"; };
 		D97A92051BAE01D200C0027C /* background.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = background.atlas; sourceTree = "<group>"; };
@@ -148,11 +148,11 @@
 				8143166D1B8730B4008A3C81 /* GameCenter.swift */,
 				A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */,
 				812FED261B9063E800A2A8C3 /* HexColor.swift */,
-				A17FFCD21BD506EA0047EC80 /* satellite.m4a */,
-				A178DE7D1BDA723B00083491 /* explosion.mp3 */,
-				A178DE7E1BDA723B00083491 /* oxygen.mp3 */,
-				145CD2911BDA40270074E543 /* astronautica.mp3 */,
 				812FED241B905B2900A2A8C3 /* Minecraft.ttf */,
+				A16B41251BDD209900CC809C /* music.aifc */,
+				A16B41241BDD209900CC809C /* oxygen.caf */,
+				A16B41261BDD209900CC809C /* satellite.caf */,
+				A16B41271BDD209900CC809C /* explosion.caf */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -269,14 +269,14 @@
 				81E445521B866B0500BC86B2 /* Images.xcassets in Resources */,
 				14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */,
 				81E445281B8667D900BC86B2 /* GameScene.sks in Resources */,
-				A178DE801BDA723B00083491 /* oxygen.mp3 in Resources */,
 				812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */,
-				A178DE7F1BDA723B00083491 /* explosion.mp3 in Resources */,
+				A16B412B1BDD209900CC809C /* explosion.caf in Resources */,
+				A16B41291BDD209900CC809C /* music.aifc in Resources */,
+				A16B41281BDD209900CC809C /* oxygen.caf in Resources */,
 				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
 				D93159291B8A12600085390A /* explosion.atlas in Resources */,
+				A16B412A1BDD209900CC809C /* satellite.caf in Resources */,
 				D97A92061BAE01D200C0027C /* background.atlas in Resources */,
-				145CD2921BDA40270074E543 /* astronautica.mp3 in Resources */,
-				A17FFCD31BD506EA0047EC80 /* satellite.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

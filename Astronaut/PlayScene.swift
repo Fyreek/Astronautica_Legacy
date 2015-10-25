@@ -17,9 +17,9 @@ struct interScene {
     static var adState:Bool = true
     static var smallAdLoad:Bool = false
     static var connectedToGC:Bool = false
-    static var explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: true)
-    static var satelliteSound = SKAction.playSoundFileNamed("satellite.m4a", waitForCompletion: true)
-    static var oxygenSound = SKAction.playSoundFileNamed("oxygen.mp3", waitForCompletion: true)
+    static var explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
+    static var satelliteSound = SKAction.playSoundFileNamed("satellite.caf", waitForCompletion: true)
+    static var oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
     static var backgroundMusicP: AVAudioPlayer!
 }
 
@@ -67,7 +67,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let asteroidTexture:SKTexture = SKTexture(imageNamed: "Asteroid16")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     let missileTexture:SKTexture = SKTexture(imageNamed: "Missile8")
-    let satellitePhysicsTexture:SKTexture = SKTexture(imageNamed: "SatellitePhysics15")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     var achievementOxygenCount:Int = 0
@@ -358,11 +357,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func collisionEnemyBonusItem(otherBody: Enemy, bonusItem: BonusItem) {
-    
-        bonusItem.moving = false
+        
         bonusItem.physicsBody = nil
-        otherBody.deathMoving = true
         otherBody.physicsBody = nil
+        bonusItem.moving = false
+        otherBody.deathMoving = true
         
         achievementOxygenCount = 0
         playExplosionSound()
@@ -391,8 +390,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func collisionHeroBonusItem(bonusItem: BonusItem) {
-        bonusItem.moving = false
         bonusItem.physicsBody = nil
+        bonusItem.moving = false
         bonusItem.hidden = true
         bonusItem.removeFromParent()
         bonusItemAlive = false
@@ -1691,6 +1690,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func playExplosionSound() {
         if interScene.soundState == true {
             self.runAction(interScene.explosionSound)
+            print("Sound played.")
         }
     }
     
