@@ -17,9 +17,9 @@ struct interScene {
     static var adState:Bool = true
     static var smallAdLoad:Bool = false
     static var connectedToGC:Bool = false
-    static var explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: false)
-    static var satelliteSound = SKAction.playSoundFileNamed("satellite.m4a", waitForCompletion: false)
-    static var oxygenSound = SKAction.playSoundFileNamed("oxygen.mp3", waitForCompletion: false)
+    static var explosionSound = SKAction.playSoundFileNamed("explosion.mp3", waitForCompletion: true)
+    static var satelliteSound = SKAction.playSoundFileNamed("satellite.m4a", waitForCompletion: true)
+    static var oxygenSound = SKAction.playSoundFileNamed("oxygen.mp3", waitForCompletion: true)
     static var backgroundMusicP: AVAudioPlayer!
 }
 
@@ -68,6 +68,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let asteroidTexture:SKTexture = SKTexture(imageNamed: "Asteroid16")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     let missileTexture:SKTexture = SKTexture(imageNamed: "Missile8")
+    let satellitePhysicsTexture:SKTexture = SKTexture(imageNamed: "SatellitePhysics15")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     var achievementOxygenCount:Int = 0
@@ -88,11 +89,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var oxygenBarAnimationFrames = [SKTexture]()
     
 	var gameSpeed:Float = 1
-	var totalSpeedAsteroid:CGFloat = 3.5
+	var totalSpeedAsteroid:CGFloat = 5 //3.5
 	var totalSpeedSatellite:CGFloat = 2.5
 	var totalSpeedRocket:CGFloat = 6
     var totalSpeedBonusItem:CGFloat = 4
-	var normalSpeedAsteroid:CGFloat = 3.5
+	var normalSpeedAsteroid:CGFloat = 5 //3.5
 	var normalSpeedSatellite:CGFloat = 2.5
 	var normalSpeedRocket:CGFloat = 6
     var normalSpeedBonusItem:CGFloat = 4
@@ -152,6 +153,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
         
 		self.physicsWorld.contactDelegate = self
+        //self.physicsWorld.speed = 0.9999
 		countDownText = SKLabelNode(text: String(countDown))
         totalScore = SKLabelNode(text: String(score))
         
@@ -547,8 +549,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         case ColliderType.Enemy.rawValue | ColliderType.Enemy.rawValue :
-            let bodyOne = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
-            let bodyTwo = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
+            //let bodyOne = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
+           // let bodyTwo = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
+            
+            let bodyOne = contact.bodyA.node as? Enemy
+            let bodyTwo = contact.bodyB.node as? Enemy
             
             for var i = 0; i < spawnPointStats.count; i++ {
                 if spawnPoints[i] == bodyOne?.spawnHeight {
@@ -617,6 +622,21 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func emptyAll() {
+        for bonusItem in bonusItems {
+            bonusItem.hidden = true
+            bonusItem.removeFromParent()
+            bonusItems = []
+        }
+        for enemy in enemies {
+            resetEnemy(enemy, yPos: enemy.yPos)
+            enemy.hidden = true
+            enemy.removeFromParent()
+        }
+        enemies = []
+        enemiesIndex = []
+    }
+    
 	func reloadGame() {
         
         interScene.playSceneDidLoad = true
@@ -633,21 +653,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         setSpawnPoints()
         oxygen = oxygenMax
         bonusItemAlive = false
-        for bonusItem in bonusItems {
-            bonusItem.hidden = true
-            bonusItem.removeFromParent()
-            bonusItems = []
-        }
-        
         gamePaused = true
+        
+        emptyAll()
         
 		hero.movementSpeed = Hero().movementSpeed
 		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
 		hero.physicsBody!.affectedByGravity = false
 		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
 		hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-		hero.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-		hero.physicsBody!.allowsRotation = false
+		//hero.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+        hero.physicsBody!.collisionBitMask = 0
+        hero.physicsBody!.allowsRotation = false
 		
         bg.position.x = 0
         bg2.position.x = self.size.width
@@ -673,13 +690,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		totalSpeedRocket = normalSpeedRocket
         totalSpeedBonusItem = normalSpeedBonusItem
 		
-		for enemy in enemies {
-			resetEnemy(enemy, yPos: enemy.yPos)
-			enemy.hidden = true
-            enemy.removeFromParent()
-		}
-        enemies = []
-        enemiesIndex = []
 		addEnemies()
 		
 		for var i = 1; i < startEnemy; i++ {
@@ -741,7 +751,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         hero.zPosition = 1.1
 		
 		addChild(hero)
-		
 	}
 	
     func achievementOxygenItem() {
@@ -871,11 +880,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     enemy.spawnHeight = enemy.yPos
                     spawnPointStats[i] = false
                     enemy.spawned = true
-                    enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
+                    if enemy.name != "Satellite15" {
+                        enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
+                    } else {
+                        enemy.physicsBody = SKPhysicsBody(texture: satellitePhysicsTexture, alphaThreshold: 0, size: enemy.size)
+                    }
                     enemy.physicsBody!.affectedByGravity = false
                     enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
                     enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-                    enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+                    //enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+                    enemy.physicsBody!.collisionBitMask = 0
                     enemy.physicsBody!.allowsRotation = false
                 }
             }
@@ -896,6 +910,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	func showMenu() {
+        
+        emptyAll()
         
         let transition = SKTransition.fadeWithDuration(1)
         
@@ -1238,7 +1254,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         funcTouchesIn(touches, withEvent: event!)
         
     }
-
+    
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
         if NSUserDefaults.standardUserDefaults().boolForKey("gamePaused").boolValue == true {
@@ -1324,7 +1340,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             bonusItem.physicsBody!.affectedByGravity = false
                             bonusItem.physicsBody!.categoryBitMask = ColliderType.bonusItem.rawValue
                             bonusItem.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
-                            bonusItem.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+                            //bonusItem.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+                            bonusItem.physicsBody!.collisionBitMask = 0
                             bonusItem.physicsBody!.allowsRotation = false
                             bonusItem.moving = true
                         }
@@ -1364,6 +1381,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func showPlayScene() {
+        
+        emptyAll()
         
         hideAds()
         
@@ -1422,6 +1441,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             hero.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
 				
                 self.hero.hidden = true
+                self.hero.removeFromParent()
                 self.openGameOverMenu()
                 
             })
@@ -1554,8 +1574,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                     playSatelliteSound(enemy)
                                 }
                             }
-                            if enemy.spawnHeight == 9999 {
-                            } else {
+                            if enemy.spawnHeight != 9999 {
                                 for var i = 0; i < spawnPointStats.count; i++ {
                                     if spawnPoints[i] == enemy.spawnHeight {
                                         spawnPointStats[i] = true

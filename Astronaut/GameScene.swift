@@ -192,6 +192,8 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func randomEnemyShow(named: String) {
+        enemies = []
+        
         let enemy:Enemy = Enemy(imageNamed: named)
         enemy.name = named
         
