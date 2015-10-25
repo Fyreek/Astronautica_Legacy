@@ -11,8 +11,6 @@ import SpriteKit
 
 class OptionScene: SKScene {
     
-    var mySampleColorButton: UIButton!
-    var mySampleColorLabel: UILabel!
     var redSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var greenSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var blueSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))

@@ -21,7 +21,6 @@ class GameScene: SKScene, EGCDelegate {
     let bg2 = SKSpriteNode(imageNamed: "Background188")
     let bg3 = SKSpriteNode(imageNamed: "Background188")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
-    var bgAnCount:Int = 0
     var bgAnimSpeed:CGFloat = 4
     var ticks:Int = 0
 	var highScore:Int = 0
@@ -38,9 +37,6 @@ class GameScene: SKScene, EGCDelegate {
     var achievementEwokBool:Bool = false
     var achievementEwokCount:Int = 0
     var satelliteSoundPlay:Bool = false
-    var shiftBackground = SKAction()
-    var replaceBackground = SKAction()
-    var movingAndReplacingBackground = SKAction()
     var gameSpeed:Float = 1
     var endOfScreenRight = CGFloat()
     var endOfScreenLeft = CGFloat()
@@ -274,7 +270,6 @@ class GameScene: SKScene, EGCDelegate {
             menuHSButton.runAction(buttonPressLight)
             
         }
-    
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -343,7 +338,6 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func unlockEwokAchievement() {
-        print("Unlocked Star Destroyer Achievement!")
         EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_20enemies", showBannnerIfCompleted: true, addToExisting: false)
     }
     
@@ -515,8 +509,8 @@ class GameScene: SKScene, EGCDelegate {
 	override func update(currentTime: CFTimeInterval) {
         
         updateBGPosition()
-        
         updateEnemyPosition()
+        
         if ticks == 20 {
             highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
             if highScore > highScoreBefore {
@@ -538,5 +532,4 @@ class GameScene: SKScene, EGCDelegate {
         }
         ticks = ticks + 1
 	}
-        
 }

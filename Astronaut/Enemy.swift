@@ -20,7 +20,6 @@ class Enemy : SKSpriteNode {
 	var yPos:CGFloat!
     var rotationDirection:Int!
     var preLocation:CGFloat!
-    var health:Int!
 	var uniqueIndetifier:Int!
     var scored:Bool!
     var deathMoving:Bool!
@@ -39,7 +38,6 @@ class Enemy : SKSpriteNode {
 		self.yPos = 0
 		self.rotationDirection = 0
 		self.preLocation = 0
-		self.health = 0
 		self.uniqueIndetifier = 0
         self.scored = false
         self.deathMoving = false
@@ -51,7 +49,7 @@ class Enemy : SKSpriteNode {
 		super.init(texture: texture, color: color, size: size)
 	}
 	
-    convenience init(movementSpeed: Float = 0.0, currentFrame: Int = 0, randomFrame: Int = 0, moving: Bool = false, rotationSpeed: CGFloat = 1.0, angle: Float = 0.0, range: Float = 1.2, yPos: CGFloat = 0, rotationDirection: Int = 0, preLocation: CGFloat = 0, health: Int = 0, uniqueIdentifier: Int = 0, scored: Bool = false, deathMoving: Bool = false, spawned: Bool = false, spawnHeight: CGFloat = 9999, didPlaySound: Bool = false){
+    convenience init(movementSpeed: Float = 0.0, currentFrame: Int = 0, randomFrame: Int = 0, moving: Bool = false, rotationSpeed: CGFloat = 1.0, angle: Float = 0.0, range: Float = 1.2, yPos: CGFloat = 0, rotationDirection: Int = 0, preLocation: CGFloat = 0, uniqueIdentifier: Int = 0, scored: Bool = false, deathMoving: Bool = false, spawned: Bool = false, spawnHeight: CGFloat = 9999, didPlaySound: Bool = false){
 	
 		let size = CGSize(width: SKSpriteNode(imageNamed: "Asteroid16").size.width, height: SKSpriteNode(imageNamed: "Asteroid16").size.height)
 		
@@ -68,7 +66,6 @@ class Enemy : SKSpriteNode {
 		self.yPos = yPos
 		self.rotationDirection = rotationDirection
 		self.preLocation = preLocation
-		self.health = health
 		self.uniqueIndetifier = uniqueIdentifier
         self.scored = scored
         self.deathMoving = deathMoving

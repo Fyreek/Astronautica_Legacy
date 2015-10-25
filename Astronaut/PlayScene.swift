@@ -43,7 +43,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var hero = Hero(imageNamed: "Astronaut25")
     var touchLocation = CGFloat()
 	var gameOver = true
-	var gameStarted = false
 	var enemies:[Enemy] = []
 	var enemiesIndex:[Int] = []
 	var endOfScreenRight = CGFloat()
@@ -73,12 +72,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var didOxygenCollideEnemy:Bool = false
     var achievementOxygenCount:Int = 0
     var enemySound:Bool = false
-    
-    var bgEmit = false
     var bgAnimSpeed:CGFloat = 16
 	
     var gameOverMenuLoaded = false
-    var heroBlendFactor:Float = 0.4
     
     var lastSpriteName:String = "empty"
     
@@ -116,16 +112,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
-	
-    var touchingScreen = false
-    var touchYPosition:CGFloat = 0
     
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
-    
-    var shiftBackground = SKAction()
-    var replaceBackground = SKAction()
-    var movingAndReplacingBackground = SKAction()
     
 	var timer = NSTimer()
     var timerPause = NSTimer()
@@ -142,18 +131,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
-		//NSUserDefaults.standardUserDefaults().setInteger(0, forKey: "highScore") //Reset Highscore on start!
-        
         loadSoundState()
-        
         interScene.playSceneDidLoad = true
         
-        shiftBackground = SKAction.moveByX(-bg.size.width, y: 0, duration: 0)
-        replaceBackground = SKAction.moveByX(bg.size.width, y:0, duration: 0)
-        movingAndReplacingBackground = SKAction.repeatActionForever(SKAction.sequence([shiftBackground,replaceBackground]))
-        
 		self.physicsWorld.contactDelegate = self
-        //self.physicsWorld.speed = 0.9999
 		countDownText = SKLabelNode(text: String(countDown))
         totalScore = SKLabelNode(text: String(score))
         
@@ -359,7 +340,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             scoreBefore = score
             NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
             NSUserDefaults.standardUserDefaults().synchronize()
-            //submit score to GameCenter
             EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
             
             totalScore.hidden = false
@@ -368,77 +348,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
         }
 	}
-	
-    func showGameInfo() {
-        
-        let infoHero:SKSpriteNode = SKSpriteNode(imageNamed: "Astronaut25")
-        let infoEnemy1:SKSpriteNode = SKSpriteNode(imageNamed: "Satellite15")
-        let infoEnemy2:SKSpriteNode = SKSpriteNode(imageNamed: "Asteroid16")
-        let infoEnemy3:SKSpriteNode = SKSpriteNode(imageNamed: "Missile8")
-        let infoOxygen:SKSpriteNode = SKSpriteNode(imageNamed: "Oxygen15")
-        let infoHeroLabel:SKLabelNode = SKLabelNode(text: "You!")
-        let infoEnemy1Label:SKLabelNode = SKLabelNode(text: "Enemy")
-        let infoEnemy2Label:SKLabelNode = SKLabelNode(text: "Enemy")
-        let infoEnemy3Label:SKLabelNode = SKLabelNode(text: "Enemy")
-        let infoOxygenLabel:SKLabelNode = SKLabelNode(text: "Oxygen")
-        
-        infoEnemy1.zPosition = 1.2
-        infoEnemy1.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
-        infoEnemy1.position.y = self.size.height / 4
-        infoEnemy1.setScale(scalingFactor)
-        
-        infoEnemy1Label.zPosition = 1.2
-        infoEnemy1Label.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
-        infoEnemy1Label.position.y = self.size.height / 4
-        
-        infoEnemy2.zPosition = 1.2
-        infoEnemy2.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
-        infoEnemy2.position.y = self.size.height / 4 - infoEnemy1.size.height * 2
-        infoEnemy2.setScale(scalingFactor)
-        
-        infoEnemy2Label.zPosition = 1.2
-        infoEnemy2Label.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
-        infoEnemy2Label.position.y = self.size.height / 4 - infoEnemy1.size.height * 2
-        
-        infoEnemy3.zPosition = 1.2
-        infoEnemy3.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
-        infoEnemy3.position.y = self.size.height / 4 + infoEnemy1.size.height * 2
-        infoEnemy3.setScale(scalingFactor)
-        
-        infoEnemy3Label.zPosition = 1.2
-        infoEnemy3Label.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
-        infoEnemy3Label.position.y = self.size.height / 4 + infoEnemy1.size.height * 2
-        
-        infoHero.zPosition = 1.2
-        infoHero.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
-        infoHero.position.y = -(infoEnemy1.size.height)
-        infoHero.setScale(scalingFactor)
-        
-        infoHeroLabel.zPosition = 1.2
-        infoHeroLabel.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
-        infoHeroLabel.position.y = -(infoEnemy1.size.height)
-        
-        infoOxygen.zPosition = 1.2
-        infoOxygen.position.x = self.size.width / 2 - infoEnemy1.size.width / 2
-        infoOxygen.position.y = -(self.size.height / 4)
-        infoOxygen.setScale(scalingFactor)
-        
-        infoOxygenLabel.zPosition = 1.2
-        infoOxygenLabel.position.x = self.size.width / 2 - infoEnemy1.size.width / 2 - 100
-        infoOxygenLabel.position.y = -(self.size.height / 4)
-        
-        addChild(infoEnemy1)
-        addChild(infoEnemy1Label)
-        addChild(infoEnemy2)
-        addChild(infoEnemy2Label)
-        addChild(infoEnemy3)
-        addChild(infoEnemy3Label)
-        //addChild(infoHero)
-        //addChild(infoHeroLabel)
-        addChild(infoOxygen)
-        addChild(infoOxygenLabel)
-        
-    }
     
     func loadSoundState() {
         if interScene.musicState == true {
@@ -549,8 +458,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
         case ColliderType.Enemy.rawValue | ColliderType.Enemy.rawValue :
-            //let bodyOne = contact.bodyA.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyA.node as? Enemy : contact.bodyB.node as? Enemy
-           // let bodyTwo = contact.bodyB.categoryBitMask == ColliderType.Enemy.rawValue ? contact.bodyB.node as? Enemy : contact.bodyA.node as? Enemy
             
             let bodyOne = contact.bodyA.node as? Enemy
             let bodyTwo = contact.bodyB.node as? Enemy
@@ -618,8 +525,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if foundSound == false {
             enemySound = false
         }
-        
-        
     }
     
     func emptyAll() {
@@ -696,8 +601,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			self.addEnemies()
 		}
         
-        //showGameInfo() Maybe later for Ingame Tutorial
-        
         timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
 	}
 	
@@ -716,16 +619,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	func updateTimer() {
 		
 		if countDown > 0 {
-			
+            
 			if hero.position.y != 0 {
-				
 				hero.position.y = 0
-				
 			}
 			
 			countDown--
 			countDownText.text = String(countDown)
-			
+            
 		} else {
             
             startBGAnim()
@@ -801,27 +702,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		if number == 0 || number == 1 || number == 2 || number == 3 || number == 4 || number == 5 {
 			if upDown == 0  {
-                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: asteroidTexture)
+                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: asteroidTexture)
 			} else if upDown == 1 {
-                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, health: 10, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: asteroidTexture)
+                addEnemy(named: "Asteroid16", movementSpeed: Float(normalSpeedAsteroid) * gameSpeed, yPos: CGFloat(height), rotationSpeed: rotationSpeedRandom, rotationDirection: rotationDirection, preLocation: preLocation, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: asteroidTexture)
 			}
 		} else if number == 6 || number == 7 || number == 8 || number == 9 {
 			if upDown == 0 {
-                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: satelliteTexture)
+                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(-(height)), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: satelliteTexture)
 			} else if upDown == 1 {
-                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 3, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: satelliteTexture)
+                addEnemy(named: "Satellite15", movementSpeed: Float(normalSpeedSatellite) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: satelliteTexture)
 			}
 		} else if number == 10 {
 			if upDown == 0 {
-                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 1, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: missileTexture)
+                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: missileTexture)
 			} else if upDown == 1 {
-                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, health: 1, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: missileTexture)
+                addEnemy(named: "Missile8", movementSpeed: Float(normalSpeedRocket) * gameSpeed, yPos: CGFloat(height), rotationSpeed: 0, rotationDirection: rotationDirection, preLocation: preLocation, uniqueIdentifier: enemyCount, deathMoving: false, spawned: false, spawnHeight: 9999, enemyTexture: missileTexture)
 			}
 		}
 		
 	}
 	
-    func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, health:Int, uniqueIdentifier:Int, deathMoving:Bool, spawned: Bool, spawnHeight: CGFloat, didPlaySound : Bool = false, enemyTexture: SKTexture) {
+    func addEnemy(named named: String, movementSpeed:Float, yPos: CGFloat, rotationSpeed:CGFloat, rotationDirection:Int, preLocation:CGFloat, uniqueIdentifier:Int, deathMoving:Bool, spawned: Bool, spawnHeight: CGFloat, didPlaySound : Bool = false, enemyTexture: SKTexture) {
 
 		let enemy = Enemy(texture: enemyTexture)
 		
@@ -835,7 +736,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		enemy.rotationSpeed = rotationSpeed
 		enemy.rotationDirection = rotationDirection
 		enemy.preLocation = preLocation
-		enemy.health = health
 		enemy.uniqueIndetifier = uniqueIdentifier
         enemy.scored = false
         enemy.setRandomFrame()
@@ -888,7 +788,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     enemy.physicsBody!.affectedByGravity = false
                     enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
                     enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-                    //enemy.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
                     enemy.physicsBody!.collisionBitMask = 0
                     enemy.physicsBody!.allowsRotation = false
                 }
@@ -905,7 +804,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
 	func startGameNormal() {
         
-		gameStarted = true
 		reloadGame()
 	}
 	
@@ -1034,7 +932,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
         funcTouchesOut(touches, withEvent: event!)
-        touchingScreen = false
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -1150,8 +1047,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                     self.lastSpriteName = "empty"
                                     self.refresh.runAction(buttonPressLight){
                                         self.showPlayScene()
-                                        //self.reloadGame() 1337
-                                        //self.countDownRunning = true
                                     }
                                 }
                             }
@@ -1164,7 +1059,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                                     self.lastSpriteName = "empty"
                                     self.menu.runAction(buttonPressLight){
                                         self.showMenu()
-                                        self.gameStarted = false
                                     }
                                 }
                             }
@@ -1250,9 +1144,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
 	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-							
         funcTouchesIn(touches, withEvent: event!)
-        
     }
     
 	override func update(currentTime: CFTimeInterval) {
@@ -1270,7 +1162,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             updateEnemiesPosition()
             updateBonusItem()
             updateHeroEmitter()
-            
         }
     }
     
@@ -1340,7 +1231,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             bonusItem.physicsBody!.affectedByGravity = false
                             bonusItem.physicsBody!.categoryBitMask = ColliderType.bonusItem.rawValue
                             bonusItem.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
-                            //bonusItem.physicsBody!.collisionBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
                             bonusItem.physicsBody!.collisionBitMask = 0
                             bonusItem.physicsBody!.allowsRotation = false
                             bonusItem.moving = true
@@ -1423,7 +1313,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             startBGAnim()
         
         }
-        
     }
     
 	func updateHeroEmitter(){
@@ -1584,7 +1473,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                     }
-                    
                 }
             } else {
                 spawning(enemy)

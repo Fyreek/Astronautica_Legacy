@@ -44,26 +44,18 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOff", name: "MusicOff", object: nil)
         
         UIiAd.delegate = self
-        
-		// Init Easy Game Center
 		EGC.sharedInstance(self)
 		
 		let scene = GameScene()
-        
 		let skView = self.originalContentView as! SKView
 		skView.showsFPS = false
 		skView.showsNodeCount = false
-		
-		/* Sprite Kit applies additional optimizations to improve rendering performance */
 		skView.ignoresSiblingOrder = true
-		
-		/* Set the scale mode to scale to fit the window */
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
         
 		skView.presentScene(scene)
-        
 	}
     
     func updateSoundState() {
@@ -128,7 +120,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         let viewsDictionary = ["bannerView":UIiAd]
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
         view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
-    
     }
     
 	override func shouldAutorotate() -> Bool {
@@ -172,8 +163,8 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
                 showBannerAd()
                 self.view.addSubview(UIiAd)
                 UIView.beginAnimations(nil, context: nil)
-                UIView.setAnimationDuration(1) // Time it takes the animation to complete
-                UIiAd.alpha = 1 // Fade in the animation
+                UIView.setAnimationDuration(1)
+                UIiAd.alpha = 1
                 UIView.commitAnimations()
             }
         }
@@ -186,7 +177,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func extMusicOn() {
         let sess = AVAudioSession.sharedInstance()
         if sess.otherAudioPlaying {
-            //_ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient, withOptions: .MixWithOthers)
             _ = try? sess.setCategory(AVAudioSessionCategorySoloAmbient)
             _ = try? sess.setActive(true, withOptions: [])
         }
@@ -195,7 +185,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func extMusicOff() {
         let sess = AVAudioSession.sharedInstance()
         if sess.otherAudioPlaying {
-            //_ = try? sess.setCategory(AVAudioSessionCategoryAmbient, withOptions: .MixWithOthers)
             _ = try? sess.setCategory(AVAudioSessionCategoryAmbient)
             _ = try? sess.setActive(true, withOptions: [])
         }
