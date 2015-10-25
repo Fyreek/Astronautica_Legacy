@@ -395,6 +395,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.removeFromParent()
         bonusItemAlive = false
         bonusItems = []
+        hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
         
         if achievementOxygenCount < 10 {
             achievementOxygenCount++
