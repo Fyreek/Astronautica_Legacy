@@ -24,7 +24,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         loadAds()
         
         interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
-        interScene.satelliteSound = SKAction.playSoundFileNamed("satellite.caf", waitForCompletion: true)
         interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
         
         playBackgroundMusic("music.aifc")

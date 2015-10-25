@@ -18,7 +18,6 @@ struct interScene {
     static var smallAdLoad:Bool = false
     static var connectedToGC:Bool = false
     static var explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
-    static var satelliteSound = SKAction.playSoundFileNamed("satellite.caf", waitForCompletion: true)
     static var oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
     static var backgroundMusicP: AVAudioPlayer!
 }
@@ -62,7 +61,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var upOxygen:Bool = false
     var upOxygenCount:Int = 0
     var bonusItems:[BonusItem] = []
-    var updateBonusTick:Int = 10
+    var updateBonusTick:Int = 15
     var oxygenBar:SKSpriteNode = SKSpriteNode(imageNamed: "OxygenBar8_0")
     let asteroidTexture:SKTexture = SKTexture(imageNamed: "Asteroid16")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
@@ -417,7 +416,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
 	func didBeginContact(contact: SKPhysicsContact) {
-		
+    
+        contact.bodyA.node?.physicsBody?.contactTestBitMask = 0
+        contact.bodyB.node?.physicsBody?.contactTestBitMask = 0
+        
         let contactMask = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         
         switch contactMask {
@@ -1376,7 +1378,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if updateBonusTick > 0 {
                 updateBonusTick--
             } else {
-                updateBonusTick = 10
+                updateBonusTick = 15
                 if oxygen > 0 {
                     if upOxygen == false {
                         oxygen--
@@ -1635,11 +1637,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                         if enemy.position.x < self.size.width / 2  - 200{
-                            if enemy.name == "Satellite15" {
-                                if !gameOver {
-                                    playSatelliteSound(enemy)
-                                }
-                            }
                             if enemy.spawnHeight != 9999 {
                                 for var i = 0; i < spawnPointStats.count; i++ {
                                     if spawnPoints[i] == enemy.spawnHeight {
@@ -1690,26 +1687,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     func playExplosionSound() {
         if interScene.soundState == true {
             self.runAction(interScene.explosionSound)
-            print("Sound played.")
         }
     }
     
     func playOxygenSound() {
         if interScene.soundState == true {
             self.runAction(interScene.oxygenSound)
-        }
-    }
-    
-    func playSatelliteSound(enemy: Enemy) {
-        if interScene.soundState == true {
-            let number:Int = Int(arc4random_uniform(1000))
-            if number == 1 {
-                if enemySound == false {
-                    enemySound = true
-                    enemy.didPlaySound = true
-                    self.runAction(interScene.satelliteSound)
-                }
-            }
         }
     }
 }

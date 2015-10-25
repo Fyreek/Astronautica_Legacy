@@ -28,7 +28,6 @@
 		A10C22641BD51F6500BD79F1 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */; };
 		A16B41281BDD209900CC809C /* oxygen.caf in Resources */ = {isa = PBXBuildFile; fileRef = A16B41241BDD209900CC809C /* oxygen.caf */; };
 		A16B41291BDD209900CC809C /* music.aifc in Resources */ = {isa = PBXBuildFile; fileRef = A16B41251BDD209900CC809C /* music.aifc */; };
-		A16B412A1BDD209900CC809C /* satellite.caf in Resources */ = {isa = PBXBuildFile; fileRef = A16B41261BDD209900CC809C /* satellite.caf */; };
 		A16B412B1BDD209900CC809C /* explosion.caf in Resources */ = {isa = PBXBuildFile; fileRef = A16B41271BDD209900CC809C /* explosion.caf */; };
 		D9088E041B8B83880067CEAB /* OptionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9088E031B8B83880067CEAB /* OptionScene.swift */; };
 		D93159291B8A12600085390A /* explosion.atlas in Resources */ = {isa = PBXBuildFile; fileRef = D93159281B8A12600085390A /* explosion.atlas */; };
@@ -71,7 +70,6 @@
 		A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
 		A16B41241BDD209900CC809C /* oxygen.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = oxygen.caf; sourceTree = "<group>"; };
 		A16B41251BDD209900CC809C /* music.aifc */ = {isa = PBXFileReference; lastKnownFileType = file; path = music.aifc; sourceTree = "<group>"; };
-		A16B41261BDD209900CC809C /* satellite.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = satellite.caf; sourceTree = "<group>"; };
 		A16B41271BDD209900CC809C /* explosion.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = explosion.caf; sourceTree = "<group>"; };
 		D9088E031B8B83880067CEAB /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
 		D93159281B8A12600085390A /* explosion.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = explosion.atlas; sourceTree = "<group>"; };
@@ -151,7 +149,6 @@
 				812FED241B905B2900A2A8C3 /* Minecraft.ttf */,
 				A16B41251BDD209900CC809C /* music.aifc */,
 				A16B41241BDD209900CC809C /* oxygen.caf */,
-				A16B41261BDD209900CC809C /* satellite.caf */,
 				A16B41271BDD209900CC809C /* explosion.caf */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
 			);
@@ -275,7 +272,6 @@
 				A16B41281BDD209900CC809C /* oxygen.caf in Resources */,
 				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
 				D93159291B8A12600085390A /* explosion.atlas in Resources */,
-				A16B412A1BDD209900CC809C /* satellite.caf in Resources */,
 				D97A92061BAE01D200C0027C /* background.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

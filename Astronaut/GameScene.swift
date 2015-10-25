@@ -45,7 +45,7 @@ class GameScene: SKScene, EGCDelegate {
         
         loadingNSUser()
         showAds()
-        loadSoundState()
+        loadMusicState()
         
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
@@ -133,7 +133,6 @@ class GameScene: SKScene, EGCDelegate {
         }
         
         startBGAnim()
-
 	}
 
     
@@ -150,6 +149,18 @@ class GameScene: SKScene, EGCDelegate {
             interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
         } else {
             interScene.adState = true
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
+            interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool").boolValue
+        } else {
+            interScene.soundState = true
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("musicBool") {
+            interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool").boolValue
+        } else {
+            interScene.musicState = true
         }
         
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
@@ -217,7 +228,7 @@ class GameScene: SKScene, EGCDelegate {
         NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     }
     
-    func loadSoundState() {
+    func loadMusicState() {
         if interScene.musicState == true {
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         } else {
@@ -411,18 +422,6 @@ class GameScene: SKScene, EGCDelegate {
         scene.scoreBefore = highScore
         
 	}
-	
-    func playSatelliteSound() {
-        if interScene.soundState == true {
-            if satelliteSoundPlay == false {
-                let number:Int = Int(arc4random_uniform(1000))
-                if number == 1 {
-                    satelliteSoundPlay = true
-                    self.runAction(interScene.satelliteSound)
-                }
-            }
-        }
-    }
     
     func updateEnemyPosition() {
         for enemy in enemies {
@@ -443,9 +442,6 @@ class GameScene: SKScene, EGCDelegate {
                             enemy.angle = enemy.angle + Float(M_1_PI)
                         }
                         enemy.angle = enemy.angle + 0.1
-                        if enemy.position.x < self.size.width / 2  - 200 {
-                            playSatelliteSound()
-                        }
                     }
                     if enemy.name == "Asteroid16" {
                         enemy.position.x -= 3.5
