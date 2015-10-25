@@ -50,6 +50,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 		let skView = self.originalContentView as! SKView
 		skView.showsFPS = false
 		skView.showsNodeCount = false
+        skView.showsPhysics = false
 		skView.ignoresSiblingOrder = true
 		scene.scaleMode = .ResizeFill
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)

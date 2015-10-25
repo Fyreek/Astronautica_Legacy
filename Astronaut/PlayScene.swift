@@ -85,11 +85,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var oxygenBarAnimationFrames = [SKTexture]()
     
 	var gameSpeed:Float = 1
-	var totalSpeedAsteroid:CGFloat = 5 //3.5
+	var totalSpeedAsteroid:CGFloat = 3.5
 	var totalSpeedSatellite:CGFloat = 2.5
 	var totalSpeedRocket:CGFloat = 6
     var totalSpeedBonusItem:CGFloat = 4
-	var normalSpeedAsteroid:CGFloat = 5 //3.5
+	var normalSpeedAsteroid:CGFloat = 3.5
 	var normalSpeedSatellite:CGFloat = 2.5
 	var normalSpeedRocket:CGFloat = 6
     var normalSpeedBonusItem:CGFloat = 4
@@ -563,11 +563,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         emptyAll()
         
 		hero.movementSpeed = Hero().movementSpeed
-		hero.physicsBody = SKPhysicsBody(texture: hero.texture!, alphaThreshold: 0, size: hero.size)
+        heroPhysicsBody()
 		hero.physicsBody!.affectedByGravity = false
 		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
 		hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-		//hero.physicsBody!.collisionBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
         hero.physicsBody!.collisionBitMask = 0
         hero.physicsBody!.allowsRotation = false
 		
@@ -689,7 +688,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         addChild(bonusItem)
     }
     
-    
 	func addEnemies() {
 		enemyCount++
 		let number:Int = Int(arc4random_uniform(11))
@@ -771,6 +769,172 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		addChild(enemy)
 	}
 	
+    func oxygenPhysicsBody(bonusItem: BonusItem) {
+        
+        let offsetX = bonusItem.frame.size.width * bonusItem.anchorPoint.x
+        let offsetY = bonusItem.frame.size.height * bonusItem.anchorPoint.y
+        let path:CGMutablePathRef = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(path, nil, 0 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, nil, 4 - offsetX, 29 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 29 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 15 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 15 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 4 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 4 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 0 - offsetX, 10 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        bonusItem.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    }
+    
+    func heroPhysicsBody() {
+    
+        let offsetX = hero.frame.size.width * hero.anchorPoint.x
+        let offsetY = hero.frame.size.height * hero.anchorPoint.y
+        let path:CGMutablePathRef = CGPathCreateMutable()
+    
+        CGPathMoveToPoint(path, nil, 0 - offsetX, 24 - offsetY);
+        CGPathAddLineToPoint(path, nil, 13 - offsetX, 24 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 30 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 30 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, nil, 30 - offsetX, 24 - offsetY);
+        CGPathAddLineToPoint(path, nil, 31 - offsetX, 24 - offsetY);
+        CGPathAddLineToPoint(path, nil, 32 - offsetX, 25 - offsetY);
+        CGPathAddLineToPoint(path, nil, 34 - offsetX, 27 - offsetY);
+        CGPathAddLineToPoint(path, nil, 41 - offsetX, 31 - offsetY);
+        CGPathAddLineToPoint(path, nil, 45 - offsetX, 31 - offsetY);
+        CGPathAddLineToPoint(path, nil, 47 - offsetX, 26 - offsetY);
+        CGPathAddLineToPoint(path, nil, 49 - offsetX, 23 - offsetY);
+        CGPathAddLineToPoint(path, nil, 49 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 45 - offsetX, 6 - offsetY);
+        CGPathAddLineToPoint(path, nil, 42 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 37 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 33 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 30 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 13 - offsetX, 9 - offsetY);
+        CGPathAddLineToPoint(path, nil, 0 - offsetX, 10 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        hero.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    }
+    
+    func missilePhysicsBody(enemy: Enemy) {
+        
+        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x
+        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y
+        let path:CGMutablePathRef = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(path, nil, 0 - offsetX, 9 - offsetY);
+        CGPathAddLineToPoint(path, nil, 1 - offsetX, 12 - offsetY);
+        CGPathAddLineToPoint(path, nil, 19 - offsetX, 12 - offsetY);
+        CGPathAddLineToPoint(path, nil, 23 - offsetX, 15 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 15 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 12 - offsetY);
+        CGPathAddLineToPoint(path, nil, 25 - offsetX, 12 - offsetY);
+        CGPathAddLineToPoint(path, nil, 25 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 9 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 6 - offsetY);
+        CGPathAddLineToPoint(path, nil, 25 - offsetX, 5 - offsetY);
+        CGPathAddLineToPoint(path, nil, 25 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 2 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 23 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 20 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 1 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 0 - offsetX, 5 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    }
+    
+    func asteroidPhysicsBody(enemy: Enemy) {
+    
+        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x
+        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y
+        let path:CGMutablePathRef = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(path, nil, 0 - offsetX, 25 - offsetY);
+        CGPathAddLineToPoint(path, nil, 6 - offsetX, 31 - offsetY);
+        CGPathAddLineToPoint(path, nil, 23 - offsetX, 31 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 30 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 23 - offsetY);
+        CGPathAddLineToPoint(path, nil, 31 - offsetX, 21 - offsetY);
+        CGPathAddLineToPoint(path, nil, 31 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 29 - offsetX, 11 - offsetY);
+        CGPathAddLineToPoint(path, nil, 28 - offsetX, 11 - offsetY);
+        CGPathAddLineToPoint(path, nil, 28 - offsetX, 6 - offsetY);
+        CGPathAddLineToPoint(path, nil, 25 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 17 - offsetX, 2 - offsetY);
+        CGPathAddLineToPoint(path, nil, 16 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 5 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 3 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 0 - offsetX, 14 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    }
+    
+    func satellitePhysicsBody(enemy: Enemy) {
+        
+        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x
+        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y
+        let path:CGMutablePathRef = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(path, nil, 0 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 22 - offsetY);
+        CGPathAddLineToPoint(path, nil, 19 - offsetX, 22 - offsetY);
+        CGPathAddLineToPoint(path, nil, 20 - offsetX, 20 - offsetY);
+        CGPathAddLineToPoint(path, nil, 23 - offsetX, 20 - offsetY);
+        CGPathAddLineToPoint(path, nil, 24 - offsetX, 21 - offsetY);
+        CGPathAddLineToPoint(path, nil, 27 - offsetX, 26 - offsetY);
+        CGPathAddLineToPoint(path, nil, 49 - offsetX, 26 - offsetY);
+        CGPathAddLineToPoint(path, nil, 53 - offsetX, 22 - offsetY);
+        CGPathAddLineToPoint(path, nil, 54 - offsetX, 20 - offsetY);
+        CGPathAddLineToPoint(path, nil, 57 - offsetX, 20 - offsetY);
+        CGPathAddLineToPoint(path, nil, 57 - offsetX, 22 - offsetY);
+        CGPathAddLineToPoint(path, nil, 65 - offsetX, 29 - offsetY);
+        CGPathAddLineToPoint(path, nil, 76 - offsetX, 29 - offsetY);
+        CGPathAddLineToPoint(path, nil, 77 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, nil, 77 - offsetX, 26 - offsetY);
+        CGPathAddLineToPoint(path, nil, 65 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 58 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 57 - offsetX, 16 - offsetY);
+        CGPathAddLineToPoint(path, nil, 54 - offsetX, 16 - offsetY);
+        CGPathAddLineToPoint(path, nil, 54 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 45 - offsetX, 6 - offsetY);
+        CGPathAddLineToPoint(path, nil, 46 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 39 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 37 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 32 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 31 - offsetX, 6 - offsetY);
+        CGPathAddLineToPoint(path, nil, 24 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 23 - offsetX, 15 - offsetY);
+        CGPathAddLineToPoint(path, nil, 19 - offsetX, 16 - offsetY);
+        CGPathAddLineToPoint(path, nil, 20 - offsetX, 14 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 6 - offsetY);
+        CGPathAddLineToPoint(path, nil, 1 - offsetX, 5 - offsetY);
+        CGPathAddLineToPoint(path, nil, 0 - offsetX, 7 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
+    }
+    
     func spawning(enemy: Enemy) {
         for var i = 0; i < spawnPoints.count; i++ {
             if enemy.spawned == false {
@@ -780,10 +944,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     enemy.spawnHeight = enemy.yPos
                     spawnPointStats[i] = false
                     enemy.spawned = true
-                    if enemy.name != "Satellite15" {
-                        enemy.physicsBody = SKPhysicsBody(texture: enemy.texture!, alphaThreshold: 0, size: enemy.size)
-                    } else {
-                        enemy.physicsBody = SKPhysicsBody(texture: satellitePhysicsTexture, alphaThreshold: 0, size: enemy.size)
+                    if enemy.name == "Asteroid16" {
+                        asteroidPhysicsBody(enemy)
+                    } else if enemy.name == "Satellite15" {
+                        satellitePhysicsBody(enemy)
+                    } else if enemy.name == "Missile8" {
+                        missilePhysicsBody(enemy)
                     }
                     enemy.physicsBody!.affectedByGravity = false
                     enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
@@ -1227,7 +1393,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             bonusItem.position.x = endOfScreenRight
                             spawnPointStats[i] = false
                             bonusItem.spawned = true
-                            bonusItem.physicsBody = SKPhysicsBody(texture: bonusItem.texture!, alphaThreshold: 0, size: bonusItem.size)
+                            oxygenPhysicsBody(bonusItem)
                             bonusItem.physicsBody!.affectedByGravity = false
                             bonusItem.physicsBody!.categoryBitMask = ColliderType.bonusItem.rawValue
                             bonusItem.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
