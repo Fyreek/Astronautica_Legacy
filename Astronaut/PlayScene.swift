@@ -771,8 +771,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	
     func oxygenPhysicsBody(bonusItem: BonusItem) {
         
-        let offsetX = bonusItem.frame.size.width * bonusItem.anchorPoint.x
-        let offsetY = bonusItem.frame.size.height * bonusItem.anchorPoint.y
+        let offsetX = bonusItem.frame.size.width * bonusItem.anchorPoint.x / scalingFactor
+        let offsetY = bonusItem.frame.size.height * bonusItem.anchorPoint.y / scalingFactor
         let path:CGMutablePathRef = CGPathCreateMutable()
         
         CGPathMoveToPoint(path, nil, 0 - offsetX, 18 - offsetY);
@@ -800,8 +800,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func heroPhysicsBody() {
     
-        let offsetX = hero.frame.size.width * hero.anchorPoint.x
-        let offsetY = hero.frame.size.height * hero.anchorPoint.y
+        let offsetX = hero.frame.size.width * hero.anchorPoint.x / scalingFactor
+        let offsetY = hero.frame.size.height * hero.anchorPoint.y / scalingFactor
         let path:CGMutablePathRef = CGPathCreateMutable()
     
         CGPathMoveToPoint(path, nil, 0 - offsetX, 24 - offsetY);
@@ -833,8 +833,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func missilePhysicsBody(enemy: Enemy) {
         
-        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x
-        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y
+        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x / scalingFactor
+        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y / scalingFactor
         let path:CGMutablePathRef = CGPathCreateMutable()
         
         CGPathMoveToPoint(path, nil, 0 - offsetX, 9 - offsetY);
@@ -864,8 +864,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func asteroidPhysicsBody(enemy: Enemy) {
     
-        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x
-        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y
+        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x / scalingFactor
+        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y / scalingFactor
         let path:CGMutablePathRef = CGPathCreateMutable()
         
         CGPathMoveToPoint(path, nil, 0 - offsetX, 25 - offsetY);
@@ -890,10 +890,22 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
     }
     
+    func offset(node: SKSpriteNode, isX: Bool)->CGFloat {
+        return isX ? node.frame.size.width * node.anchorPoint.x : node.frame.size.height * node.anchorPoint.y
+    }
+    
+    func AddLineToPoint(path: CGMutablePath!, x: CGFloat, y: CGFloat, node: SKSpriteNode) {
+        CGPathAddLineToPoint(path, nil, (x * 2) - offset(node, isX: true), (y * 2) - offset(node, isX: false))
+    }
+    
+    func MoveToPoint(path: CGMutablePath!, x: CGFloat, y: CGFloat, node: SKSpriteNode) {
+        CGPathMoveToPoint(path, nil, (x * 2) - offset(node, isX: true), (y * 2) - offset(node, isX: false))
+    }
+    
     func satellitePhysicsBody(enemy: Enemy) {
         
-        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x
-        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y
+        let offsetX = enemy.frame.size.width * enemy.anchorPoint.x / scalingFactor
+        let offsetY = enemy.frame.size.height * enemy.anchorPoint.y / scalingFactor
         let path:CGMutablePathRef = CGPathCreateMutable()
         
         CGPathMoveToPoint(path, nil, 0 - offsetX, 10 - offsetY);
