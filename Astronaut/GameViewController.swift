@@ -26,7 +26,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
         interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
         
-        playBackgroundMusic("music.aifc")
+        playBackgroundMusic("music.caf")
         
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
