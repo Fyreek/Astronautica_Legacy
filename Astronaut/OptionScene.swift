@@ -280,7 +280,7 @@ class OptionScene: SKScene {
     func hideAds() {
         if interScene.adState == true {
             resetSecret()
-            NSNotificationCenter.defaultCenter().postNotificationName("removeAds", object: nil)
+            NSNotificationCenter.defaultCenter().postNotificationName("displayAdAlert", object: nil)
         }
     }
     
@@ -510,6 +510,5 @@ class OptionScene: SKScene {
     override func update(currentTime: CFTimeInterval) {
             /* Called before each frame is rendered */
     }
-    
-}
 
+}

@@ -36,11 +36,10 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBannerAd", name: "hideadsID", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
-        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFsAd", name: "showFSAd", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "removeAds", name: "removeAds", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOn", name: "MusicOn", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOff", name: "MusicOff", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "displayAdAlert", name: "displayAdAlert", object: nil)
         
         UIiAd.delegate = self
 		EGC.sharedInstance(self)
@@ -238,12 +237,23 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         self.requestInterstitialAdPresentation()
     }
     
-    func removeAds() {
-        InAppPurchase.sharedInstance.buyRemoveAds()
-    }
-    
     func loadAds() {
         InAppPurchase.sharedInstance.loadAds()
     }
     
+    func displayAdAlert() {
+        let alert = UIAlertController(title: "Remove Ads", message: "Do you want to remove the ads?", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        alert.addAction(UIAlertAction(title: "Purchase \(interScene.adPrice)", style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                InAppPurchase.sharedInstance.buyRemoveAds()
+            }))
+            
+        alert.addAction(UIAlertAction(title: "Restore Purchase", style: UIAlertActionStyle.Default, handler: { (action: UIAlertAction!) in
+                InAppPurchase.sharedInstance.restoreTransactions()
+            }))
+            
+        alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
 }

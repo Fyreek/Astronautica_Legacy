@@ -21,6 +21,7 @@ struct interScene {
     static var oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
     static var backgroundMusicP: AVAudioPlayer!
     static var tickTime:Int = 200
+    static var adPrice:String = ""
 }
 
 struct secretUnlock {
