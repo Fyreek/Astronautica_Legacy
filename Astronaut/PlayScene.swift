@@ -326,6 +326,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if score >= 100 {
             achievement100Points()
+        } else if score >= 150 {
+            achievement150Points()
         }
         
         if score <= scoreBefore {
@@ -665,6 +667,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_100points", showBannnerIfCompleted: true, addToExisting: false)
     }
     
+    func achievement150Points() {
+        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_150points", showBannnerIfCompleted: true, addToExisting: false)
+    }
+    
     func addBonusItems(itemType: String) {
     
         //For more Items later
@@ -992,6 +998,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	func showMenu() {
         
         emptyAll()
+        
+        interScene.tickTime = 200
         
         let transition = SKTransition.fadeWithDuration(1)
         
@@ -1464,6 +1472,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         hideAds()
         
+        interScene.tickTime = 200
+        
         let transition = SKTransition.fadeWithDuration(1)
         let scene = PlayScene(size: self.size)
         let skView = self.view as SKView!
@@ -1675,7 +1685,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			totalSpeedRocket = totalSpeedRocket + 0.1
             totalSpeedBonusItem = totalSpeedBonusItem + 0.1
 			hero.movementSpeed = hero.movementSpeed + 5
-            if interScene.tickTime > 20 {
+            if interScene.tickTime > 50 {
                 interScene.tickTime = interScene.tickTime - 5
             }
             
