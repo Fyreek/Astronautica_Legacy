@@ -33,6 +33,14 @@ struct secretUnlock {
     static var secretUnlocked:Bool = false
 }
 
+struct achievementNoob {
+    static var Noob1:Bool = false
+    static var Noob2:Bool = false
+    static var Noob3:Bool = false
+    static var Noob4:Bool = false
+    static var trigger:Bool = false
+}
+
 struct heroColor {
     static var heroColorRed:Float = 1.0
     static var heroColorGreen:Float = 1.0
@@ -132,6 +140,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         loadSoundState()
         interScene.playSceneDidLoad = true
+        
+        achievementNoob.trigger = false
         
 		self.physicsWorld.contactDelegate = self
 		countDownText = SKLabelNode(text: String(countDown))
@@ -328,6 +338,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             achievement100Points()
         } else if score >= 150 {
             achievement150Points()
+        }
+        if achievementNoob.trigger == false {
+            achievementNoob.trigger = true
+            if score < 10 {
+                if achievementNoob.Noob4 == true {
+                    EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_earlydeath", showBannnerIfCompleted: true, addToExisting: false)
+                } else if achievementNoob.Noob3 == true {
+                    achievementNoob.Noob4 = true
+                } else if achievementNoob.Noob2 == true {
+                    achievementNoob.Noob3 = true
+                } else if achievementNoob.Noob1 == true {
+                    achievementNoob.Noob2 = true
+                } else {
+                    achievementNoob.Noob1 = true
+                }
+            } else {
+                achievementNoob.Noob1 = false
+                achievementNoob.Noob2 = false
+                achievementNoob.Noob3 = false
+                achievementNoob.Noob4 = false
+            }
         }
         
         if score <= scoreBefore {

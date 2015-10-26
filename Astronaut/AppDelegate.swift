@@ -63,7 +63,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 interScene.musicState = true
             }
         }
-        print(interScene.soundState)
         if interScene.musicState == true {
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         } else {

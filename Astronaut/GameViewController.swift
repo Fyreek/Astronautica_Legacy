@@ -79,7 +79,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
                 interScene.musicState = true
             }
         }
-        print(interScene.soundState)
         if interScene.musicState == true {
             extMusicOn()
         } else {
