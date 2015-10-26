@@ -20,6 +20,7 @@ struct interScene {
     static var explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
     static var oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
     static var backgroundMusicP: AVAudioPlayer!
+    static var tickTime:Int = 200
 }
 
 struct secretUnlock {
@@ -1354,11 +1355,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 oxygenTemp = oxygenTemp + 10
                 if oxygenTemp > 100 {
                     oxygenTemp = 99
-                }
-                if oxygenTemp % 2 == 0 {
-                    oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
+                    if oxygenTemp % 2 == 0 {
+                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
+                    } else {
+                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp) / 2]
+                    }
                 } else {
-                    oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp) / 2]
+                    if oxygenTemp % 2 == 0 {
+                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
+                    } else {
+                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp) / 2]
+                    }
                 }
             } else {
                 oxygenTemp = 0
@@ -1668,6 +1675,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			totalSpeedRocket = totalSpeedRocket + 0.1
             totalSpeedBonusItem = totalSpeedBonusItem + 0.1
 			hero.movementSpeed = hero.movementSpeed + 5
+            if interScene.tickTime > 20 {
+                interScene.tickTime = interScene.tickTime - 5
+            }
             
 		}
 		

@@ -80,7 +80,7 @@ class Enemy : SKSpriteNode {
 	
 	func setRandomFrame() {
 		
-		let range = UInt32(5)..<UInt32(200)
+		let range = UInt32(5)..<UInt32(interScene.tickTime)
 		self.randomFrame = Int(range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1))
 	}
 	
