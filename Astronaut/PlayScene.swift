@@ -100,7 +100,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     var score = 0
 	var scoreLabel = SKLabelNode()
-	var refresh = SKSpriteNode(imageNamed: "ReplayButton32")
+	var refresh = SKSpriteNode(imageNamed: "PlayButton32")
 	var totalScore = SKLabelNode(text: "")
 	var menu = SKSpriteNode(imageNamed: "MenuButton32")
 	
