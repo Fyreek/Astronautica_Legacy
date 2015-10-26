@@ -362,7 +362,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.moving = false
         otherBody.deathMoving = true
         
-        achievementOxygenCount = 0
         playExplosionSound()
         
         otherBody.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
