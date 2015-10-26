@@ -417,7 +417,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
 	func didBeginContact(contact: SKPhysicsContact) {
-    
+        
         contact.bodyA.node?.physicsBody?.contactTestBitMask = 0
         contact.bodyB.node?.physicsBody?.contactTestBitMask = 0
         
@@ -482,7 +482,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             bodyOne?.deathMoving = true
             bodyTwo?.deathMoving = true
             
-            playExplosionSound()
+            if bodyOne?.deathMoving == true {
+                playExplosionSound()
+            }
             
             bodyOne?.runAction(SKAction.animateWithTextures(explosionAnimationFrames, timePerFrame: 0.05, resize: true, restore: true), completion: {
             
