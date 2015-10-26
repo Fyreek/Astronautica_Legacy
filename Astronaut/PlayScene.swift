@@ -1362,17 +1362,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 upOxygenCount = upOxygenCount + 10
                 oxygenTemp = oxygenTemp + 10
                 if oxygenTemp > 100 {
-                    oxygenTemp = 99
-                    if oxygenTemp % 2 == 0 {
-                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
-                    } else {
-                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp) / 2]
-                    }
+                        oxygenBar.texture = oxygenBarAnimationFrames[49]
                 } else {
                     if oxygenTemp % 2 == 0 {
-                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
-                    } else {
                         oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp) / 2]
+                    } else {
+                        oxygenBar.texture = oxygenBarAnimationFrames[(oxygenTemp + 1) / 2]
                     }
                 }
             } else {
