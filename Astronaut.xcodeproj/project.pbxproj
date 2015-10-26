@@ -26,7 +26,7 @@
 		81E445521B866B0500BC86B2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 81E445511B866B0500BC86B2 /* Images.xcassets */; };
 		A10C22621BD51EF700BD79F1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10C22611BD51EF700BD79F1 /* StoreKit.framework */; };
 		A10C22641BD51F6500BD79F1 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */; };
-		A1C8F0601BDD81FE006B1678 /* oxygen.caf in Resources */ = {isa = PBXBuildFile; fileRef = A1C8F05E1BDD81FE006B1678 /* oxygen.caf */; };
+		A18CD5201BDE321500C9321D /* oxygen.caf in Resources */ = {isa = PBXBuildFile; fileRef = A18CD51F1BDE321500C9321D /* oxygen.caf */; };
 		A1C8F0611BDD81FE006B1678 /* explosion.caf in Resources */ = {isa = PBXBuildFile; fileRef = A1C8F05F1BDD81FE006B1678 /* explosion.caf */; };
 		A1C8F0631BDD8ABD006B1678 /* music.caf in Resources */ = {isa = PBXBuildFile; fileRef = A1C8F0621BDD8ABD006B1678 /* music.caf */; };
 		D9088E041B8B83880067CEAB /* OptionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9088E031B8B83880067CEAB /* OptionScene.swift */; };
@@ -68,7 +68,7 @@
 		81E445511B866B0500BC86B2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A10C22611BD51EF700BD79F1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
-		A1C8F05E1BDD81FE006B1678 /* oxygen.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = oxygen.caf; sourceTree = "<group>"; };
+		A18CD51F1BDE321500C9321D /* oxygen.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = oxygen.caf; sourceTree = "<group>"; };
 		A1C8F05F1BDD81FE006B1678 /* explosion.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = explosion.caf; sourceTree = "<group>"; };
 		A1C8F0621BDD8ABD006B1678 /* music.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = music.caf; sourceTree = "<group>"; };
 		D9088E031B8B83880067CEAB /* OptionScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionScene.swift; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 				A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */,
 				812FED261B9063E800A2A8C3 /* HexColor.swift */,
 				A1C8F0621BDD8ABD006B1678 /* music.caf */,
-				A1C8F05E1BDD81FE006B1678 /* oxygen.caf */,
+				A18CD51F1BDE321500C9321D /* oxygen.caf */,
 				A1C8F05F1BDD81FE006B1678 /* explosion.caf */,
 				812FED241B905B2900A2A8C3 /* Minecraft.ttf */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
@@ -263,7 +263,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1C8F0601BDD81FE006B1678 /* oxygen.caf in Resources */,
 				81E445521B866B0500BC86B2 /* Images.xcassets in Resources */,
 				A1C8F0611BDD81FE006B1678 /* explosion.caf in Resources */,
 				14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */,
@@ -272,6 +271,7 @@
 				81E4452F1B8667D900BC86B2 /* Main.storyboard in Resources */,
 				D93159291B8A12600085390A /* explosion.atlas in Resources */,
 				A1C8F0631BDD8ABD006B1678 /* music.caf in Resources */,
+				A18CD5201BDE321500C9321D /* oxygen.caf in Resources */,
 				D97A92061BAE01D200C0027C /* background.atlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
