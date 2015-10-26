@@ -61,6 +61,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
             print(validProduct.localizedDescription)
             print(validProduct.price)
             unlockRemoveAdsVar = validProduct
+            interScene.adPrice = "for " + SKProduct.localizedPrice(validProduct)()
         }
         else {
             print("No products")
@@ -77,14 +78,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
                     print("Product Purchased")
                     savePurchasedProductIdentifier(trans.payment.productIdentifier)
                     SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-//                    print("yes")
-//                    interScene.adState = false
-//                    interScene.smallAdLoad = false
-//                    NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
-//                    NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
-//                    NSUserDefaults.standardUserDefaults().synchronize()
-                    
-                    NSNotificationCenter.defaultCenter().postNotificationName("AdRemoveSuccess", object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName("AdRemoveSuccess", object: nil)
                     break
                     
                 case .Failed:
@@ -98,6 +92,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
                     savePurchasedProductIdentifier(trans.payment.productIdentifier)
                     SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
                     NSNotificationCenter.defaultCenter().postNotificationName(kInAppProductRestoredNotification, object: nil)
+                NSNotificationCenter.defaultCenter().postNotificationName("AdRemoveSuccess", object: nil)
                     break
                     
                 default:
@@ -139,4 +134,15 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
     /*func buyUnlockTestInAppPurchase2() {
         unlockProduct(unlockTestInAppPurchase2ProductId)
     }*/
+}
+
+extension SKProduct {
+    
+    func localizedPrice() -> String {
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .CurrencyStyle
+        formatter.locale = self.priceLocale
+        return formatter.stringFromNumber(self.price)!
+    }
+    
 }
