@@ -266,7 +266,7 @@ class GameScene: SKScene, EGCDelegate {
         } else if lastSpriteName == self.menuOptionButton.name {
         
             menuOptionButton.removeAllActions()
-            menuHSButton.runAction(buttonPressLight)
+            menuOptionButton.runAction(buttonPressLight)
             
         }
     }
