@@ -151,18 +151,6 @@ class GameScene: SKScene, EGCDelegate {
             interScene.adState = true
         }
         
-        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
-            interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool").boolValue
-        } else {
-            interScene.soundState = true
-        }
-        
-        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("musicBool") {
-            interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool").boolValue
-        } else {
-            interScene.musicState = true
-        }
-        
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
             secretUnlock.secretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         } else {

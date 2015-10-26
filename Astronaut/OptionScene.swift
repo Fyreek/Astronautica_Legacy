@@ -49,17 +49,9 @@ class OptionScene: SKScene {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccess", name: "AdRemoveSuccess", object: nil)
         
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
-        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
-            soundOn = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-        } else {
-            soundOn = true
-        }
         
-        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("musicBool") {
-            musicOn = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
-        } else {
-            musicOn = true
-        }
+        musicOn = interScene.musicState
+        soundOn = interScene.soundState
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0

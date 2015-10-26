@@ -18,15 +18,15 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
-        
+
         updateSoundState()
         
         loadAds()
         
+        playBackgroundMusic("music.caf")
+        
         interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
         interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
-        
-        playBackgroundMusic("music.caf")
         
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
@@ -59,13 +59,31 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 	}
     
     func updateSoundState() {
+        let hint = AVAudioSession.sharedInstance().secondaryAudioShouldBeSilencedHint
+        if hint == true {
+            if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
+                interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            } else {
+                interScene.soundState = true
+            }
+            interScene.musicState = false
+        } else {
+            if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
+                interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            } else {
+                interScene.soundState = true
+            }
+            if let _ = NSUserDefaults.standardUserDefaults().objectForKey("musicBool") {
+                interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+            } else {
+                interScene.musicState = true
+            }
+        }
         if interScene.musicState == true {
             extMusicOn()
         } else {
             extMusicOff()
         }
-        interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-        interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
     }
     
     func EGCAuthentified(authentified:Bool) {

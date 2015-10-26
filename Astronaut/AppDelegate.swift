@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -33,12 +34,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	}
 
 	func applicationDidBecomeActive(application: UIApplication) {
+        updateSoundState()
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	}
 
 	func applicationWillTerminate(application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
+    
+    func updateSoundState() {
+        let hint = AVAudioSession.sharedInstance().secondaryAudioShouldBeSilencedHint
+        if hint == true {
+            interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            interScene.musicState = false
+        } else {
+            interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+        }
+        if interScene.musicState == true {
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+        } else {
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+        }
+    }
     
 }
 
