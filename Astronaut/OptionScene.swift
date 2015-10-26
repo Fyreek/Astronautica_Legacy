@@ -38,6 +38,9 @@ class OptionScene: SKScene {
     
     override func didMoveToView(view: SKView) {
         
+        musicOn = interScene.musicState
+        soundOn = interScene.soundState
+        
         loadSoundState()
         
         scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
@@ -49,9 +52,6 @@ class OptionScene: SKScene {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccess", name: "AdRemoveSuccess", object: nil)
         
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
-        
-        musicOn = interScene.musicState
-        soundOn = interScene.soundState
         
         redSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 6, 280, 20))
         redSlider.minimumValue = 0

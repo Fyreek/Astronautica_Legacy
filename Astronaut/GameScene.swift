@@ -448,6 +448,7 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func playExplosionSound() {
+        print("Explosionstate: \(interScene.soundState)")
         if interScene.soundState == true {
             self.runAction(interScene.explosionSound)
         }

@@ -45,17 +45,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func updateSoundState() {
         let hint = AVAudioSession.sharedInstance().secondaryAudioShouldBeSilencedHint
         if hint == true {
-            interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
+                interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            } else {
+                interScene.soundState = true
+            }
             interScene.musicState = false
         } else {
-            interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
-            interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+            if let _ = NSUserDefaults.standardUserDefaults().objectForKey("soundBool") {
+                interScene.soundState = NSUserDefaults.standardUserDefaults().boolForKey("soundBool")
+            } else {
+                interScene.soundState = true
+            }
+            if let _ = NSUserDefaults.standardUserDefaults().objectForKey("musicBool") {
+                interScene.musicState = NSUserDefaults.standardUserDefaults().boolForKey("musicBool")
+            } else {
+                interScene.musicState = true
+            }
         }
+        print(interScene.soundState)
         if interScene.musicState == true {
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         } else {
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         }
+
     }
     
 }
