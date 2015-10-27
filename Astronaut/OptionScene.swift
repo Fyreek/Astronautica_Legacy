@@ -42,9 +42,13 @@ class OptionScene: SKScene {
         soundOn = interScene.soundState
         
         loadSoundState()
-        
-        scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
 
+        if interScene.deviceInfo == "iPhone" {
+            scalingFactor = interScene.scalingfactoriPhone
+        } else if interScene.deviceInfo == "iPad" {
+            scalingFactor = interScene.scalingfactoriPad
+        }
+        
         bg.zPosition = 0.9
         bg.setScale(scalingFactor)
         addChild(bg)

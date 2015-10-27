@@ -22,6 +22,10 @@ struct interScene {
     static var backgroundMusicP: AVAudioPlayer!
     static var tickTime:Int = 200
     static var adPrice:String = ""
+    static var scalingfactoriPad:CGFloat = 1
+    static var scalingfactoriPhone:CGFloat = 1
+    static var scalingfactorSpeed:CGFloat = 1
+    static var deviceInfo:String = "iPhone"
 }
 
 struct secretUnlock {
@@ -139,6 +143,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
+        print(interScene.scalingfactorSpeed)
+        
         loadSoundState()
         interScene.playSceneDidLoad = true
         
@@ -148,12 +154,34 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		countDownText = SKLabelNode(text: String(countDown))
         totalScore = SKLabelNode(text: String(score))
         
-        scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        if interScene.deviceInfo == "iPhone" {
+            scalingFactor = interScene.scalingfactoriPhone
+        } else if interScene.deviceInfo == "iPad" {
+            scalingFactor = interScene.scalingfactoriPad
+        }
         
+        totalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed
+        totalSpeedSatellite = 2.5 * interScene.scalingfactorSpeed
+        totalSpeedRocket = 6 * interScene.scalingfactorSpeed
+        totalSpeedBonusItem = 4 * interScene.scalingfactorSpeed
+        normalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed
+        normalSpeedSatellite = 2.5 * interScene.scalingfactorSpeed
+        normalSpeedRocket = 6 * interScene.scalingfactorSpeed
+        normalSpeedBonusItem = 4 * interScene.scalingfactorSpeed
+        
+        if interScene.deviceInfo == "iPhone" {
+        
+        } else if interScene.deviceInfo == "iPad" {
+        
+        }
+        if interScene.deviceInfo == "iPhone" {
+            oxygenBar.setScale(scalingFactor)
+        } else if interScene.deviceInfo == "iPad" {
+            oxygenBar.setScale(scalingFactor / 3)
+        }
         oxygenBar.position.x = self.size.width / 2 - 40 - oxygenBar.size.width / 2
         oxygenBar.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 25
         oxygenBar.zPosition = 1.3
-        oxygenBar.setScale(scalingFactor)
         addChild(oxygenBar)
         
         spawnPoints.append(0)
@@ -216,6 +244,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		scoreLabel = SKLabelNode(text: "0")
 		scoreLabel = SKLabelNode(fontNamed: "Minecraft")
+        scoreLabel.setScale(scalingFactor)
 		scoreLabel.fontSize = 15
         scoreLabel.fontColor = UIColor(rgba: "#5F6575")
 		scoreLabel.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 35
@@ -223,28 +252,39 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         scoreLabel.zPosition = 1.2
 		
 		countDownText = SKLabelNode(fontNamed: "Minecraft")
+        countDownText.setScale(scalingFactor)
 		countDownText.fontSize = 15
 		countDownText.fontColor = UIColor(rgba: "#5F6575")
 		countDownText.position.y = (self.size.height / 8)
         countDownText.zPosition = 1.2
         countDownText.fontColor = UIColor(rgba: "#5F6575")
 		
+        refresh.setScale(scalingFactor)
 		refresh.position.y = -(self.size.height / 4.5)
 		refresh.position.x = -(self.size.width / 8)
         refresh.zPosition = 1.2
 		
+        menu.setScale(scalingFactor)
 		menu.position.y = -(self.size.height / 4.5)
 		menu.position.x = (self.size.width / 8)
         menu.zPosition = 1.2
 		
-		gamePause.position.y = -(self.size.height / 2) + 40
-		gamePause.position.x = -(self.size.width / 2) + 40
+        gamePause.setScale(scalingFactor)
+        if interScene.deviceInfo == "iPhone" {
+            gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 10
+            gamePause.position.x = -(self.size.width / 2) + gamePause.size.height / 2 + 10
+        } else if interScene.deviceInfo == "iPad" {
+            gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 20
+            gamePause.position.x = -(self.size.width / 2) + gamePause.size.height / 2 + 20
+        }
         gamePause.zPosition = 1.2
 		
+        gamePlay.setScale(scalingFactor)
 		gamePlay.position.y = 0
 		gamePlay.position.x = -(self.size.width / 8)
         gamePlay.zPosition = 1.2
         
+        menuPause.setScale(scalingFactor)
         menuPause.position.y = 0
         menuPause.position.x = self.size.width / 8
         menuPause.zPosition = 1.2
@@ -255,6 +295,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		totalScore.position.x = 0
 		totalScore.position.y = self.size.height / 8
         totalScore.zPosition = 1.2
+        totalScore.setScale(scalingFactor)
 		
 		addChild(totalScore)
 		addChild(scoreLabel)
@@ -337,7 +378,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if score >= 100 {
             achievement100Points()
-        } else if score >= 150 {
+        }
+        if score >= 150 {
             achievement150Points()
         }
         if achievementNoob.trigger == false {
@@ -837,7 +879,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         CGPathAddLineToPoint(path, nil, 0 - offsetX, 10 - offsetY);
         
         CGPathCloseSubpath(path);
-        bonusItem.physicsBody = SKPhysicsBody(polygonFromPath: path)
+        var scaleTransform = CGAffineTransformMakeScale(scalingFactor, scalingFactor)
+        let scaledPath = CGPathCreateCopyByTransformingPath(path, &scaleTransform)
+        bonusItem.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
     }
     
     func heroPhysicsBody() {
@@ -869,8 +913,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         CGPathAddLineToPoint(path, nil, 13 - offsetX, 9 - offsetY);
         CGPathAddLineToPoint(path, nil, 0 - offsetX, 10 - offsetY);
         
-        CGPathCloseSubpath(path);
-        hero.physicsBody = SKPhysicsBody(polygonFromPath: path)
+        CGPathCloseSubpath(path)
+        var scaleTransform = CGAffineTransformMakeScale(scalingFactor, scalingFactor)
+        let scaledPath = CGPathCreateCopyByTransformingPath(path, &scaleTransform)
+        hero.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
     }
     
     func missilePhysicsBody(enemy: Enemy) {
@@ -901,7 +947,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         CGPathAddLineToPoint(path, nil, 0 - offsetX, 5 - offsetY);
         
         CGPathCloseSubpath(path);
-        enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
+        var scaleTransform = CGAffineTransformMakeScale(scalingFactor, scalingFactor)
+        let scaledPath = CGPathCreateCopyByTransformingPath(path, &scaleTransform)
+        enemy.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
     }
     
     func asteroidPhysicsBody(enemy: Enemy) {
@@ -929,19 +977,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         CGPathAddLineToPoint(path, nil, 0 - offsetX, 14 - offsetY);
         
         CGPathCloseSubpath(path);
-        enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
-    }
-    
-    func offset(node: SKSpriteNode, isX: Bool)->CGFloat {
-        return isX ? node.frame.size.width * node.anchorPoint.x : node.frame.size.height * node.anchorPoint.y
-    }
-    
-    func AddLineToPoint(path: CGMutablePath!, x: CGFloat, y: CGFloat, node: SKSpriteNode) {
-        CGPathAddLineToPoint(path, nil, (x * 2) - offset(node, isX: true), (y * 2) - offset(node, isX: false))
-    }
-    
-    func MoveToPoint(path: CGMutablePath!, x: CGFloat, y: CGFloat, node: SKSpriteNode) {
-        CGPathMoveToPoint(path, nil, (x * 2) - offset(node, isX: true), (y * 2) - offset(node, isX: false))
+        var scaleTransform = CGAffineTransformMakeScale(scalingFactor, scalingFactor)
+        let scaledPath = CGPathCreateCopyByTransformingPath(path, &scaleTransform)
+        enemy.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
     }
     
     func satellitePhysicsBody(enemy: Enemy) {
@@ -986,7 +1024,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         CGPathAddLineToPoint(path, nil, 0 - offsetX, 7 - offsetY);
         
         CGPathCloseSubpath(path);
-        enemy.physicsBody = SKPhysicsBody(polygonFromPath: path)
+        var scaleTransform = CGAffineTransformMakeScale(scalingFactor, scalingFactor)
+        let scaledPath = CGPathCreateCopyByTransformingPath(path, &scaleTransform)
+        enemy.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
     }
     
     func spawning(enemy: Enemy) {
@@ -1146,7 +1186,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         } else if touchLocation < -((self.size.height / 2) - (hero.size.height / 2)) {
             touchLocation = -((self.size.height / 2) - (hero.size.height / 2))
         }
-		let duration = (abs(hero.position.y - touchLocation)) / hero.movementSpeed
+		let duration = (abs(hero.position.y - touchLocation)) / hero.movementSpeed / scalingFactor
 		let moveAction = SKAction.moveToY(touchLocation, duration: NSTimeInterval(duration))
 		hero.runAction(moveAction, withKey: "movingA")
 	}
@@ -1393,7 +1433,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if upOxygenCount < oxygenTempUp {
                 upOxygenCount = upOxygenCount + 10
                 oxygenTemp = oxygenTemp + 10
-                if oxygenTemp > 100 {
+                if oxygenTemp > 98 {
                         oxygenBar.texture = oxygenBarAnimationFrames[49]
                 } else {
                     if oxygenTemp % 2 == 0 {
@@ -1568,18 +1608,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if enemy.spawned == true {
                 if enemy.deathMoving == false {
                     if enemy.moving == false {
-                        
                         enemy.currentFrame = enemy.currentFrame + 1
                         if enemy.currentFrame > enemy.randomFrame{
-                            
                             enemy.moving = true
-                            
                         }
                     } else {
                         
                         if enemy.name == "Satellite15" {
                             
-                            enemy.position.y = CGFloat((Double(enemy.position.y))) + CGFloat(sin(enemy.angle / 2) * enemy.range)
+                            enemy.position.y = CGFloat((Double(enemy.position.y))) + CGFloat(sin(enemy.angle / 2) * enemy.range * Float(scalingFactor))
                             if enemy.position.y > self.size.height / 2 - enemy.size.height / 2{
                                 enemy.angle = enemy.angle + Float(M_1_PI)
                             } else if enemy.position.y < -(self.size.height / 2 - enemy.size.height / 2) {

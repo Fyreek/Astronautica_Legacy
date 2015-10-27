@@ -10,6 +10,13 @@ import SpriteKit
 import iAd
 import AVFoundation
 
+enum UIUserInterfaceIdiom : Int {
+    case Unspecified
+    
+    case Phone // iPhone and iPod touch style UI
+    case Pad // iPad style UI
+}
+
 class GameScene: SKScene, EGCDelegate {
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
@@ -53,8 +60,23 @@ class GameScene: SKScene, EGCDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
         
-        scalingFactor = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        device()
+        
+        interScene.scalingfactoriPad = (self.size.height * 2) / 768 //iPad Mini Height
+        interScene.scalingfactoriPhone = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
+        
+        if interScene.deviceInfo == "iPhone" {
+            scalingFactor = interScene.scalingfactoriPhone
+            interScene.scalingfactorSpeed = self.size.width * 2 / 1136
+        } else if interScene.deviceInfo == "iPad" {
+            scalingFactor = interScene.scalingfactoriPad
+            interScene.scalingfactorSpeed = self.size.width * 2 / 1024
+        }
+        
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
+        
+        print("Windows Size: \(self.size.width)")
+        print("Label Size: \(nameLabel.size.width)")
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -66,9 +88,9 @@ class GameScene: SKScene, EGCDelegate {
         bg2.zPosition = 0.9
         bg3.zPosition = 0.9
         
-        bg.setScale(scalingFactor)
-        bg2.setScale(scalingFactor)
-        bg3.setScale(scalingFactor)
+        bg.setScale(interScene.scalingfactoriPhone)
+        bg2.setScale(interScene.scalingfactoriPhone)
+        bg3.setScale(interScene.scalingfactoriPhone)
         
         addChild(bg)
         bg.position.x = 0
@@ -80,10 +102,14 @@ class GameScene: SKScene, EGCDelegate {
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
         nameLabel.zPosition = 1.2
-        if nameLabel.size.width > self.size.width {
-            nameLabel.setScale(scalingFactorX)
-        } else {
-            nameLabel.setScale(scalingFactor)
+        if interScene.deviceInfo == "iPhone" {
+            if nameLabel.size.width > self.size.width {
+                nameLabel.setScale(scalingFactorX)
+            } else {
+                nameLabel.setScale(scalingFactor)
+            }
+        } else if interScene.deviceInfo == "iPad" {
+            nameLabel.setScale(interScene.scalingfactoriPad)
         }
         addChild(nameLabel)
         
@@ -101,7 +127,6 @@ class GameScene: SKScene, EGCDelegate {
 		highScoreLabel.position.x = 0
 		highScoreLabel.position.y = -(self.size.height / 36)
 		highScoreLabel.zPosition = 1.2
-		highScoreLabel.setScale(1)
 		highScoreLabel.alpha = 0.3
 		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7") //will fix later
 		
@@ -135,6 +160,16 @@ class GameScene: SKScene, EGCDelegate {
         startBGAnim()
 	}
 
+    func device() {
+        switch UIDevice.currentDevice().userInterfaceIdiom {
+        case .Phone:
+            interScene.deviceInfo = "iPhone"
+        case .Pad:
+            interScene.deviceInfo = "iPad"
+        default:
+            print("unknown device")
+        }
+    }
     
     func switchLsButton() {
         if interScene.connectedToGC == true {
@@ -432,9 +467,9 @@ class GameScene: SKScene, EGCDelegate {
                         enemy.angle = enemy.angle + 0.1
                     }
                     if enemy.name == "Asteroid16" {
-                        enemy.position.x -= 3.5
+                        enemy.position.x -= 3.5 * interScene.scalingfactorSpeed
                     } else if enemy.name == "Satellite15" {
-                        enemy.position.x -= 2.5
+                        enemy.position.x -= 2.5 * interScene.scalingfactorSpeed
                     }
                 } else {
                     enemy.spawned = false
