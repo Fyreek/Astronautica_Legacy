@@ -20,7 +20,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 		super.viewDidLoad()
 
         updateSoundState()
-        
+
         loadAds()
         
         playBackgroundMusic("music.caf")

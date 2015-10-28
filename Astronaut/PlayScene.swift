@@ -25,7 +25,7 @@ struct interScene {
     static var scalingfactoriPad:CGFloat = 1
     static var scalingfactoriPhone:CGFloat = 1
     static var scalingfactorSpeed:CGFloat = 1
-    static var deviceInfo:String = "iPhone"
+    static var deviceType = UIDevice.currentDevice().deviceType
 }
 
 struct secretUnlock {
@@ -143,20 +143,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         
-        print(interScene.scalingfactorSpeed)
-        
         loadSoundState()
         interScene.playSceneDidLoad = true
-        
+        print(interScene.deviceType)
         achievementNoob.trigger = false
         
 		self.physicsWorld.contactDelegate = self
 		countDownText = SKLabelNode(text: String(countDown))
         totalScore = SKLabelNode(text: String(score))
         
-        if interScene.deviceInfo == "iPhone" {
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
-        } else if interScene.deviceInfo == "iPad" {
+        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             scalingFactor = interScene.scalingfactoriPad
         }
         
@@ -169,20 +167,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         normalSpeedRocket = 6 * interScene.scalingfactorSpeed
         normalSpeedBonusItem = 4 * interScene.scalingfactorSpeed
         
-        if interScene.deviceInfo == "iPhone" {
-        
-        } else if interScene.deviceInfo == "iPad" {
-        
-        }
-        if interScene.deviceInfo == "iPhone" {
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             oxygenBar.setScale(scalingFactor)
-        } else if interScene.deviceInfo == "iPad" {
+        } else if interScene.deviceType == .IPad {
             oxygenBar.setScale(scalingFactor / 3)
+        } else if interScene.deviceType == .IPadMini {
+            oxygenBar.setScale(scalingFactor)
         }
         oxygenBar.position.x = self.size.width / 2 - 40 - oxygenBar.size.width / 2
         oxygenBar.position.y = (self.size.height / 2) - oxygenBar.size.height / 2 - 25
         oxygenBar.zPosition = 1.3
         addChild(oxygenBar)
+        oxygenBar.texture?.filteringMode = .Nearest
         
         spawnPoints.append(0)
         spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
@@ -197,6 +193,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bg.setScale(scalingFactor)
         bg2.setScale(scalingFactor)
         bg3.setScale(scalingFactor)
+        
+        bg.texture?.filteringMode = .Nearest
+        bg2.texture?.filteringMode = .Nearest
+        bg3.texture?.filteringMode = .Nearest
         
         addChild(bg)
         bg.position.x = 0
@@ -222,6 +222,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         for var i=1; i<(numImagesExplosion + 3) / 3; i++ {
         
             let explosionTextureName = "explosion32-\(i)"
+            explosionAtlas.textureNamed(explosionTextureName).filteringMode = .Nearest
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
         }
         
@@ -229,6 +230,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         for var i=1; i<(numImagesOxygenBar / 3); i++ {
             
             let oxygenBarTextureName = "OxygenBar8_\(i)"
+            oxygenBarAtlas.textureNamed(oxygenBarTextureName).filteringMode = .Nearest
             oxygenBarAnimationFrames.append(oxygenBarAtlas.textureNamed(oxygenBarTextureName))
         }
         
@@ -236,6 +238,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         for var i=1; i<(numImagesBackground / 3); i++ {
         
             let backgroundTextureName = "background107_\(i)"
+            backgroundAtlas.textureNamed(backgroundTextureName).filteringMode = .Nearest
             backgroundAnimationFrames.append(backgroundAtlas.textureNamed(backgroundTextureName))
         }
         
@@ -263,31 +266,36 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		refresh.position.y = -(self.size.height / 4.5)
 		refresh.position.x = -(self.size.width / 8)
         refresh.zPosition = 1.2
+        refresh.texture?.filteringMode = .Nearest
 		
         menu.setScale(scalingFactor)
 		menu.position.y = -(self.size.height / 4.5)
 		menu.position.x = (self.size.width / 8)
         menu.zPosition = 1.2
+        menu.texture?.filteringMode = .Nearest
 		
         gamePause.setScale(scalingFactor)
-        if interScene.deviceInfo == "iPhone" {
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 10
             gamePause.position.x = -(self.size.width / 2) + gamePause.size.height / 2 + 10
-        } else if interScene.deviceInfo == "iPad" {
+        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 20
             gamePause.position.x = -(self.size.width / 2) + gamePause.size.height / 2 + 20
         }
         gamePause.zPosition = 1.2
+        gamePause.texture?.filteringMode = .Nearest
 		
         gamePlay.setScale(scalingFactor)
 		gamePlay.position.y = 0
 		gamePlay.position.x = -(self.size.width / 8)
         gamePlay.zPosition = 1.2
+        gamePlay.texture?.filteringMode = .Nearest
         
         menuPause.setScale(scalingFactor)
         menuPause.position.y = 0
         menuPause.position.x = self.size.width / 8
         menuPause.zPosition = 1.2
+        menuPause.texture?.filteringMode = .Nearest
 		
 		totalScore = SKLabelNode(fontNamed: "Minecraft")
 		totalScore.fontSize = 15
@@ -729,7 +737,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		hero = Hero(imageNamed: "Astronaut25")
 		hero.setScale(scalingFactor)
         hero.zPosition = 1.1
-		
+		hero.texture?.filteringMode = .Nearest
 		addChild(hero)
 	}
 	
@@ -769,6 +777,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         bonusItems.append(bonusItem)
         bonusItemAlive = true
+        bonusItem.texture?.filteringMode = .Nearest
         addChild(bonusItem)
     }
     
@@ -825,6 +834,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         enemy.moving = false
         enemy.spawnHeight = spawnHeight
         enemy.didPlaySound = didPlaySound
+        enemy.texture?.filteringMode = .Nearest
 		enemies.append(enemy)
 		enemiesIndex.append(uniqueIdentifier)
 		
@@ -849,7 +859,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 enemy.runAction(SKAction.rotateToAngle(((0) * Pi) / 180, duration: 0))
             }
         }
-
 		addChild(enemy)
 	}
 	

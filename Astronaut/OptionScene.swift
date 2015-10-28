@@ -15,6 +15,13 @@ class OptionScene: SKScene {
     var greenSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var blueSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     let bg = SKSpriteNode(imageNamed: "Background188")
+    let bg2 = SKSpriteNode(imageNamed: "Background188")
+    let bg3 = SKSpriteNode(imageNamed: "Background188")
+    var bgAnimSpeed:CGFloat = 4
+    let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
+    let gameSpeed:CGFloat = 1
+    var endOfScreenRight = CGFloat()
+    var endOfScreenLeft = CGFloat()
     let coloredSprite = SKSpriteNode(imageNamed: "Astronaut25")
     let backSprite = SKSpriteNode(imageNamed: "BackButton32")
     let menuColorSprite = SKSpriteNode(imageNamed: "SecretButton32")
@@ -43,15 +50,33 @@ class OptionScene: SKScene {
         
         loadSoundState()
 
-        if interScene.deviceInfo == "iPhone" {
+        endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
+        endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
+        
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
-        } else if interScene.deviceInfo == "iPad" {
+        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             scalingFactor = interScene.scalingfactoriPad
         }
         
         bg.zPosition = 0.9
-        bg.setScale(scalingFactor)
+        bg2.zPosition = 0.9
+        bg3.zPosition = 0.9
+        
+        bg.setScale(interScene.scalingfactoriPhone)
+        bg2.setScale(interScene.scalingfactoriPhone)
+        bg3.setScale(interScene.scalingfactoriPhone)
+        
+        bg.texture?.filteringMode = .Nearest
+        bg2.texture?.filteringMode = .Nearest
+        bg3.texture?.filteringMode = .Nearest
+        
         addChild(bg)
+        bg.position.x = 0
+        bg2.position.x = self.size.width
+        bg3.position.x = self.size.width * 2
+        addChild(bg2)
+        addChild(bg3)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccess", name: "AdRemoveSuccess", object: nil)
         
@@ -93,6 +118,7 @@ class OptionScene: SKScene {
         coloredSprite.zPosition = 1.2
         addChild(coloredSprite)
         coloredSprite.hidden = true
+        coloredSprite.texture?.filteringMode = .Nearest
         
         noAdSprite.setScale(scalingFactor)
         noAdSprite.position.x = 0
@@ -100,6 +126,7 @@ class OptionScene: SKScene {
         noAdSprite.zPosition = 1.2
         noAdSprite.name = "noAdSprite"
         addChild(noAdSprite)
+        noAdSprite.texture?.filteringMode = .Nearest
         
         musicSprite.setScale(scalingFactor)
         musicSprite.position.x = -(self.size.width / 4 - musicSprite.size.width)
@@ -112,6 +139,7 @@ class OptionScene: SKScene {
             musicSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
         }
         addChild(musicSprite)
+        musicSprite.texture?.filteringMode = .Nearest
         
         soundSprite.setScale(scalingFactor)
         soundSprite.position.x = self.size.width / 4 - soundSprite.size.width
@@ -124,6 +152,7 @@ class OptionScene: SKScene {
             soundSprite.texture = SKTexture(imageNamed: "SoundOffButton32")
         }
         addChild(soundSprite)
+        soundSprite.texture?.filteringMode = .Nearest
         
         backSprite.setScale(scalingFactor)
         backSprite.position.x = -((self.size.width / 2) - (backSprite.size.width / 2) - 20)
@@ -131,6 +160,7 @@ class OptionScene: SKScene {
         backSprite.zPosition = 1.2
         backSprite.name = "backSprite"
         addChild(backSprite)
+        backSprite.texture?.filteringMode = .Nearest
         
         menuColorSprite.setScale(scalingFactor)
         menuColorSprite.position.x = -((self.size.width / 2) - (backSprite.size.width / 2) - 20)
@@ -144,6 +174,7 @@ class OptionScene: SKScene {
         } else {
             menuColorSprite.hidden = true
         }
+        menuColorSprite.texture?.filteringMode = .Nearest
             
         menuSoundSprite.setScale(scalingFactor)
         menuSoundSprite.position.x = (self.size.width / 2) - (menuSoundSprite.size.width / 2) - 20
@@ -152,6 +183,7 @@ class OptionScene: SKScene {
         menuSoundSprite.name = "menuSoundSprite"
         addChild(menuSoundSprite)
         menuSoundSprite.hidden = true
+        menuSoundSprite.texture?.filteringMode = .Nearest
         
         menuThemeSprite.setScale(scalingFactor)
         menuThemeSprite.position.x = (self.size.width / 2) - (menuThemeSprite.size.width / 2) - 20
@@ -160,9 +192,11 @@ class OptionScene: SKScene {
         menuThemeSprite.name = "menuThemeSprite"
         addChild(menuThemeSprite)
         menuThemeSprite.hidden = true
+        menuThemeSprite.texture?.filteringMode = .Nearest
         
         sliderValueDidChange()
         adButtonSwitch()
+        startBGAnim()
     }
     
     func adButtonSwitch() {
@@ -173,6 +207,43 @@ class OptionScene: SKScene {
         }
     }
     
+    func startBGAnim() {
+        bg.runAction(SKAction.moveToX(bg.position.x - self.size.width * 2 - SKSpriteNode(texture: satelliteTexture).size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width * 2 - SKSpriteNode(texture: satelliteTexture).size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+        bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width * 2 - SKSpriteNode(texture: satelliteTexture).size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+    }
+    
+    func stopBGAnim() {
+        bg.removeAllActions()
+        bg2.removeAllActions()
+        bg3.removeAllActions()
+    }
+    
+    func updateBGPosition() {
+        
+        if bg.position.x <= endOfScreenLeft - self.size.width / 2{
+            
+            bg.position.x = self.size.width * 2
+            stopBGAnim()
+            startBGAnim()
+            
+        }
+        if bg2.position.x <= endOfScreenLeft - self.size.width / 2{
+            
+            bg2.position.x = self.size.width * 2
+            stopBGAnim()
+            startBGAnim()
+            
+        }
+        if bg3.position.x <= endOfScreenLeft - self.size.width / 2{
+            
+            bg3.position.x = self.size.width * 2
+            stopBGAnim()
+            startBGAnim()
+            
+        }
+    }
+
     func showThemeMenu() {
         resetSecret()
         soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
@@ -513,6 +584,7 @@ class OptionScene: SKScene {
     
     override func update(currentTime: CFTimeInterval) {
             /* Called before each frame is rendered */
+        updateBGPosition()
     }
 
 }

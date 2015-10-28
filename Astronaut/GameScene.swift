@@ -10,13 +10,6 @@ import SpriteKit
 import iAd
 import AVFoundation
 
-enum UIUserInterfaceIdiom : Int {
-    case Unspecified
-    
-    case Phone // iPhone and iPod touch style UI
-    case Pad // iPad style UI
-}
-
 class GameScene: SKScene, EGCDelegate {
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
@@ -60,23 +53,19 @@ class GameScene: SKScene, EGCDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
         
-        device()
-        
         interScene.scalingfactoriPad = (self.size.height * 2) / 768 //iPad Mini Height
         interScene.scalingfactoriPhone = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         
-        if interScene.deviceInfo == "iPhone" {
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
             interScene.scalingfactorSpeed = self.size.width * 2 / 1136
-        } else if interScene.deviceInfo == "iPad" {
+        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             scalingFactor = interScene.scalingfactoriPad
             interScene.scalingfactorSpeed = self.size.width * 2 / 1024
         }
+
         
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
-        
-        print("Windows Size: \(self.size.width)")
-        print("Label Size: \(nameLabel.size.width)")
         
 		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
@@ -92,6 +81,10 @@ class GameScene: SKScene, EGCDelegate {
         bg2.setScale(interScene.scalingfactoriPhone)
         bg3.setScale(interScene.scalingfactoriPhone)
         
+        bg.texture?.filteringMode = .Nearest
+        bg2.texture?.filteringMode = .Nearest
+        bg3.texture?.filteringMode = .Nearest
+        
         addChild(bg)
         bg.position.x = 0
         bg2.position.x = self.size.width
@@ -102,15 +95,16 @@ class GameScene: SKScene, EGCDelegate {
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
         nameLabel.zPosition = 1.2
-        if interScene.deviceInfo == "iPhone" {
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             if nameLabel.size.width > self.size.width {
                 nameLabel.setScale(scalingFactorX)
             } else {
                 nameLabel.setScale(scalingFactor)
             }
-        } else if interScene.deviceInfo == "iPad" {
+        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             nameLabel.setScale(interScene.scalingfactoriPad)
         }
+        nameLabel.texture?.filteringMode = .Nearest
         addChild(nameLabel)
         
         startGameButton.setScale(scalingFactor)
@@ -120,6 +114,7 @@ class GameScene: SKScene, EGCDelegate {
 		startGameButton.position.y = -(self.size.height / 4.5)
 		startGameButton.position.x = 0
 		startGameButton.zPosition = 1.2
+        startGameButton.texture?.filteringMode = .Nearest
 		
         highScoreLabel.setScale(scalingFactor)
 		addChild(highScoreLabel)
@@ -128,7 +123,7 @@ class GameScene: SKScene, EGCDelegate {
 		highScoreLabel.position.y = -(self.size.height / 36)
 		highScoreLabel.zPosition = 1.2
 		highScoreLabel.alpha = 0.3
-		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7") //will fix later
+		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7")
 		
         menuOptionButton.setScale(scalingFactor)
 		addChild(menuOptionButton)
@@ -137,6 +132,7 @@ class GameScene: SKScene, EGCDelegate {
 		menuOptionButton.position.y = -(self.size.height / 4.5)
 		menuOptionButton.position.x = self.size.width / 3
 		menuOptionButton.zPosition = 1.2
+        menuOptionButton.texture?.filteringMode = .Nearest
 		
         menuHSButton.setScale(scalingFactor)
 		addChild(menuHSButton)
@@ -145,6 +141,7 @@ class GameScene: SKScene, EGCDelegate {
 		menuHSButton.position.y = -(self.size.height / 4.5)
 		menuHSButton.position.x = -(self.size.width / 3)
 		menuHSButton.zPosition = 1.2
+        menuHSButton.texture?.filteringMode = .Nearest
         
         switchLsButton()
         
@@ -154,22 +151,12 @@ class GameScene: SKScene, EGCDelegate {
         for var i=1; i<(numImagesExplosion + 3) / 3; i++ {
             
             let explosionTextureName = "explosion32-\(i)"
+            explosionAtlas.textureNamed(explosionTextureName).filteringMode = .Nearest
             explosionAnimationFrames.append(explosionAtlas.textureNamed(explosionTextureName))
         }
         
         startBGAnim()
 	}
-
-    func device() {
-        switch UIDevice.currentDevice().userInterfaceIdiom {
-        case .Phone:
-            interScene.deviceInfo = "iPhone"
-        case .Pad:
-            interScene.deviceInfo = "iPad"
-        default:
-            print("unknown device")
-        }
-    }
     
     func switchLsButton() {
         if interScene.connectedToGC == true {
@@ -234,6 +221,7 @@ class GameScene: SKScene, EGCDelegate {
         enemy.hidden = false
         enemy.moving = true
         enemies.append(enemy)
+        enemy.texture?.filteringMode = .Nearest
         addChild(enemy)
     }
     
