@@ -63,6 +63,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePaused = false
 	var enemyCount = 0
     var deathEnemy: Enemy!
+    var obtainedSpawnCount:Int = 0
     var spawnPoints:[CGFloat] = []
     var spawnPointStats:[Bool] = [true, true, true, true, true]
     var scoreBefore:Int = 0
@@ -1062,26 +1063,29 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func enemySpawn(enemy: Enemy) {
-        for var i = 0; i < spawnPoints.count; i++ {
-            if enemy.spawned == false {
-                if spawnPointStats[i].boolValue == true {
-                    enemy.yPos = spawnPoints[i]
-                    enemy.position.y = enemy.yPos
-                    enemy.spawnHeight = enemy.yPos
-                    spawnPointStats[i] = false
-                    enemy.spawned = true
-                    if enemy.name == "Asteroid16" {
-                        asteroidPhysicsBody(enemy)
-                    } else if enemy.name == "Satellite15" {
-                        satellitePhysicsBody(enemy)
-                    } else if enemy.name == "Missile8" {
-                        missilePhysicsBody(enemy)
+        if obtainedSpawnCount <= 4 {
+            for var i = 0; i < spawnPoints.count; i++ {
+                if enemy.spawned == false {
+                    if spawnPointStats[i].boolValue == true {
+                        enemy.yPos = spawnPoints[i]
+                        enemy.position.y = enemy.yPos
+                        enemy.spawnHeight = enemy.yPos
+                        spawnPointStats[i] = false
+                        enemy.spawned = true
+                        if enemy.name == "Asteroid16" {
+                            asteroidPhysicsBody(enemy)
+                        } else if enemy.name == "Satellite15" {
+                            satellitePhysicsBody(enemy)
+                        } else if enemy.name == "Missile8" {
+                            missilePhysicsBody(enemy)
+                        }
+                        obtainedSpawnCount = obtainedSpawnCount + 1
+                        enemy.physicsBody!.affectedByGravity = false
+                        enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
+                        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+                        enemy.physicsBody!.collisionBitMask = 0
+                        enemy.physicsBody!.allowsRotation = false
                     }
-                    enemy.physicsBody!.affectedByGravity = false
-                    enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-                    enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-                    enemy.physicsBody!.collisionBitMask = 0
-                    enemy.physicsBody!.allowsRotation = false
                 }
             }
         }
@@ -1096,13 +1100,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if bonusItems.count >= 1 {
                 for bonusItem in bonusItems {
                     if bonusItem.spawned == true {
-                        spawning(enemy)
+                        enemySpawn(enemy)
                     } else {
                         bonusItemSpawn()
                     }
                 }
             } else {
-                spawning(enemy)
+                enemySpawn(enemy)
             }
         }
     }
@@ -1755,6 +1759,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                         if enemy.position.x < self.size.width / 2  - 200{
+                            obtainedSpawnCount = obtainedSpawnCount - 1
                             if enemy.spawnHeight != 9999 {
                                 for var i = 0; i < spawnPointStats.count; i++ {
                                     if spawnPoints[i] == enemy.spawnHeight {
