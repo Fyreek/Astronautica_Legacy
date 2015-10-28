@@ -27,6 +27,7 @@
 		A10C22621BD51EF700BD79F1 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A10C22611BD51EF700BD79F1 /* StoreKit.framework */; };
 		A10C22641BD51F6500BD79F1 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */; };
 		A158ACDA1BE00FE3003E6681 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A158ACD91BE00FE3003E6681 /* Launch Screen.storyboard */; };
+		A17999E01BE112B100DCD1D2 /* UIDeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17999DF1BE112B100DCD1D2 /* UIDeviceExtension.swift */; };
 		A18CD5201BDE321500C9321D /* oxygen.caf in Resources */ = {isa = PBXBuildFile; fileRef = A18CD51F1BDE321500C9321D /* oxygen.caf */; };
 		A1C8F0611BDD81FE006B1678 /* explosion.caf in Resources */ = {isa = PBXBuildFile; fileRef = A1C8F05F1BDD81FE006B1678 /* explosion.caf */; };
 		A1C8F0631BDD8ABD006B1678 /* music.caf in Resources */ = {isa = PBXBuildFile; fileRef = A1C8F0621BDD8ABD006B1678 /* music.caf */; };
@@ -70,6 +71,7 @@
 		A10C22611BD51EF700BD79F1 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
 		A158ACD91BE00FE3003E6681 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		A17999DF1BE112B100DCD1D2 /* UIDeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIDeviceExtension.swift; sourceTree = "<group>"; };
 		A18CD51F1BDE321500C9321D /* oxygen.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = oxygen.caf; sourceTree = "<group>"; };
 		A1C8F05F1BDD81FE006B1678 /* explosion.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = explosion.caf; sourceTree = "<group>"; };
 		A1C8F0621BDD8ABD006B1678 /* music.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = music.caf; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				A10C22611BD51EF700BD79F1 /* StoreKit.framework */,
 				8143166D1B8730B4008A3C81 /* GameCenter.swift */,
 				A10C22631BD51F6500BD79F1 /* InAppPurchase.swift */,
+				A17999DF1BE112B100DCD1D2 /* UIDeviceExtension.swift */,
 				812FED261B9063E800A2A8C3 /* HexColor.swift */,
 				A1C8F0621BDD8ABD006B1678 /* music.caf */,
 				A18CD51F1BDE321500C9321D /* oxygen.caf */,
@@ -303,6 +306,7 @@
 				81E4452C1B8667D900BC86B2 /* GameViewController.swift in Sources */,
 				81E445261B8667D900BC86B2 /* AppDelegate.swift in Sources */,
 				8143166E1B8730B4008A3C81 /* GameCenter.swift in Sources */,
+				A17999E01BE112B100DCD1D2 /* UIDeviceExtension.swift in Sources */,
 				812FED271B9063E800A2A8C3 /* HexColor.swift in Sources */,
 				81E445501B86689100BC86B2 /* Hero.swift in Sources */,
 			);
