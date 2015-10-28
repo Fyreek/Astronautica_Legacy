@@ -1029,7 +1029,30 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         enemy.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
     }
     
-    func spawning(enemy: Enemy) {
+    func bonusItemSpawn() {
+        for bonusItem in bonusItems {
+            for var i = 0; i < spawnPoints.count; i++ {
+                if bonusItem.spawned == false {
+                    if spawnPointStats[i].boolValue == true {
+                        bonusItem.position.y = spawnPoints[i]
+                        bonusItem.spawnHeight = spawnPoints[i]
+                        bonusItem.position.x = endOfScreenRight
+                        spawnPointStats[i] = false
+                        bonusItem.spawned = true
+                        oxygenPhysicsBody(bonusItem)
+                        bonusItem.physicsBody!.affectedByGravity = false
+                        bonusItem.physicsBody!.categoryBitMask = ColliderType.bonusItem.rawValue
+                        bonusItem.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
+                        bonusItem.physicsBody!.collisionBitMask = 0
+                        bonusItem.physicsBody!.allowsRotation = false
+                        bonusItem.moving = true
+                    }
+                }
+            }
+        }
+    }
+    
+    func enemySpawn(enemy: Enemy) {
         for var i = 0; i < spawnPoints.count; i++ {
             if enemy.spawned == false {
                 if spawnPointStats[i].boolValue == true {
@@ -1051,6 +1074,26 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     enemy.physicsBody!.collisionBitMask = 0
                     enemy.physicsBody!.allowsRotation = false
                 }
+            }
+        }
+
+    }
+    
+    func spawning(enemy: Enemy = Enemy(texture: nil)) {
+    
+        if enemy.texture == nil {
+            bonusItemSpawn()
+        } else {
+            if bonusItems.count >= 1 {
+                for bonusItem in bonusItems {
+                    if bonusItem.spawned == true {
+                        spawning(enemy)
+                    } else {
+                        bonusItemSpawn()
+                    }
+                }
+            } else {
+                spawning(enemy)
             }
         }
     }
@@ -1482,24 +1525,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         if bonusItems.count >= 1 {
             for bonusItem in bonusItems {
-                for var i = 0; i < spawnPoints.count; i++ {
-                    if bonusItem.spawned == false {
-                        if spawnPointStats[i].boolValue == true {
-                            bonusItem.position.y = spawnPoints[i]
-                            bonusItem.spawnHeight = spawnPoints[i]
-                            bonusItem.position.x = endOfScreenRight
-                            spawnPointStats[i] = false
-                            bonusItem.spawned = true
-                            oxygenPhysicsBody(bonusItem)
-                            bonusItem.physicsBody!.affectedByGravity = false
-                            bonusItem.physicsBody!.categoryBitMask = ColliderType.bonusItem.rawValue
-                            bonusItem.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
-                            bonusItem.physicsBody!.collisionBitMask = 0
-                            bonusItem.physicsBody!.allowsRotation = false
-                            bonusItem.moving = true
-                        }
-                    }
-                }
+                spawning()
                 if bonusItem.moving == true {
                     if bonusItem.position.x > endOfScreenLeft {
                         bonusItem.position.x -= totalSpeedBonusItem
