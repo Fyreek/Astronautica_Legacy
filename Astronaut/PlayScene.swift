@@ -26,6 +26,7 @@ struct interScene {
     static var scalingfactoriPhone:CGFloat = 1
     static var scalingfactorSpeed:CGFloat = 1
     static var deviceType = UIDevice.currentDevice().deviceType
+    static var firstStart:Bool = true
 }
 
 struct secretUnlock {
@@ -80,6 +81,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let asteroidTexture:SKTexture = SKTexture(imageNamed: "Asteroid16")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     let missileTexture:SKTexture = SKTexture(imageNamed: "Missile8")
+    var oxygenMarker:SKSpriteNode = SKSpriteNode(imageNamed: "Orb32")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     var achievementOxygenCount:Int = 0
@@ -156,6 +158,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             scalingFactor = interScene.scalingfactoriPhone
         } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             scalingFactor = interScene.scalingfactoriPad
+        }
+        
+        if interScene.firstStart == true {
+            oxygenMarker.hidden = true
+            oxygenMarker.setScale(scalingFactor)
+            oxygenMarker.zPosition = 1.1
+            let fadeIn:SKAction = SKAction.fadeInWithDuration(1.0)
+            let fadeOut:SKAction = SKAction.fadeOutWithDuration(1.0)
+            let fading:SKAction = SKAction.sequence([fadeIn, fadeOut])
+            oxygenMarker.runAction(SKAction.repeatActionForever(fading))
+            addChild(oxygenMarker)
         }
         
         totalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed
@@ -476,7 +489,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.physicsBody = nil
         bonusItem.moving = false
         bonusItem.hidden = true
+        oxygenMarker.hidden = true
         bonusItem.removeFromParent()
+        oxygenMarker.removeFromParent()
+        interScene.firstStart = false
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "firstStart")
+        NSUserDefaults.standardUserDefaults().synchronize()
         bonusItemAlive = false
         bonusItems = []
         hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
@@ -1542,7 +1560,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         } else {
                             bonusItem.zRotation = bonusItem.zRotation - 0.05
                         }
+                        if interScene.firstStart == true {
+                            oxygenMarker.hidden = false
+                            oxygenMarker.position.x = bonusItem.position.x
+                            oxygenMarker.position.y = bonusItem.position.y
+                            oxygenMarker.zRotation = bonusItem.zRotation
+                        }
                     } else {
+                        oxygenMarker.hidden = true
                         bonusItems = []
                         bonusItem.removeFromParent()
                         achievementOxygenCount = 0

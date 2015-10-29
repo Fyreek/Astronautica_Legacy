@@ -30,6 +30,7 @@ class OptionScene: SKScene {
     var noAdSprite = SKSpriteNode(imageNamed: "RemoveAdsButton32")
     let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
     let musicSprite = SKSpriteNode(imageNamed: "MusicOnButton32")
+    var versionLabel = SKLabelNode(text: "")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var soundOn:Bool = true
@@ -127,6 +128,19 @@ class OptionScene: SKScene {
         noAdSprite.name = "noAdSprite"
         addChild(noAdSprite)
         noAdSprite.texture?.filteringMode = .Nearest
+        
+        if let version = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? String {
+            self.versionLabel.text = version
+        }
+        
+        versionLabel.setScale(scalingFactor / 1.5)
+        versionLabel.zPosition = 1.2
+        versionLabel.position.x = self.size.width / 2 - 50 * scalingFactor / 1.5
+        versionLabel.position.y = self.size.height / 2 - 50 * scalingFactor / 1.5
+        versionLabel.alpha = 0.3
+        versionLabel.fontColor = UIColor(rgba: "#d7d7d7")
+        versionLabel.hidden = true
+        addChild(versionLabel)
         
         musicSprite.setScale(scalingFactor)
         musicSprite.position.x = -(self.size.width / 4 - musicSprite.size.width)
@@ -293,6 +307,8 @@ class OptionScene: SKScene {
             self.view?.addSubview(self.blueSlider)
             self.coloredSprite.hidden = false
             self.coloredSprite.runAction(SKAction.fadeInWithDuration(1.0))
+            self.versionLabel.hidden = false
+            self.versionLabel.runAction(SKAction.fadeInWithDuration(1.0))
             
             UIView.animateWithDuration(1.0, animations: {
                 self.redSlider.alpha = 1.0
@@ -303,9 +319,11 @@ class OptionScene: SKScene {
     }
     
     func showSoundMenu() {
-
+        
+        versionLabel.runAction(SKAction.fadeOutWithDuration(1.0))
         coloredSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
             self.coloredSprite.hidden = true
+            self.versionLabel.hidden = true
             
             self.redSlider.removeFromSuperview()
             self.greenSlider.removeFromSuperview()

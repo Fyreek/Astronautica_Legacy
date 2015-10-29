@@ -167,6 +167,13 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func loadingNSUser() {
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("firstStart") {
+            interScene.firstStart = NSUserDefaults.standardUserDefaults().boolForKey("firstStart").boolValue
+        } else {
+            interScene.firstStart = true
+        }
+        
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
             interScene.adState = NSUserDefaults.standardUserDefaults().boolForKey("Ads").boolValue
         } else {
