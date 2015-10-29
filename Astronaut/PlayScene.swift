@@ -81,12 +81,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     let asteroidTexture:SKTexture = SKTexture(imageNamed: "Asteroid16")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     let missileTexture:SKTexture = SKTexture(imageNamed: "Missile8")
-    var oxygenMarker:SKSpriteNode = SKSpriteNode(imageNamed: "Orb32")
+    var oxygenMarker:SKSpriteNode = SKSpriteNode(imageNamed: "Orb16")
     var didOxygenCollide:Bool = false
     var didOxygenCollideEnemy:Bool = false
     var achievementOxygenCount:Int = 0
     var enemySound:Bool = false
     var bgAnimSpeed:CGFloat = 16
+    
+    var introDisplayed:Bool = false
 	
     var gameOverMenuLoaded = false
     
@@ -147,7 +149,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         loadSoundState()
         interScene.playSceneDidLoad = true
-        print(interScene.deviceType)
+        
         achievementNoob.trigger = false
         
 		self.physicsWorld.contactDelegate = self
@@ -163,9 +165,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if interScene.firstStart == true {
             oxygenMarker.hidden = true
             oxygenMarker.setScale(scalingFactor)
-            oxygenMarker.zPosition = 1.1
-            let fadeIn:SKAction = SKAction.fadeInWithDuration(1.0)
-            let fadeOut:SKAction = SKAction.fadeOutWithDuration(1.0)
+            oxygenMarker.zPosition = 1.05
+            let fadeIn:SKAction = SKAction.fadeAlphaTo(0.1, duration: NSTimeInterval(gameSpeed / 2))
+            let fadeOut:SKAction = SKAction.fadeAlphaTo(0.4, duration: NSTimeInterval(gameSpeed / 2))
             let fading:SKAction = SKAction.sequence([fadeIn, fadeOut])
             oxygenMarker.runAction(SKAction.repeatActionForever(fading))
             addChild(oxygenMarker)
@@ -1195,6 +1197,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             menuPause.zPosition = 1.2
 			gamePause.hidden = true
 			hero.paused = true
+            gamePlay.position.y = 0
+            gamePlay.position.x = -(self.size.width / 8)
+            
+            
 			
 		}
 	}
@@ -1209,6 +1215,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 
             hideAds()
             
+            totalScore.hidden = true
             countDownText.hidden = false
             gamePlay.hidden = true
             gamePlay.zPosition = 0.9
@@ -1562,6 +1569,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         }
                         if interScene.firstStart == true {
                             oxygenMarker.hidden = false
+                            oxygenMarker.alpha = 0.5
                             oxygenMarker.position.x = bonusItem.position.x
                             oxygenMarker.position.y = bonusItem.position.y
                             oxygenMarker.zRotation = bonusItem.zRotation
@@ -1575,16 +1583,20 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             addBonusItems("Oxygen15")
                         }
                     }
-                    if bonusItem.position.x < self.size.width / 2  - 200{
-                        if bonusItem.spawnHeight == 9999 {
-                            
-                        } else {
+                    if bonusItem.position.x < self.size.width / 2  - 200 {
+                        if bonusItem.spawnHeight != 9999 {
                             for var i = 0; i < spawnPointStats.count; i++ {
                                 if spawnPoints[i] == bonusItem.spawnHeight {
                                     spawnPointStats[i] = true
                                     bonusItem.spawnHeight = 9999
                                 }
                             }
+                        }
+                        
+                    } else if bonusItem.position.x < self.size.width / 2 - 50 && introDisplayed == false {
+                        if bonusItem.spawnHeight != 8888 {
+                            oxygenIntro()
+                            bonusItem.spawnHeight = 8888
                         }
                     }
                 }
@@ -1839,6 +1851,29 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if interScene.soundState == true {
             self.runAction(interScene.oxygenSound)
         }
+    }
+    
+    func oxygenIntro() {
+        if !gameOver {
+            
+            introDisplayed = true
+            stopBGAnim()
+            
+            gamePaused = true
+            gamePlay.hidden = false
+            gamePlay.alpha = 1
+            gamePlay.position.x = 0
+            gamePlay.position.y = -(self.size.height / 8)
+            gamePlay.zPosition = 1.2
+            hero.paused = true
+            totalScore.hidden = false
+            totalScore.text = ("Collect the oxygen!")
+            totalScore.runAction(SKAction.fadeInWithDuration(NSTimeInterval(gameSpeed)))
+            gamePlay.runAction(SKAction.fadeInWithDuration(NSTimeInterval(gameSpeed)))
+
+        }
+
+        
     }
 }
 

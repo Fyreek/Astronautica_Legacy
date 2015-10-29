@@ -133,12 +133,13 @@ class OptionScene: SKScene {
             self.versionLabel.text = version
         }
         
+        versionLabel = SKLabelNode(fontNamed: "Minecraft")
+        versionLabel.fontSize = 15
+        versionLabel.fontColor = UIColor(rgba: "#5F6575")
         versionLabel.setScale(scalingFactor / 1.5)
         versionLabel.zPosition = 1.2
         versionLabel.position.x = self.size.width / 2 - 50 * scalingFactor / 1.5
         versionLabel.position.y = self.size.height / 2 - 50 * scalingFactor / 1.5
-        versionLabel.alpha = 0.3
-        versionLabel.fontColor = UIColor(rgba: "#d7d7d7")
         versionLabel.hidden = true
         addChild(versionLabel)
         

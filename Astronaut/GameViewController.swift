@@ -125,8 +125,27 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
             if self.gotScore == false {
                 if let tupleIsOk = tupleHighScore {
                     self.gcScore = tupleIsOk.score
-                    NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
-                    NSUserDefaults.standardUserDefaults().synchronize()
+                    
+                    if let _ = NSUserDefaults.standardUserDefaults().objectForKey("highScore") {
+                        
+                        if self.gcScore > NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
+                            
+                            NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
+                            NSUserDefaults.standardUserDefaults().synchronize()
+                            
+                        } else if self.gcScore < NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
+                            
+                            EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: NSUserDefaults.standardUserDefaults().integerForKey("highScore"))
+                            
+                        }
+                        
+                    } else {
+                        
+                            NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
+                            NSUserDefaults.standardUserDefaults().synchronize()
+
+                    }
+                    
                     self.gotScore = true
                 }
             }
