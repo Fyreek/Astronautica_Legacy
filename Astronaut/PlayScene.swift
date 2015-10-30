@@ -542,6 +542,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         switch contactMask {
          
         case ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue :
+            interScene.oxygenFail = 0
             if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue {
                 let otherBody = contact.bodyB.node as? Enemy
                 heroGameEnding(otherBody)
