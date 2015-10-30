@@ -49,7 +49,6 @@ class GameScene: SKScene, EGCDelegate {
         
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
-
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
         
@@ -67,7 +66,7 @@ class GameScene: SKScene, EGCDelegate {
         
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
         
-		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+        highScore = interScene.highScore
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
 		highScoreLabel.fontSize = 15
         highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
@@ -436,9 +435,6 @@ class GameScene: SKScene, EGCDelegate {
         scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         scene.size = skView.bounds.size
         skView.presentScene(scene, transition: transition)
-        
-        scene.scoreBefore = highScore
-        
 	}
     
     func updateEnemyPosition() {
@@ -526,7 +522,6 @@ class GameScene: SKScene, EGCDelegate {
         updateEnemyPosition()
         
         if ticks == 20 {
-            highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
             if highScore > highScoreBefore {
         
                 highScoreLabel.text = "Highscore: " + String(highScore)

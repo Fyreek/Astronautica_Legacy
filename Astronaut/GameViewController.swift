@@ -23,6 +23,10 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
 
         loadAds()
         
+        if (NSUserDefaults.standardUserDefaults().objectForKey("highScore") != nil) {
+            interScene.highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+        }
+        
         playBackgroundMusic("music.caf")
         
         interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
@@ -132,9 +136,11 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
                             
                             NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
                             NSUserDefaults.standardUserDefaults().synchronize()
+                            interScene.highScore = self.gcScore
                             
                         } else if self.gcScore < NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
                             
+                            interScene.highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
                             EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: NSUserDefaults.standardUserDefaults().integerForKey("highScore"))
                             
                         }

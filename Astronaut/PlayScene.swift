@@ -27,6 +27,8 @@ struct interScene {
     static var scalingfactorSpeed:CGFloat = 1
     static var deviceType = UIDevice.currentDevice().deviceType
     static var firstStart:Bool = true
+    static var introDisplayed:Bool = false
+    static var highScore:Int = 0
 }
 
 struct secretUnlock {
@@ -87,8 +89,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var achievementOxygenCount:Int = 0
     var enemySound:Bool = false
     var bgAnimSpeed:CGFloat = 16
-    
-    var introDisplayed:Bool = false
+    var ending:Bool = false
 	
     var gameOverMenuLoaded = false
     
@@ -162,6 +163,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             scalingFactor = interScene.scalingfactoriPad
         }
         
+        scoreBefore = interScene.highScore
+        
         if interScene.firstStart == true {
             oxygenMarker.hidden = true
             oxygenMarker.setScale(scalingFactor)
@@ -225,7 +228,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         
-		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+		//highScore = interScene.highScore
         
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
 		
@@ -383,67 +386,77 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func heroGameEnding(otherBody: Enemy?) {
-        hero.physicsBody = nil
-        gameOver = true
-        gamePause.hidden = true
-        hero.removeAllActions()
-        scoreLabel.hidden = true
-        oxygenBar.hidden = true
         
-        if otherBody != nil {
-            deathEnemy = otherBody
-            deathEnemy.deathMoving = true
-            deathEnemy.removeFromParent()
-        }
-        hero.emit = true
+        if ending == false {
         
-        interScene.playSceneDidLoad = false
-        
-        if score >= 100 {
-            achievement100Points()
-        }
-        if score >= 150 {
-            achievement150Points()
-        }
-        if achievementNoob.trigger == false {
-            achievementNoob.trigger = true
-            if score < 10 {
-                if achievementNoob.Noob4 == true {
-                    EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_earlydeath", showBannnerIfCompleted: true, addToExisting: false)
-                } else if achievementNoob.Noob3 == true {
-                    achievementNoob.Noob4 = true
-                } else if achievementNoob.Noob2 == true {
-                    achievementNoob.Noob3 = true
-                } else if achievementNoob.Noob1 == true {
-                    achievementNoob.Noob2 = true
-                } else {
-                    achievementNoob.Noob1 = true
-                }
-            } else {
-                achievementNoob.Noob1 = false
-                achievementNoob.Noob2 = false
-                achievementNoob.Noob3 = false
-                achievementNoob.Noob4 = false
+            ending = true
+            
+            print("test")
+            print("-----")
+            
+            hero.physicsBody = nil
+            gameOver = true
+            gamePause.hidden = true
+            hero.removeAllActions()
+            scoreLabel.hidden = true
+            oxygenBar.hidden = true
+            
+            if otherBody != nil {
+                deathEnemy = otherBody
+                deathEnemy.deathMoving = true
+                deathEnemy.removeFromParent()
             }
-        }
-        
-        if score <= scoreBefore {
+            hero.emit = true
             
-            totalScore.hidden = false
-            totalScore.text = ("You reached ") + String(score) + (" points!")
-            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+            interScene.playSceneDidLoad = false
             
-        } else if score > scoreBefore {
+            if score >= 100 {
+                achievement100Points()
+            }
+            if score >= 150 {
+                achievement150Points()
+            }
+            if achievementNoob.trigger == false {
+                achievementNoob.trigger = true
+                if score < 10 {
+                    if achievementNoob.Noob4 == true {
+                        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_earlydeath", showBannnerIfCompleted: true, addToExisting: false)
+                    } else if achievementNoob.Noob3 == true {
+                        achievementNoob.Noob4 = true
+                    } else if achievementNoob.Noob2 == true {
+                        achievementNoob.Noob3 = true
+                    } else if achievementNoob.Noob1 == true {
+                        achievementNoob.Noob2 = true
+                    } else {
+                        achievementNoob.Noob1 = true
+                    }
+                } else {
+                    achievementNoob.Noob1 = false
+                    achievementNoob.Noob2 = false
+                    achievementNoob.Noob3 = false
+                    achievementNoob.Noob4 = false
+                }
+            }
             
-            scoreBefore = score
-            NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
-            NSUserDefaults.standardUserDefaults().synchronize()
-            EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
-            
-            totalScore.hidden = false
-            totalScore.text = ("New Highscore: ") + String(score) + (" points!")
-            totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-            
+            if score <= scoreBefore {
+                
+                totalScore.hidden = false
+                totalScore.text = ("You reached ") + String(score) + (" points!")
+                totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+                
+            } else if score > scoreBefore {
+                
+                scoreBefore = score
+                NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
+                NSUserDefaults.standardUserDefaults().synchronize()
+                interScene.highScore = score
+                EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
+                
+                totalScore.hidden = false
+                totalScore.text = ("New Highscore: ") + String(score) + (" points!")
+                totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+                
+            }
         }
 	}
     
@@ -1153,10 +1166,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
 		scene.size = skView.bounds.size
         skView.presentScene(scene, transition: transition)
-		
-		highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
-		scene.highScoreLabel.text = "Highscore: " + String(highScore)
-		
 	}
     
     func showFSAd() {
@@ -1212,9 +1221,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		if !gameOver {
             
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
-
-            hideAds()
             
+            hideAds()
             totalScore.hidden = true
             countDownText.hidden = false
             gamePlay.hidden = true
@@ -1238,6 +1246,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             startBGAnim()
             
+            oxygenMarker.removeAllActions()
+            oxygenMarker.hidden = true
             countDown = 3
             countDownText.text = String(countDown)
             countDownText.hidden = true
@@ -1593,7 +1603,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                         
-                    } else if bonusItem.position.x < self.size.width / 2 - 50 && introDisplayed == false {
+                    } else if bonusItem.position.x < self.size.width / 2 - 50 && interScene.introDisplayed == false {
                         if bonusItem.spawnHeight != 8888 {
                             oxygenIntro()
                             bonusItem.spawnHeight = 8888
@@ -1620,8 +1630,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         scene.size = skView.bounds.size
         skView.presentScene(scene, transition: transition)
-        
-        scene.scoreBefore = highScore
     }
     
     func updateBGPosition() {
@@ -1854,9 +1862,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func oxygenIntro() {
-        if !gameOver {
+        if !gameOver && interScene.firstStart == true{
             
-            introDisplayed = true
+            interScene.introDisplayed = true
             stopBGAnim()
             
             gamePaused = true
