@@ -29,6 +29,7 @@ struct interScene {
     static var firstStart:Bool = true
     static var introDisplayed:Bool = false
     static var highScore:Int = 0
+    static var oxygenFail:Int = 0
 }
 
 struct secretUnlock {
@@ -391,9 +392,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
             ending = true
             
-            print("test")
-            print("-----")
-            
             hero.physicsBody = nil
             gameOver = true
             gamePause.hidden = true
@@ -504,6 +502,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.physicsBody = nil
         bonusItem.moving = false
         bonusItem.hidden = true
+        interScene.oxygenFail = 0
         oxygenMarker.hidden = true
         bonusItem.removeFromParent()
         oxygenMarker.removeFromParent()
@@ -1556,6 +1555,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     renderOxygenBar()
                 } else {
                     heroGameEnding(nil)
+                    if interScene.oxygenFail == 5 {
+                        interScene.introDisplayed = false
+                    }
+                    interScene.oxygenFail++
                 }
             }
             if oxygen <= oxygenMax / 2 {
@@ -1605,7 +1608,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         
                     } else if bonusItem.position.x < self.size.width / 2 - 50 && interScene.introDisplayed == false {
                         if bonusItem.spawnHeight != 8888 {
-                            oxygenIntro()
+                            if interScene.oxygenFail == 5 {
+                                oxygenIntro()
+                            } else if interScene.firstStart == true {
+                                oxygenIntro()
+                            }
                             bonusItem.spawnHeight = 8888
                         }
                     }
@@ -1862,8 +1869,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func oxygenIntro() {
-        if !gameOver && interScene.firstStart == true{
+        if !gameOver {
             
+            interScene.oxygenFail = 0
             interScene.introDisplayed = true
             stopBGAnim()
             
