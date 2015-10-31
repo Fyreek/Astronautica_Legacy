@@ -219,10 +219,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             spawnPoints.append(-(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor * 3 + spawnPointDist * 3)))
         }
         
-        print(self.size.height)
-        print(spawnPoints)
-        print(SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
-        
         bg.zPosition = 0.9
         bg2.zPosition = 0.9
         bg3.zPosition = 0.9
@@ -383,7 +379,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
     
     func setSpawnPoints() {
-        spawnPointStats = [true, true, true, true, true, true, true]
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
+            spawnPointStats = [true, true, true, true, true]
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
+            spawnPointStats = [true, true, true, true, true, true]        }
     }
     
     func openGameOverMenu() {
@@ -1529,9 +1528,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         
 		if !gamePaused {
-			if !gameOver {
-				updateBGPosition()
-			}
+            updateBGPosition()
             updateEnemiesPosition()
             updateBonusItem()
             updateHeroEmitter()

@@ -53,7 +53,7 @@ func parseDeviceType(identifier: String) -> DeviceType {
     
     if identifier == "i386" || identifier == "x86_64" {
         print("Simulator")
-        return .IPadRetina //.Simulator
+        return .IPhone //.Simulator
     }
     
     switch identifier {
