@@ -1243,6 +1243,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
             
             hideAds()
+            hero.removeAllActions()
             totalScore.hidden = true
             countDownText.hidden = false
             gamePlay.hidden = true
