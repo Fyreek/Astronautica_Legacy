@@ -68,6 +68,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePaused = false
 	var enemyCount = 0
     var deathEnemy: Enemy!
+    var obtainedSpawnCount:Int = 0
     var spawnPoints:[CGFloat] = []
     var spawnPointStats:[Bool] = [true, true, true, true, true]
     var scoreBefore:Int = 0
@@ -161,7 +162,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
-        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
             scalingFactor = interScene.scalingfactoriPad
         }
         
@@ -189,9 +190,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             oxygenBar.setScale(scalingFactor)
-        } else if interScene.deviceType == .IPad {
+        } else if interScene.deviceType == .IPadRetina {
             oxygenBar.setScale(scalingFactor / 3)
-        } else if interScene.deviceType == .IPadMini {
+        } else if interScene.deviceType == .IPad {
             oxygenBar.setScale(scalingFactor)
         }
         oxygenBar.position.x = self.size.width / 2 - 40 - oxygenBar.size.width / 2
@@ -201,24 +202,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         oxygenBar.texture?.filteringMode = .Nearest
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
+            startEnemy = 5
             spawnPoints.append(0)
             spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
             spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))
             spawnPoints.append(self.size.height / 4)
             spawnPoints.append(-(self.size.height / 4))
-            startEnemy = 5
-        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
-            spawnPoints.append(0)
-            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
-            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))
-            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 2 - 40)
-            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 2 - 40))
-            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 3 - 80)
-            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 3 - 80))
-            startEnemy = 7
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
+            startEnemy = 6
+            let spawnPointDist: CGFloat = (self.size.height - (CGFloat(startEnemy) * (SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))) / (CGFloat(startEnemy))
+            spawnPoints.append(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor + (spawnPointDist / 2)))
+            spawnPoints.append(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor * 2 + spawnPointDist * 2))
+            spawnPoints.append(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor * 3 + spawnPointDist * 3))
+            spawnPoints.append(-(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor + (spawnPointDist / 2))))
+            spawnPoints.append(-(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor * 2 + spawnPointDist * 2)))
+            spawnPoints.append(-(self.size.height / 2 - (SKSpriteNode(texture: satelliteTexture).size.height / 2 * scalingFactor * 3 + spawnPointDist * 3)))
         }
         
-        print(scalingFactor)
+        print(self.size.height)
         print(spawnPoints)
         print(SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
         
@@ -314,7 +315,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 10
             gamePause.position.x = -(self.size.width / 2) + gamePause.size.height / 2 + 10
-        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
             gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 20
             gamePause.position.x = -(self.size.width / 2) + gamePause.size.height / 2 + 20
         }
@@ -1114,26 +1115,28 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func enemySpawn(enemy: Enemy) {
-        for var i = 0; i < spawnPoints.count; i++ {
-            if enemy.spawned == false {
-                if spawnPointStats[i].boolValue == true {
-                    enemy.yPos = spawnPoints[i]
-                    enemy.position.y = enemy.yPos
-                    enemy.spawnHeight = enemy.yPos
-                    spawnPointStats[i] = false
-                    enemy.spawned = true
-                    if enemy.name == "Asteroid16" {
-                        asteroidPhysicsBody(enemy)
-                    } else if enemy.name == "Satellite15" {
-                        satellitePhysicsBody(enemy)
-                    } else if enemy.name == "Missile8" {
-                        missilePhysicsBody(enemy)
+        if obtainedSpawnCount <= (spawnPoints.count - 1) {
+            for var i = 0; i < spawnPoints.count; i++ {
+                if enemy.spawned == false {
+                    if spawnPointStats[i].boolValue == true {
+                        enemy.yPos = spawnPoints[i]
+                        enemy.position.y = enemy.yPos
+                        enemy.spawnHeight = enemy.yPos
+                        spawnPointStats[i] = false
+                        enemy.spawned = true
+                        if enemy.name == "Asteroid16" {
+                            asteroidPhysicsBody(enemy)
+                        } else if enemy.name == "Satellite15" {
+                            satellitePhysicsBody(enemy)
+                        } else if enemy.name == "Missile8" {
+                            missilePhysicsBody(enemy)
+                        }
+                        enemy.physicsBody!.affectedByGravity = false
+                        enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
+                        enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+                        enemy.physicsBody!.collisionBitMask = 0
+                        enemy.physicsBody!.allowsRotation = false
                     }
-                    enemy.physicsBody!.affectedByGravity = false
-                    enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
-                    enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
-                    enemy.physicsBody!.collisionBitMask = 0
-                    enemy.physicsBody!.allowsRotation = false
                 }
             }
         }
@@ -1829,6 +1832,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             }
                         }
                         if enemy.position.x < self.size.width / 2  - 200{
+                            obtainedSpawnCount = obtainedSpawnCount - 1
                             if enemy.spawnHeight != 9999 {
                                 for var i = 0; i < spawnPointStats.count; i++ {
                                     if spawnPoints[i] == enemy.spawnHeight {
@@ -1869,7 +1873,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if score % 10 == 0 {
                     addEnemies()
                 }
-            } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+            } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
                 if score % 7 == 0 {
                     addEnemies()
                 }

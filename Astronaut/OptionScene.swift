@@ -56,7 +56,7 @@ class OptionScene: SKScene {
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
-        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
             scalingFactor = interScene.scalingfactoriPad
         }
         

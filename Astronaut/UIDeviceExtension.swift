@@ -46,13 +46,14 @@ public enum DeviceType {
     
     case IPhone
     case IPodTouch
+    case IPadRetina
 }
 
 func parseDeviceType(identifier: String) -> DeviceType {
     
     if identifier == "i386" || identifier == "x86_64" {
         print("Simulator")
-        return .IPad //.Simulator
+        return .IPadRetina //.Simulator
     }
     
     switch identifier {
@@ -77,13 +78,13 @@ func parseDeviceType(identifier: String) -> DeviceType {
         
     case "iPad1,1", "iPad1,2": return .IPad
     case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4": return .IPad //.IPad2
-    case "iPad2,5", "iPad2,6", "iPad2,7": return .IPadMini
-    case "iPad3,1", "iPad3,2", "iPad3,3": return .IPad //.IPad3
-    case "iPad3,4", "iPad3,5", "iPad3,6": return .IPad //.IPad4
-    case "iPad4,1", "iPad4,2", "iPad4,3": return .IPad //.IPadAir
-    case "iPad4,4", "iPad4,5", "iPad4,6": return .IPad //.IPadMiniRetina
-    case "iPad4,7", "iPad4,8": return .IPad //.IPadMini3
-    case "iPad5,3", "iPad5,4": return .IPad //.IPadAir2
+    case "iPad2,5", "iPad2,6", "iPad2,7": return .IPad //.IPadMini
+    case "iPad3,1", "iPad3,2", "iPad3,3": return .IPadRetina //.IPad3
+    case "iPad3,4", "iPad3,5", "iPad3,6": return .IPadRetina //.IPad4
+    case "iPad4,1", "iPad4,2", "iPad4,3": return .IPadRetina //.IPadAir
+    case "iPad4,4", "iPad4,5", "iPad4,6": return .IPadRetina //.IPadMiniRetina
+    case "iPad4,7", "iPad4,8": return .IPadRetina //.IPadMini3
+    case "iPad5,3", "iPad5,4": return .IPadRetina //.IPadAir2
         
     default: return .NotAvailable
     }

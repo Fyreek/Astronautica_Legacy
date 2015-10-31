@@ -58,7 +58,7 @@ class GameScene: SKScene, EGCDelegate {
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
             interScene.scalingfactorSpeed = self.size.width * 2 / 1136
-        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
             scalingFactor = interScene.scalingfactoriPad
             interScene.scalingfactorSpeed = self.size.width * 2 / 1024
         }
@@ -100,7 +100,7 @@ class GameScene: SKScene, EGCDelegate {
             } else {
                 nameLabel.setScale(scalingFactor)
             }
-        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
             nameLabel.setScale(interScene.scalingfactoriPad)
         }
         nameLabel.texture?.filteringMode = .Nearest
