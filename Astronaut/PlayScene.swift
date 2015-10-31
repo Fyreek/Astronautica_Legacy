@@ -207,7 +207,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             spawnPoints.append(self.size.height / 4)
             spawnPoints.append(-(self.size.height / 4))
             startEnemy = 5
-        } else if interScene.deviceType == .IPad {
+        } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
             spawnPoints.append(0)
             spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
             spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))
@@ -1117,10 +1117,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         for var i = 0; i < spawnPoints.count; i++ {
             if enemy.spawned == false {
                 if spawnPointStats[i].boolValue == true {
-                    print(spawnPoints.count)
-                    print(enemies.count)
-                    print(enemiesIndex.count)
-                    print(enemy.name)
                     enemy.yPos = spawnPoints[i]
                     enemy.position.y = enemy.yPos
                     enemy.spawnHeight = enemy.yPos
@@ -1133,8 +1129,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     } else if enemy.name == "Missile8" {
                         missilePhysicsBody(enemy)
                     }
-                    print(enemy)
-                    print("-------------")
                     enemy.physicsBody!.affectedByGravity = false
                     enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
                     enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
@@ -1274,6 +1268,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             
             oxygenMarker.removeAllActions()
             oxygenMarker.hidden = true
+            oxygenMarker.removeFromParent()
             countDown = 3
             countDownText.text = String(countDown)
             countDownText.hidden = true
@@ -1869,12 +1864,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		}
 		
 		if score <= 50 {
-		
-			if score % 10 == 0 {
-			
-				addEnemies()
-				
-			}
+            if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
+                if score % 10 == 0 {
+                    addEnemies()
+                }
+            } else if interScene.deviceType == .IPad || interScene.deviceType == .IPadMini {
+                if score % 7 == 0 {
+                    addEnemies()
+                }
+            }
 		}
 		
 		if (enemies.count - startEnemy) < (score / 10) {
