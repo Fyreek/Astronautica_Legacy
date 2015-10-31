@@ -30,6 +30,7 @@ struct interScene {
     static var introDisplayed:Bool = false
     static var highScore:Int = 0
     static var oxygenFail:Int = 0
+    static var deaths:Int = 0
 }
 
 struct secretUnlock {
@@ -199,11 +200,27 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         addChild(oxygenBar)
         oxygenBar.texture?.filteringMode = .Nearest
         
-        spawnPoints.append(0)
-        spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
-        spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))
-        spawnPoints.append(self.size.height / 4)
-        spawnPoints.append(-(self.size.height / 4))
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
+            spawnPoints.append(0)
+            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
+            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))
+            spawnPoints.append(self.size.height / 4)
+            spawnPoints.append(-(self.size.height / 4))
+            startEnemy = 5
+        } else if interScene.deviceType == .IPad {
+            spawnPoints.append(0)
+            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
+            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor))
+            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 2 - 40)
+            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 2 - 40))
+            spawnPoints.append(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 3 - 80)
+            spawnPoints.append(-(self.size.height / 2 - SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor * 3 - 80))
+            startEnemy = 7
+        }
+        
+        print(scalingFactor)
+        print(spawnPoints)
+        print(SKSpriteNode(texture: satelliteTexture).size.height * scalingFactor)
         
         bg.zPosition = 0.9
         bg2.zPosition = 0.9
@@ -365,13 +382,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
     
     func setSpawnPoints() {
-        spawnPointStats = [true, true, true, true, true]
+        spawnPointStats = [true, true, true, true, true, true, true]
     }
     
     func openGameOverMenu() {
 
         showAds()
-        showFSAd()
+        if interScene.deaths >= 3 {
+            showFSAd()
+        }
         
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
@@ -391,7 +410,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         if ending == false {
         
             ending = true
-            
+            interScene.deaths++
             hero.physicsBody = nil
             gameOver = true
             gamePause.hidden = true
@@ -1098,6 +1117,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         for var i = 0; i < spawnPoints.count; i++ {
             if enemy.spawned == false {
                 if spawnPointStats[i].boolValue == true {
+                    print(spawnPoints.count)
+                    print(enemies.count)
+                    print(enemiesIndex.count)
+                    print(enemy.name)
                     enemy.yPos = spawnPoints[i]
                     enemy.position.y = enemy.yPos
                     enemy.spawnHeight = enemy.yPos
@@ -1110,6 +1133,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                     } else if enemy.name == "Missile8" {
                         missilePhysicsBody(enemy)
                     }
+                    print(enemy)
+                    print("-------------")
                     enemy.physicsBody!.affectedByGravity = false
                     enemy.physicsBody!.categoryBitMask = ColliderType.Enemy.rawValue
                     enemy.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
@@ -1170,6 +1195,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func showFSAd() {
         if interScene.adState == true {
+            interScene.deaths = 0
             NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
         }
     }
@@ -1851,7 +1877,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			}
 		}
 		
-		if (enemies.count - 5) < (score / 10) {
+		if (enemies.count - startEnemy) < (score / 10) {
 		
 			addEnemies()
 		}

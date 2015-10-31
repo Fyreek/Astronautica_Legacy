@@ -15,6 +15,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     var UIiAd: ADBannerView = ADBannerView()
     var gotScore:Bool = false
     var gcScore:Int = -1
+    var loadedAd:Bool = false
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -202,6 +203,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     func bannerViewDidLoadAd(banner: ADBannerView!) {
         if interScene.playSceneDidLoad == false {
             if interScene.adState == true {
+                loadedAd = true
                 showBannerAd()
                 self.view.addSubview(UIiAd)
                 UIView.beginAnimations(nil, context: nil)
@@ -233,15 +235,17 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func showBannerAd() {
-        addAdConstraints()
-        UIiAd.hidden = false
-        UIiAd.alpha = 1.0
-        
-        UIView.animateWithDuration(0.25, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-        
-            self.UIiAd.alpha = 1.0
+        if loadedAd == true {
+            addAdConstraints()
+            UIiAd.hidden = false
+            UIiAd.alpha = 1.0
             
-        }, completion: nil)
+            UIView.animateWithDuration(0.25, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+            
+                self.UIiAd.alpha = 1.0
+                
+            }, completion: nil)
+        }
     }
     
     func hideBannerAd() {
