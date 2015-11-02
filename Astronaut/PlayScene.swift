@@ -518,6 +518,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func collisionHeroBonusItem(bonusItem: BonusItem) {
+        
         bonusItem.physicsBody = nil
         bonusItem.moving = false
         bonusItem.hidden = true
@@ -1630,13 +1631,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         }
                         
                     } else if bonusItem.position.x < self.size.width / 2 - 50 && interScene.introDisplayed == false {
-                        if bonusItem.spawnHeight != 8888 {
+                        
+                        if bonusItem.spawnHeight != 9999 {
                             if interScene.oxygenFail == 5 {
                                 oxygenIntro()
+                                bonusItem.spawnHeight = 9999
                             } else if interScene.firstStart == true {
                                 oxygenIntro()
+                                bonusItem.spawnHeight = 9999
                             }
-                            bonusItem.spawnHeight = 8888
                         }
                     }
                 }
@@ -1846,12 +1849,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
         }
 	}
-	
+    
 	func updateScore(){
 		
 		score++
 		scoreLabel.text = String(score)
-		
+        
 		if score % 5 == 0 {
 			
 			totalSpeedAsteroid = totalSpeedAsteroid + 0.1
