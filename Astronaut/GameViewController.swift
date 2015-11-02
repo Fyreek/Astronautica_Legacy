@@ -35,7 +35,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
-        
+        self.UIiAd.backgroundColor = UIColor(rgba: "#1E2124")
         UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
         
@@ -160,9 +160,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func addAdConstraints() {
-        let viewsDictionary = ["bannerView":UIiAd]
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
-        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
+        NSLayoutConstraint(item: UIiAd, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .BottomMargin, multiplier: 1.0, constant: 0.0).active = true
     }
     
 	override func shouldAutorotate() -> Bool {

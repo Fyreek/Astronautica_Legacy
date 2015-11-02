@@ -60,13 +60,15 @@ class OptionScene: SKScene {
             scalingFactor = interScene.scalingfactoriPad
         }
         
+        self.backgroundColor = UIColor(rgba: "#1E2124")
+        
         bg.zPosition = 0.9
         bg2.zPosition = 0.9
         bg3.zPosition = 0.9
         
-        bg.setScale(interScene.scalingfactoriPhone)
-        bg2.setScale(interScene.scalingfactoriPhone)
-        bg3.setScale(interScene.scalingfactoriPhone)
+        bg.setScale(scalingFactor)
+        bg2.setScale(scalingFactor)
+        bg3.setScale(scalingFactor)
         
         bg.texture?.filteringMode = .Nearest
         bg2.texture?.filteringMode = .Nearest

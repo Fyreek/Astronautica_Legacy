@@ -168,6 +168,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         scoreBefore = interScene.highScore
         
+        self.backgroundColor = UIColor(rgba: "#1E2124")
+        
         if interScene.firstStart == true {
             oxygenMarker.hidden = true
             oxygenMarker.setScale(scalingFactor)
