@@ -29,6 +29,7 @@ struct interScene {
     static var firstStart:Bool = true
     static var introDisplayed:Bool = false
     static var highScore:Int = 0
+    static var highScoreBefore:Int = 0
     static var oxygenFail:Int = 0
     static var deaths:Int = 0
 }
@@ -104,7 +105,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var backgroundAnimationFrames = [SKTexture]()
     var oxygenBarAnimationFrames = [SKTexture]()
     
-	var gameSpeed:Float = 1
+	var gameSpeed:Float = 1.0
 	var totalSpeedAsteroid:CGFloat = 3.5
 	var totalSpeedSatellite:CGFloat = 2.5
 	var totalSpeedRocket:CGFloat = 6
@@ -181,14 +182,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             addChild(oxygenMarker)
         }
         
-        totalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed
-        totalSpeedSatellite = 2.5 * interScene.scalingfactorSpeed
-        totalSpeedRocket = 6 * interScene.scalingfactorSpeed
-        totalSpeedBonusItem = 4 * interScene.scalingfactorSpeed
-        normalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed
-        normalSpeedSatellite = 2.5 * interScene.scalingfactorSpeed
-        normalSpeedRocket = 6 * interScene.scalingfactorSpeed
-        normalSpeedBonusItem = 4 * interScene.scalingfactorSpeed
+        totalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        totalSpeedSatellite = 2.5 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        totalSpeedRocket = 6 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        totalSpeedBonusItem = 4 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        normalSpeedAsteroid = 3.5 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        normalSpeedSatellite = 2.5 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        normalSpeedRocket = 6 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
+        normalSpeedBonusItem = 4 * interScene.scalingfactorSpeed * CGFloat(gameSpeed)
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             oxygenBar.setScale(scalingFactor)
@@ -491,6 +492,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         bonusItem.physicsBody = nil
         otherBody.physicsBody = nil
+        
+        for var i = 0; i < spawnPointStats.count; i++ {
+            if spawnPoints[i] == bonusItem.spawnHeight {
+                spawnPointStats[i] = true
+                bonusItem.spawnHeight = 9999
+            }
+        }
+        
         bonusItem.moving = false
         otherBody.deathMoving = true
         
@@ -524,6 +533,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.physicsBody = nil
         bonusItem.moving = false
         bonusItem.hidden = true
+        
+        for var i = 0; i < spawnPointStats.count; i++ {
+            if spawnPoints[i] == bonusItem.spawnHeight {
+                spawnPointStats[i] = true
+                bonusItem.spawnHeight = 9999
+            }
+        }
+        
         interScene.oxygenFail = 0
         oxygenMarker.hidden = true
         bonusItem.removeFromParent()
@@ -705,7 +722,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         emptyAll()
         
-		hero.movementSpeed = Hero().movementSpeed
+		hero.movementSpeed = Hero().movementSpeed * CGFloat(gameSpeed)
         heroPhysicsBody()
 		hero.physicsBody!.affectedByGravity = false
 		hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
@@ -731,7 +748,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		totalScore.runAction(SKAction.fadeOutWithDuration(1.0))
 		score = 0
 		scoreLabel.text = "0"
-		gameSpeed = 1
 		totalSpeedAsteroid = normalSpeedAsteroid
 		totalSpeedSatellite = normalSpeedSatellite
 		totalSpeedRocket = normalSpeedRocket
@@ -1859,6 +1875,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
 		if score % 5 == 0 {
 			
+            gameSpeed = gameSpeed + 0.1
 			totalSpeedAsteroid = totalSpeedAsteroid + 0.1
 			totalSpeedSatellite = totalSpeedSatellite + 0.1
 			totalSpeedRocket = totalSpeedRocket + 0.1

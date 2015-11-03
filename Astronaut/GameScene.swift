@@ -23,8 +23,6 @@ class GameScene: SKScene, EGCDelegate {
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     var bgAnimSpeed:CGFloat = 4
     var ticks:Int = 0
-	var highScore:Int = 0
-    var highScoreBefore:Int = 0
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var lastSpriteName:String = ""
@@ -66,12 +64,11 @@ class GameScene: SKScene, EGCDelegate {
         
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
         self.backgroundColor = UIColor(rgba: "#1E2124")
-        
-        highScore = interScene.highScore
+
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
 		highScoreLabel.fontSize = 15
         highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
-		highScoreLabel.text = "Highscore: " + String(highScore)
+		highScoreLabel.text = "Highscore: " + String(interScene.highScore)
 		
         bg.zPosition = 0.9
         bg2.zPosition = 0.9
@@ -172,6 +169,12 @@ class GameScene: SKScene, EGCDelegate {
             interScene.firstStart = NSUserDefaults.standardUserDefaults().boolForKey("firstStart").boolValue
         } else {
             interScene.firstStart = true
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("highScore") {
+            interScene.highScoreBefore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
+        } else {
+            interScene.highScoreBefore = 0
         }
         
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {
@@ -523,10 +526,11 @@ class GameScene: SKScene, EGCDelegate {
         updateEnemyPosition()
         
         if ticks == 20 {
-            if highScore > highScoreBefore {
+            if interScene.highScore > interScene.highScoreBefore {
         
-                highScoreLabel.text = "Highscore: " + String(highScore)
-                NSUserDefaults.standardUserDefaults().setInteger(highScore, forKey: "highScore")
+                highScoreLabel.text = "Highscore: " + String(interScene.highScore)
+                NSUserDefaults.standardUserDefaults().setInteger(interScene.highScore, forKey: "highScore")
+                interScene.highScoreBefore = interScene.highScore
             
             }
             if spawnActive == false {
@@ -537,7 +541,6 @@ class GameScene: SKScene, EGCDelegate {
                 }
             }
             
-            highScoreBefore = highScore
             ticks = 0
         }
         ticks = ticks + 1

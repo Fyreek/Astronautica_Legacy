@@ -148,8 +148,9 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
                         
                     } else {
                         
-                            NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
-                            NSUserDefaults.standardUserDefaults().synchronize()
+                        NSUserDefaults.standardUserDefaults().setInteger(self.gcScore, forKey: "highScore")
+                        NSUserDefaults.standardUserDefaults().synchronize()
+                        interScene.highScore = self.gcScore
 
                     }
                     
