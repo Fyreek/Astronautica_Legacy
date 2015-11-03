@@ -161,8 +161,9 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func addAdConstraints() {
-        NSLayoutConstraint(item: UIiAd, attribute: .Bottom, relatedBy: .Equal, toItem: view, attribute: .BottomMargin, multiplier: 1.0, constant: 0.0).active = true
-    }
+        let viewsDictionary = ["bannerView":UIiAd]
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[bannerView]|", options: [], metrics: nil, views: viewsDictionary))
+        view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:[bannerView]|", options: [], metrics: nil, views: viewsDictionary))    }
     
 	override func shouldAutorotate() -> Bool {
 		return true
