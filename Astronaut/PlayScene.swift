@@ -246,8 +246,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         
-		//highScore = interScene.highScore
-        
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
 		
         let explosionAtlas = SKTextureAtlas(named: "explosion")
@@ -923,10 +921,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 angle = -3
             }
             if hero.position.y > enemy.position.y {
-                //enemy.runAction(SKAction.rotateToAngle(360 - angle * Pi / 180 , duration: 0))
                 enemy.runAction(SKAction.rotateToAngle(((0) * Pi) / 180, duration: 0))
             } else if hero.position.y < enemy.position.y {
-                //enemy.runAction(SKAction.rotateToAngle(360 - angle * Pi / 180 , duration: 0))
                 enemy.runAction(SKAction.rotateToAngle(((0) * Pi) / 180, duration: 0))
             }
         }
@@ -1231,8 +1227,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func pauseGame() {
 		
-		//Spiel pausieren.
-		
 		if !gameOver {
 			
             showAds()
@@ -1256,8 +1250,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	}
 	
 	func resumeGame() {
-		
-		//Spiel fortsetzen.
 		
 		if !gameOver {
             
