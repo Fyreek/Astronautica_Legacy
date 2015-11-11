@@ -121,6 +121,7 @@ class GameScene: SKScene, EGCDelegate {
 		highScoreLabel.zPosition = 1.2
 		highScoreLabel.alpha = 0.3
 		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7")
+        highScoreLabel.name = "highScoreLabel"
 		
         menuOptionButton.setScale(scalingFactor)
 		addChild(menuOptionButton)
@@ -272,6 +273,9 @@ class GameScene: SKScene, EGCDelegate {
             } else if self.nodeAtPoint(location) == self.menuOptionButton {
                 lastSpriteName = self.menuOptionButton.name!
                 self.menuOptionButton.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.highScoreLabel {
+                lastSpriteName = self.highScoreLabel.name!
+                self.highScoreLabel.runAction(buttonPressDark)
             }
             for enemy in enemies {
                 if self.nodeAtPoint(location) == enemy {
@@ -300,6 +304,11 @@ class GameScene: SKScene, EGCDelegate {
         
             menuOptionButton.removeAllActions()
             menuOptionButton.runAction(buttonPressLight)
+            
+        } else if lastSpriteName == self.highScoreLabel.name {
+        
+            highScoreLabel.removeAllActions()
+            highScoreLabel.runAction(buttonPressLight)
             
         }
     }
@@ -333,15 +342,24 @@ class GameScene: SKScene, EGCDelegate {
                         self.showOptionScene()
                     }
                 }
-            } else  {
+            } else if self.nodeAtPoint(location) == self.highScoreLabel {
+                removeButtonAnim()
+                if lastSpriteName == highScoreLabel.name {
+                    self.highScoreLabel.runAction(buttonPressLight) {
+                        NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
+                    }
+                }
+            }else  {
 
                 menuHSButton.removeAllActions()
                 menuOptionButton.removeAllActions()
                 startGameButton.removeAllActions()
+                highScoreLabel.removeAllActions()
                 
                 self.menuHSButton.runAction(buttonPressLight)
                 self.menuOptionButton.runAction(buttonPressLight)
                 self.startGameButton.runAction(buttonPressLight)
+                self.highScoreLabel.removeAllActions()
                 
             }
         }
