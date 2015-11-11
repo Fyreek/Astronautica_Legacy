@@ -67,7 +67,6 @@ class GameScene: SKScene, EGCDelegate {
 
 		highScoreLabel = SKLabelNode(fontNamed: "Minecraft")
 		highScoreLabel.fontSize = 15
-        highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
 		highScoreLabel.text = "Highscore: " + String(interScene.highScore)
 		
         bg.zPosition = 0.9
@@ -119,8 +118,8 @@ class GameScene: SKScene, EGCDelegate {
 		highScoreLabel.position.x = 0
 		highScoreLabel.position.y = -(self.size.height / 36)
 		highScoreLabel.zPosition = 1.2
-		highScoreLabel.alpha = 0.3
-		highScoreLabel.fontColor = UIColor(rgba: "#d7d7d7")
+		highScoreLabel.alpha = 1
+		highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
         highScoreLabel.name = "highScoreLabel"
 		
         menuOptionButton.setScale(scalingFactor)
@@ -162,6 +161,36 @@ class GameScene: SKScene, EGCDelegate {
         } else {
             menuHSButton.texture = SKTexture(imageNamed: "DLeaderboardsButton32")
         }
+    }
+    
+    func labelColorDark() {
+        UIView.animateWithDuration(1.0, animations: {
+            
+            self.highScoreLabel.fontColor = UIColor(rgba: "#4C515E")
+            
+            }, completion: {(finished: Bool) -> Void in
+                //Load new Stuff
+        })
+    }
+    
+    func labelColorLight() {
+        UIView.animateWithDuration(1.0, animations: {
+            
+            self.highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
+            
+            }, completion: {(finished: Bool) -> Void in
+                //Load new Stuff
+        })
+    }
+    
+    func labelColorLightAction() {
+        UIView.animateWithDuration(1.0, animations: {
+            
+            self.highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
+            
+            }, completion: {(finished: Bool) -> Void in
+                NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
+        })
     }
     
     func loadingNSUser() {
@@ -275,7 +304,7 @@ class GameScene: SKScene, EGCDelegate {
                 self.menuOptionButton.runAction(buttonPressDark)
             } else if self.nodeAtPoint(location) == self.highScoreLabel {
                 lastSpriteName = self.highScoreLabel.name!
-                self.highScoreLabel.runAction(buttonPressDark)
+                labelColorDark()
             }
             for enemy in enemies {
                 if self.nodeAtPoint(location) == enemy {
@@ -308,7 +337,7 @@ class GameScene: SKScene, EGCDelegate {
         } else if lastSpriteName == self.highScoreLabel.name {
         
             highScoreLabel.removeAllActions()
-            highScoreLabel.runAction(buttonPressLight)
+            labelColorLight()
             
         }
     }
@@ -345,9 +374,7 @@ class GameScene: SKScene, EGCDelegate {
             } else if self.nodeAtPoint(location) == self.highScoreLabel {
                 removeButtonAnim()
                 if lastSpriteName == highScoreLabel.name {
-                    self.highScoreLabel.runAction(buttonPressLight) {
-                        NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
-                    }
+                    labelColorLightAction()
                 }
             }else  {
 
@@ -359,7 +386,7 @@ class GameScene: SKScene, EGCDelegate {
                 self.menuHSButton.runAction(buttonPressLight)
                 self.menuOptionButton.runAction(buttonPressLight)
                 self.startGameButton.runAction(buttonPressLight)
-                self.highScoreLabel.removeAllActions()
+                labelColorLight()
                 
             }
         }
