@@ -272,7 +272,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func showShareMenu() {
-        let firstActivityItem = "I scored \(interScene.highScore) points in Astronautica. Get it here:\nhttp://bit.ly/1koZQ4e"
+        let firstActivityItem = "I scored \(interScene.highScore) points in Astronautica. Check it out:\nhttp://bit.ly/1koZQ4e"
         
         let activityViewController : UIActivityViewController = UIActivityViewController(activityItems: [firstActivityItem], applicationActivities: nil)
         
