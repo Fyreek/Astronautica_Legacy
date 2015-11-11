@@ -45,6 +45,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOn", name: "MusicOn", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOff", name: "MusicOff", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "displayAdAlert", name: "displayAdAlert", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showShareMenu", name: "ShareMenu", object: nil)
         
         UIiAd.delegate = self
 		EGC.sharedInstance(self)
@@ -268,6 +269,15 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     
     func loadAds() {
         InAppPurchase.sharedInstance.loadAds()
+    }
+    
+    func showShareMenu() {
+        let firstActivityItem = "I just scored \(interScene.highScore) points in Astronautica. Get it here:\nhttp://bit.ly/1koZQ4e"
+        
+        let activityViewController : UIActivityViewController = UIActivityViewController(activityItems: [firstActivityItem], applicationActivities: nil)
+        
+        self.presentViewController(activityViewController, animated: true, completion: nil)
+
     }
     
     func displayAdAlert() {

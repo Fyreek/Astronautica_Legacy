@@ -182,7 +182,7 @@ class GameScene: SKScene, EGCDelegate {
         } else {
             interScene.adState = true
         }
-        
+
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
             secretUnlock.secretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         } else {

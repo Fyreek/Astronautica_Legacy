@@ -94,6 +94,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var enemySound:Bool = false
     var bgAnimSpeed:CGFloat = 16
     var ending:Bool = false
+    var newHighScore:Bool = false
 	
     var gameOverMenuLoaded = false
     
@@ -130,6 +131,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePause = SKSpriteNode(imageNamed: "PauseButton32")
 	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
+    var gameShare = SKSpriteNode(imageNamed: "ShareButton18")
     
     var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
@@ -307,6 +309,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		menu.position.x = (self.size.width / 8)
         menu.zPosition = 1.2
         menu.texture?.filteringMode = .Nearest
+        
+        gameShare.setScale(scalingFactor)
+        gameShare.position.y = 0
+        gameShare.position.x = 0
+        gameShare.zPosition = 1.2
+        gameShare.texture?.filteringMode = .Nearest
 		
         gamePause.setScale(scalingFactor)
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
@@ -343,6 +351,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		addChild(scoreLabel)
 		addChild(refresh)
 		addChild(menu)
+        addChild(gameShare)
 		addChild(gamePause)
 		addChild(gamePlay)
         addChild(menuPause)
@@ -372,6 +381,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		menu.name = "menu"
 		menu.hidden = true
 		menu.alpha = 0
+        
+        gameShare.name = "share"
+        gameShare.hidden = true
+        gameShare.alpha = 0
         
         GameViewController.prepareInterstitialAds()
         
@@ -403,7 +416,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         menuPause.zPosition = 0.9
         menu.hidden = false
         menu.runAction(SKAction.fadeInWithDuration(1.0))
-        
+        if newHighScore == true {
+            gameShare.zPosition = 1.2
+            gameShare.hidden = false
+            gameShare.runAction(SKAction.fadeInWithDuration(1.0))
+        }
     }
     
     func heroGameEnding(otherBody: Enemy?) {
@@ -464,6 +481,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 
             } else if score > scoreBefore {
                 
+                newHighScore = true
+                
                 scoreBefore = score
                 NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
                 NSUserDefaults.standardUserDefaults().synchronize()
@@ -473,7 +492,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 totalScore.hidden = false
                 totalScore.text = ("New Highscore: ") + String(score) + (" points!")
                 totalScore.runAction(SKAction.fadeInWithDuration(1.0))
-                
             }
         }
 	}
@@ -668,22 +686,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             fatalError("other collision: \(contactMask)")
         }
 	}
-    
-    func testSoundPlay() {
-        var foundSound:Bool = false
-        for enemy in enemies {
-            if enemy.name == "Satellite15" {
-                if enemy.didPlaySound == true {
-                    enemy.didPlaySound = false
-                    enemySound = false
-                    foundSound = true
-                }
-            }
-        }
-        if foundSound == false {
-            enemySound = false
-        }
-    }
     
     func emptyAll() {
         for bonusItem in bonusItems {
@@ -888,8 +890,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
         enemy.setScale(scalingFactor)
         enemy.zPosition = 1.1
-        
-        testSoundPlay()
         
 		enemy.movementSpeed = movementSpeed
 		enemy.yPos = yPos
@@ -1374,17 +1374,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if gameOver {
                     if self.nodeAtPoint(location) == self.refresh {
                         lastSpriteName = self.refresh.name!
-                        if gameOver {
-                            if !countDownRunning {
-                                self.refresh.runAction(buttonPressDark)
-                            }
+                        if !countDownRunning {
+                            self.refresh.runAction(buttonPressDark)
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
                         lastSpriteName = self.menu.name!
-                        if gameOver {
-                            if !countDownRunning {
-                                self.menu.runAction(buttonPressDark)
-                            }
+                        if !countDownRunning {
+                            self.menu.runAction(buttonPressDark)
+                        }
+                    } else if self.nodeAtPoint(location) == self.gameShare {
+                        lastSpriteName = self.gameShare.name!
+                        if !countDownRunning {
+                            self.gameShare.runAction(buttonPressDark)
                         }
                     }
                 } else if !gameOver {
@@ -1423,26 +1424,31 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             if !gamePaused {
                 if gameOver {
                     if self.nodeAtPoint(location) == self.refresh {
-                        if gameOver {
-                            if !countDownRunning {
-                                removeButtonAnim()
-                                if lastSpriteName == self.refresh.name {
-                                    self.lastSpriteName = "empty"
-                                    self.refresh.runAction(buttonPressLight){
-                                        self.showPlayScene()
-                                    }
+                        if !countDownRunning {
+                            removeButtonAnim()
+                            if lastSpriteName == self.refresh.name {
+                                self.lastSpriteName = "empty"
+                                self.refresh.runAction(buttonPressLight){
+                                    self.showPlayScene()
                                 }
                             }
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
-                        if gameOver {
-                            if !countDownRunning {
-                                removeButtonAnim()
-                                if lastSpriteName == self.menu.name {
-                                    self.lastSpriteName = "empty"
-                                    self.menu.runAction(buttonPressLight){
-                                        self.showMenu()
-                                    }
+                        if !countDownRunning {
+                            removeButtonAnim()
+                            if lastSpriteName == self.menu.name {
+                                self.lastSpriteName = "empty"
+                                self.menu.runAction(buttonPressLight){
+                                    self.showMenu()
+                                }
+                            }
+                        }
+                    } else if self.nodeAtPoint(location) == self.gameShare {
+                        if !countDownRunning {
+                            if lastSpriteName == self.gameShare.name {
+                                self.lastSpriteName = "empty"
+                                self.gameShare.runAction(buttonPressLight){
+                                    self.showShareMenu()
                                 }
                             }
                         }
@@ -1519,11 +1525,17 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         refresh.removeAllActions()
         gamePlay.removeAllActions()
         gamePause.removeAllActions()
+        gameShare.removeAllActions()
         self.menuPause.runAction(buttonPressLight)
         self.menu.runAction(buttonPressLight)
         self.refresh.runAction(buttonPressLight)
         self.gamePlay.runAction(buttonPressLight)
         self.gamePause.runAction(buttonPressLight)
+        self.gameShare.runAction(buttonPressLight)
+    }
+    
+    func showShareMenu() {
+        NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
     }
     
 	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
