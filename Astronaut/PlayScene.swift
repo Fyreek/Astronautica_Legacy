@@ -409,6 +409,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         refresh.hidden = false
         refresh.runAction(SKAction.fadeInWithDuration(1.0)){
             self.gameOverMenuLoaded = true
+            self.pulsingPlayButton()
         }
         refresh.zPosition = 1.2
         menu.zPosition = 1.2
@@ -502,6 +503,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         } else {
             NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         }
+    }
+    
+    func pulsingPlayButton() {
+        let pulseUp = SKAction.scaleTo(scalingFactor + 0.02, duration: 1.0)
+        let pulseDown = SKAction.scaleTo(scalingFactor - 0.02, duration: 1.0)
+        let pulse = SKAction.sequence([pulseUp, pulseDown])
+        let repeatPulse = SKAction.repeatActionForever(pulse)
+        self.refresh.runAction(repeatPulse, withKey: "pulse")
     }
     
     func collisionEnemyBonusItem(otherBody: Enemy, bonusItem: BonusItem) {
@@ -1376,6 +1385,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         lastSpriteName = self.refresh.name!
                         if !countDownRunning {
                             self.refresh.runAction(buttonPressDark)
+                            self.refresh.removeActionForKey("pulse")
                         }
                     } else if self.nodeAtPoint(location) == self.menu {
                         lastSpriteName = self.menu.name!
@@ -1532,6 +1542,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.gamePlay.runAction(buttonPressLight)
         self.gamePause.runAction(buttonPressLight)
         self.gameShare.runAction(buttonPressLight)
+        pulsingPlayButton()
     }
     
     func showShareMenu() {

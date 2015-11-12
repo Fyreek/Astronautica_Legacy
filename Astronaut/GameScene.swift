@@ -153,6 +153,7 @@ class GameScene: SKScene, EGCDelegate {
         }
         
         startBGAnim()
+        pulsingPlayButton()
 	}
     
     func switchLsButton() {
@@ -238,6 +239,14 @@ class GameScene: SKScene, EGCDelegate {
         }
     }
     
+    func pulsingPlayButton() {
+        let pulseUp = SKAction.scaleTo(scalingFactor + 0.02, duration: 1.0)
+        let pulseDown = SKAction.scaleTo(scalingFactor - 0.02, duration: 1.0)
+        let pulse = SKAction.sequence([pulseUp, pulseDown])
+        let repeatPulse = SKAction.repeatActionForever(pulse)
+        self.startGameButton.runAction(repeatPulse, withKey: "pulse")
+    }
+    
     func whichEnemy() {
         let number:Int = Int(arc4random_uniform(2))
         if number == 0 {
@@ -294,6 +303,7 @@ class GameScene: SKScene, EGCDelegate {
 			if self.nodeAtPoint(location) == self.startGameButton {
                 lastSpriteName = self.startGameButton.name!
                 self.startGameButton.runAction(buttonPressDark)
+                self.startGameButton.removeActionForKey("pulse")
             } else if self.nodeAtPoint(location) == self.menuHSButton {
                 if interScene.connectedToGC == true {
                     lastSpriteName = self.menuHSButton.name!
@@ -340,6 +350,7 @@ class GameScene: SKScene, EGCDelegate {
             labelColorLight()
             
         }
+        pulsingPlayButton()
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -387,6 +398,7 @@ class GameScene: SKScene, EGCDelegate {
                 self.menuOptionButton.runAction(buttonPressLight)
                 self.startGameButton.runAction(buttonPressLight)
                 labelColorLight()
+                pulsingPlayButton()
                 
             }
         }
