@@ -30,7 +30,7 @@ class OptionScene: SKScene {
     var noAdSprite = SKSpriteNode(imageNamed: "RemoveAdsButton32")
     let soundSprite = SKSpriteNode(imageNamed: "SoundOnButton32")
     let musicSprite = SKSpriteNode(imageNamed: "MusicOnButton32")
-    var versionLabel = SKLabelNode(text: "")
+    var versionLabel = SKLabelNode(text: "0")
     let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
     var soundOn:Bool = true
@@ -43,6 +43,7 @@ class OptionScene: SKScene {
     var lastSpriteName:String = ""
     var scalingFactor:CGFloat = 1
     var isSecretUnlocked:Bool = false
+    var secretShown:Bool = false
     
     override func didMoveToView(view: SKView) {
         
@@ -53,6 +54,10 @@ class OptionScene: SKScene {
 
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeRight.direction = .Right
+        self.view!.addGestureRecognizer(swipeRight)
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
@@ -94,6 +99,9 @@ class OptionScene: SKScene {
         redSlider.value = heroColor.heroColorRed
         redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         redSlider.alpha = 0
+        redSlider.setThumbImage(UIImage(named: "Astronaut25"), forState: UIControlState.Normal)
+        redSlider.setMinimumTrackImage(UIImage(named: "RedSlider3"), forState: UIControlState.Normal)
+        redSlider.setMaximumTrackImage(UIImage(named: "GreySlider3"), forState: UIControlState.Normal)
         
         greenSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 3, 280, 20))
         greenSlider.minimumValue = 0
@@ -104,6 +112,10 @@ class OptionScene: SKScene {
         greenSlider.value = heroColor.heroColorGreen
         greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         greenSlider.alpha = 0
+        greenSlider.alpha = 0
+        greenSlider.setThumbImage(UIImage(named: "Astronaut25"), forState: UIControlState.Normal)
+        greenSlider.setMinimumTrackImage(UIImage(named: "GreenSlider3"), forState: UIControlState.Normal)
+        greenSlider.setMaximumTrackImage(UIImage(named: "GreySlider3"), forState: UIControlState.Normal)
         
         blueSlider = UISlider(frame: CGRectMake(self.size.width / 2 - 140, self.size.height / 2 , 280, 20))
         blueSlider.minimumValue = 0
@@ -114,6 +126,10 @@ class OptionScene: SKScene {
         blueSlider.value = heroColor.heroColorBlue
         blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
         blueSlider.alpha = 0
+        blueSlider.alpha = 0
+        blueSlider.setThumbImage(UIImage(named: "Astronaut25"), forState: UIControlState.Normal)
+        blueSlider.setMinimumTrackImage(UIImage(named: "BlueSlider3"), forState: UIControlState.Normal)
+        blueSlider.setMaximumTrackImage(UIImage(named: "GreySlider3"), forState: UIControlState.Normal)
         
         coloredSprite.setScale(scalingFactor)
         coloredSprite.position.x = 0
@@ -131,19 +147,18 @@ class OptionScene: SKScene {
         addChild(noAdSprite)
         noAdSprite.texture?.filteringMode = .Nearest
         
+        versionLabel = SKLabelNode(fontNamed: "Minecraft")
+        versionLabel.fontSize = 15
+        addChild(versionLabel)
         if let version = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? String {
             self.versionLabel.text = version
         }
-        
-        versionLabel = SKLabelNode(fontNamed: "Minecraft")
-        versionLabel.fontSize = 15
         versionLabel.fontColor = UIColor(rgba: "#5F6575")
-        versionLabel.setScale(scalingFactor / 1.5)
         versionLabel.zPosition = 1.2
         versionLabel.position.x = self.size.width / 2 - 50 * scalingFactor / 1.5
         versionLabel.position.y = self.size.height / 2 - 50 * scalingFactor / 1.5
+        versionLabel.alpha = 1.0
         versionLabel.hidden = true
-        addChild(versionLabel)
         
         musicSprite.setScale(scalingFactor)
         musicSprite.position.x = -(self.size.width / 4 - musicSprite.size.width)
@@ -214,6 +229,7 @@ class OptionScene: SKScene {
         sliderValueDidChange()
         adButtonSwitch()
         startBGAnim()
+        optionSceneActive = true
     }
     
     func adButtonSwitch() {
@@ -228,6 +244,27 @@ class OptionScene: SKScene {
         bg.runAction(SKAction.moveToX(bg.position.x - self.size.width * 2 - SKSpriteNode(texture: satelliteTexture).size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
         bg2.runAction(SKAction.moveToX(bg2.position.x - self.size.width * 2 - SKSpriteNode(texture: satelliteTexture).size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
         bg3.runAction(SKAction.moveToX(bg3.position.x - self.size.width * 2 - SKSpriteNode(texture: satelliteTexture).size.width / 2, duration: NSTimeInterval(self.size.width / CGFloat(gameSpeed) / bgAnimSpeed)))
+    }
+    
+    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+        
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.Right:
+                if secretShown == false {
+                    showMenu()
+                }
+            case UISwipeGestureRecognizerDirection.Down:
+                print("Swiped down")
+            case UISwipeGestureRecognizerDirection.Left:
+                print("Swiped left")
+            case UISwipeGestureRecognizerDirection.Up:
+                print("Swiped up")
+            default:
+                break
+            }
+        }
     }
     
     func stopBGAnim() {
@@ -298,6 +335,7 @@ class OptionScene: SKScene {
     
     func showHeroColorMenu() {
         resetSecret()
+        secretShown = true
         soundSprite.runAction(SKAction.fadeOutWithDuration(1.0))
         musicSprite.runAction(SKAction.fadeOutWithDuration(1.0))
         noAdSprite.runAction(SKAction.fadeOutWithDuration(1.0)){
@@ -561,16 +599,23 @@ class OptionScene: SKScene {
             
         })
         
-        let transition = SKTransition.fadeWithDuration(1)
+        if secretShown == true {
             
-        let scene = GameScene(size: self.size)
-        let skView = self.view as SKView!
-        skView.ignoresSiblingOrder = true
-        scene.scaleMode = .ResizeFill
-        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        scene.size = skView.bounds.size
-        skView.presentScene(scene, transition: transition)
-
+            showSoundMenu()
+            secretShown = false
+            
+        } else {
+        
+            let transition = SKTransition.fadeWithDuration(1)
+            let scene = GameScene(size: self.size)
+            let skView = self.view as SKView!
+            skView.ignoresSiblingOrder = true
+            scene.scaleMode = .ResizeFill
+            scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            scene.size = skView.bounds.size
+            skView.presentScene(scene, transition: transition)
+            
+        }
     }
     
     func loadSoundState() {
@@ -588,7 +633,7 @@ class OptionScene: SKScene {
             green = Float(greenSlider.value)
             blue = Float(blueSlider.value)
             let color = UIColor(red: CGFloat(red), green: CGFloat(green), blue: CGFloat(blue), alpha: 1.0)
-        
+            
             heroColor.heroColorRed = red
             heroColor.heroColorGreen = green
             heroColor.heroColorBlue = blue

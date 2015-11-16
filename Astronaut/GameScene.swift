@@ -25,7 +25,7 @@ class GameScene: SKScene, EGCDelegate {
     var ticks:Int = 0
 	let buttonPressDark = SKAction.colorizeWithColor(UIColor.blackColor(), colorBlendFactor: 0.2, duration: 0.2)
     let buttonPressLight = SKAction.colorizeWithColor(UIColor.clearColor(), colorBlendFactor: 0, duration: 0.2)
-    var lastSpriteName:String = ""
+    var lastSpriteName:String = "empty"
     var scalingFactor:CGFloat = 1
     var scalingFactorX:CGFloat = 1
     var tickCount:Int = 0
@@ -50,6 +50,14 @@ class GameScene: SKScene, EGCDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
         
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeRight.direction = .Right
+        self.view!.addGestureRecognizer(swipeRight)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        swipeLeft.direction = .Left
+        self.view!.addGestureRecognizer(swipeLeft)
+        
         interScene.scalingfactoriPad = (self.size.height * 2) / 768 //iPad Mini Height
         interScene.scalingfactoriPhone = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         
@@ -60,7 +68,6 @@ class GameScene: SKScene, EGCDelegate {
             scalingFactor = interScene.scalingfactoriPad
             interScene.scalingfactorSpeed = self.size.width * 2 / 1024
         }
-
         
         scalingFactorX = self.size.width / (nameLabel.size.width + 20)
         self.backgroundColor = UIColor(rgba: "#1E2124")
@@ -172,6 +179,29 @@ class GameScene: SKScene, EGCDelegate {
             }, completion: {(finished: Bool) -> Void in
                 //Load new Stuff
         })
+    }
+    
+    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+        
+        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+            
+            switch swipeGesture.direction {
+            case UISwipeGestureRecognizerDirection.Right:
+                if lastSpriteName == "empty" {
+                    EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                }
+            case UISwipeGestureRecognizerDirection.Down:
+                print("Swiped down")
+            case UISwipeGestureRecognizerDirection.Left:
+                if lastSpriteName == "empty" {
+                    showOptionScene()
+                }
+            case UISwipeGestureRecognizerDirection.Up:
+                print("Swiped up")
+            default:
+                break
+            }
+        }
     }
     
     func labelColorLight() {
@@ -363,6 +393,7 @@ class GameScene: SKScene, EGCDelegate {
                     self.startGameButton.runAction(buttonPressLight){
                         self.resetSecret()
                         self.showPlayScene()
+                        self.lastSpriteName = "empty"
                     }
                 }
             } else if self.nodeAtPoint(location) == self.menuHSButton {
@@ -372,6 +403,7 @@ class GameScene: SKScene, EGCDelegate {
                         self.menuHSButton.runAction(buttonPressLight){
                             self.resetSecret()
                             EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                            self.lastSpriteName = "empty"
                         }
                     }
                 }
@@ -380,15 +412,17 @@ class GameScene: SKScene, EGCDelegate {
                 if lastSpriteName == menuOptionButton.name {
                     self.menuOptionButton.runAction(buttonPressLight) {
                         self.showOptionScene()
+                        self.lastSpriteName = "empty"
                     }
                 }
             } else if self.nodeAtPoint(location) == self.highScoreLabel {
                 removeButtonAnim()
                 if lastSpriteName == highScoreLabel.name {
                     labelColorLightAction()
+                    self.lastSpriteName = "empty"
                 }
             }else  {
-
+                lastSpriteName = "empty"
                 menuHSButton.removeAllActions()
                 menuOptionButton.removeAllActions()
                 startGameButton.removeAllActions()
@@ -480,8 +514,6 @@ class GameScene: SKScene, EGCDelegate {
         scene.size = skView.bounds.size
         scene.optionSceneActive = true
         skView.presentScene(scene, transition: transition)
-
-        
     }
     
 	func showPlayScene() {

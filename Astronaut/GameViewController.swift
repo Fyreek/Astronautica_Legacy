@@ -27,7 +27,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         if (NSUserDefaults.standardUserDefaults().objectForKey("highScore") != nil) {
             interScene.highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
         }
-        
+
         playBackgroundMusic("music.caf")
         
         interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
