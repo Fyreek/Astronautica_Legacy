@@ -116,6 +116,13 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var normalSpeedRocket:CGFloat = 6
     var normalSpeedBonusItem:CGFloat = 4
     
+    var gameSpeedOld:CGFloat = 0
+    var totalSpeedAsteroidOld:CGFloat = 0
+    var totalSpeedSatelliteOld:CGFloat = 0
+    var totalSpeedRocketOld:CGFloat = 0
+    var totalSpeedBonusItemOld:CGFloat = 0
+    var countDownSpeedItem:Int = 0
+    
 	var countDownRunning = false
 	
 	let bg = SKSpriteNode(imageNamed: "Background188")
@@ -141,6 +148,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	var timer = NSTimer()
     var timerPause = NSTimer()
+    var timerSpeedItem = NSTimer()
 	var countDown = 3
 	var countDownText = SKLabelNode(text: "")
 	enum ColliderType:UInt32 {
@@ -548,9 +556,46 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             bonusItem.removeFromParent()
             self.bonusItems = []
             if !self.gameOver {
-                self.addBonusItems("Oxygen15")
+                if bonusItem.name == "Oxygen15" {
+                    self.addBonusItems("Oxygen")
+                }
             }
         })
+    }
+    
+    func collisionHeroSpeedItem(bonusItem: BonusItem) {
+        bonusItem.physicsBody = nil
+        bonusItem.moving = false
+        bonusItem.hidden = true
+        
+        for var i = 0; i < spawnPointStats.count; i++ {
+            if spawnPoints[i] == bonusItem.spawnHeight {
+                spawnPointStats[i] = true
+                bonusItem.spawnHeight = 9999
+            }
+        }
+        
+        bonusItemAlive = false
+        bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
+        bonusItem.removeFromParent()
+        
+        hero.physicsBody = nil
+        gameSpeedOld = CGFloat(gameSpeed)
+        totalSpeedAsteroidOld = totalSpeedAsteroid
+        totalSpeedSatelliteOld = totalSpeedSatellite
+        totalSpeedRocketOld = totalSpeedRocket
+        totalSpeedBonusItemOld = totalSpeedBonusItem
+        
+        gameSpeed = gameSpeed + 10
+        totalSpeedAsteroid = totalSpeedAsteroid + 10
+        totalSpeedRocket = totalSpeedRocket + 10
+        totalSpeedSatellite = totalSpeedSatellite + 10
+        totalSpeedBonusItem = totalSpeedBonusItem + 10
+        
+        stopBGAnim()
+        startBGAnim()
+        
+        timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerSpeedItem"), userInfo: nil, repeats: true)
     }
     
     func collisionHeroBonusItem(bonusItem: BonusItem) {
@@ -566,7 +611,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        interScene.oxygenFail = 0
         oxygenMarker.hidden = true
         bonusItem.removeFromParent()
         oxygenMarker.removeFromParent()
@@ -574,8 +618,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "firstStart")
         NSUserDefaults.standardUserDefaults().synchronize()
         bonusItemAlive = false
-        bonusItems = []
-        hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+        bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
+        
+        interScene.oxygenFail = 0
         
         if achievementOxygenCount < 10 {
             achievementOxygenCount++
@@ -594,6 +639,32 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         upOxygen = true
         playOxygenSound()
         renderOxygenBar()
+    }
+    
+    func updateTimerSpeedItem() {
+    
+        if countDownSpeedItem < 3 {
+            countDownSpeedItem++
+        } else {
+            timerSpeedItem.invalidate()
+            countDownSpeedItem = 0
+            totalSpeedAsteroid = totalSpeedAsteroidOld
+            totalSpeedRocket = totalSpeedRocketOld
+            totalSpeedSatellite = totalSpeedSatelliteOld
+            totalSpeedBonusItem = totalSpeedBonusItemOld
+            gameSpeed = Float(gameSpeedOld)
+            
+            stopBGAnim()
+            startBGAnim()
+            
+            heroPhysicsBody()
+            hero.physicsBody!.affectedByGravity = false
+            hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
+            hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+            hero.physicsBody!.collisionBitMask = 0
+            hero.physicsBody!.allowsRotation = false
+        }
+        
     }
     
 	func didBeginContact(contact: SKPhysicsContact) {
@@ -616,14 +687,25 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
             
         case ColliderType.Hero.rawValue | ColliderType.bonusItem.rawValue :
-            if didOxygenCollide == false {
-                didOxygenCollide = true
-                if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue {
-                    let otherBody = contact.bodyB.node as? BonusItem
-                    collisionHeroBonusItem(otherBody!)
-                } else {
-                    let otherBody = contact.bodyA.node as? BonusItem
-                    collisionHeroBonusItem(otherBody!)
+            if contact.bodyA.categoryBitMask == ColliderType.Hero.rawValue {
+                let otherBody = contact.bodyB.node as? BonusItem
+                if otherBody?.name == "Oxygen15" {
+                    if didOxygenCollide == false {
+                        didOxygenCollide = true
+                        collisionHeroBonusItem(otherBody!)
+                    }
+                } else if otherBody?.name == "Speed15" {
+                    collisionHeroSpeedItem(otherBody!)
+                }
+            } else {
+                let otherBody = contact.bodyA.node as? BonusItem
+                if otherBody?.name == "Oxygen15" {
+                    if didOxygenCollide == false {
+                        didOxygenCollide = true
+                        collisionHeroBonusItem(otherBody!)
+                    }
+                } else if otherBody?.name == "Speed15" {
+                    collisionHeroSpeedItem(otherBody!)
                 }
             }
             
@@ -837,8 +919,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
         //For more Items later
         let direction:Int = Int(arc4random_uniform(2))
-        if itemType == "Oxygen15" {
+        if itemType == "Oxygen" {
             addBonusItem(named: "Oxygen15", spawned: false, spawnHeight: 0, alive: false, moving: false, rotationDirection: direction)
+        } else if itemType == "Speed" {
+            addBonusItem(named: "Speed15", spawned: false, spawnHeight: 0, alive: false, moving: false, rotationDirection: direction)
         }
     }
     
@@ -856,7 +940,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.rotationDirection = rotationDirection
         
         bonusItems.append(bonusItem)
-        bonusItemAlive = true
+        print(bonusItems)
+        print("_______")
+        if bonusItem.name == "Oxygen15" {
+            bonusItemAlive = true
+        }
         bonusItem.texture?.filteringMode = .Nearest
         addChild(bonusItem)
     }
@@ -938,6 +1026,36 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		addChild(enemy)
 	}
 	
+    func speedPhysicsBody(bonusItem: BonusItem) {
+        let offsetX = bonusItem.frame.size.width * bonusItem.anchorPoint.x / scalingFactor
+        let offsetY = bonusItem.frame.size.height * bonusItem.anchorPoint.y / scalingFactor
+        let path:CGMutablePathRef = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(path, nil, 0 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, nil, 4 - offsetX, 29 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 29 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 28 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 15 - offsetX, 18 - offsetY);
+        CGPathAddLineToPoint(path, nil, 15 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 14 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 12 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 4 - offsetX, 0 - offsetY);
+        CGPathAddLineToPoint(path, nil, 4 - offsetX, 3 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 4 - offsetY);
+        CGPathAddLineToPoint(path, nil, 2 - offsetX, 10 - offsetY);
+        CGPathAddLineToPoint(path, nil, 0 - offsetX, 10 - offsetY);
+        
+        CGPathCloseSubpath(path);
+        var scaleTransform = CGAffineTransformMakeScale(scalingFactor, scalingFactor)
+        let scaledPath = CGPathCreateCopyByTransformingPath(path, &scaleTransform)
+        bonusItem.physicsBody = SKPhysicsBody(polygonFromPath: scaledPath!)
+    }
+    
     func oxygenPhysicsBody(bonusItem: BonusItem) {
         
         let offsetX = bonusItem.frame.size.width * bonusItem.anchorPoint.x / scalingFactor
@@ -1124,7 +1242,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         bonusItem.position.x = endOfScreenRight
                         spawnPointStats[i] = false
                         bonusItem.spawned = true
-                        oxygenPhysicsBody(bonusItem)
+                        if bonusItem.name == "Oxygen15" {
+                            oxygenPhysicsBody(bonusItem)
+                        } else if bonusItem.name == "Speed15" {
+                            speedPhysicsBody(bonusItem)
+                        }
                         bonusItem.physicsBody!.affectedByGravity = false
                         bonusItem.physicsBody!.categoryBitMask = ColliderType.bonusItem.rawValue
                         bonusItem.physicsBody!.contactTestBitMask = ColliderType.Hero.rawValue | ColliderType.Enemy.rawValue
@@ -1622,7 +1744,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if bonusItemAlive == false {
                     didOxygenCollide = false
                     didOxygenCollideEnemy = false
-                    addBonusItems("Oxygen15")
+                    addBonusItems("Oxygen")
                 }
             }
         }
@@ -1645,12 +1767,18 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                             oxygenMarker.zRotation = bonusItem.zRotation
                         }
                     } else {
-                        oxygenMarker.hidden = true
-                        bonusItems = []
-                        bonusItem.removeFromParent()
-                        achievementOxygenCount = 0
-                        if !gameOver {
-                            addBonusItems("Oxygen15")
+                        if bonusItem.name == "Oxygen15" {
+                            oxygenMarker.hidden = true
+                            bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
+                            bonusItem.removeFromParent()
+                            achievementOxygenCount = 0
+                            if !gameOver {
+                                addBonusItems("Oxygen")
+                            }
+                        } else if bonusItem.name == "Speed15" {
+                            bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
+                            bonusItem.removeFromParent()
+                            //bonusItemAlive = false
                         }
                     }
                     if bonusItem.position.x < self.size.width / 2  - 200 {
@@ -1664,14 +1792,15 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         }
                         
                     } else if bonusItem.position.x < self.size.width / 2 - 50 && interScene.introDisplayed == false {
-                        
-                        if bonusItem.spawnHeight != 9999 {
-                            if interScene.oxygenFail == 5 {
-                                oxygenIntro()
-                                bonusItem.spawnHeight = 9999
-                            } else if interScene.firstStart == true {
-                                oxygenIntro()
-                                bonusItem.spawnHeight = 9999
+                        if bonusItem.name == "Oxygen15" {
+                            if bonusItem.spawnHeight != 9999 {
+                                if interScene.oxygenFail == 5 {
+                                    oxygenIntro()
+                                    bonusItem.spawnHeight = 9999
+                                } else if interScene.firstStart == true {
+                                    oxygenIntro()
+                                    bonusItem.spawnHeight = 9999
+                                }
                             }
                         }
                     }
@@ -1901,6 +2030,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
             
 		}
+        
+        if score % 10 == 0 {
+            addBonusItems("Speed")
+        }
 		
 		if score <= 50 {
             if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
