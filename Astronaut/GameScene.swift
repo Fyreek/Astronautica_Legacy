@@ -39,6 +39,8 @@ class GameScene: SKScene, EGCDelegate {
     var endOfScreenRight = CGFloat()
     var endOfScreenLeft = CGFloat()
     var coinLabel = SKLabelNode(text: "0")
+    var versionLabel = SKLabelNode(text: "0")
+    var timerVersion = NSTimer()
     
 	override func didMoveToView(view: SKView) {
         
@@ -98,10 +100,11 @@ class GameScene: SKScene, EGCDelegate {
         bg3.position.x = self.size.width * 2
         addChild(bg2)
         addChild(bg3)
-
+        
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
         nameLabel.zPosition = 1.2
+        nameLabel.name = "nameLabel"
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             if nameLabel.size.width > self.size.width {
                 nameLabel.setScale(scalingFactorX)
@@ -113,6 +116,19 @@ class GameScene: SKScene, EGCDelegate {
         }
         nameLabel.texture?.filteringMode = .Nearest
         addChild(nameLabel)
+        
+        versionLabel = SKLabelNode(fontNamed: "Minecraft")
+        versionLabel.fontSize = 15
+        addChild(versionLabel)
+        if let version = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? String {
+            self.versionLabel.text = "b\(version)"
+        }
+        versionLabel.fontColor = UIColor(rgba: "#5F6575")
+        versionLabel.zPosition = 1.2
+        versionLabel.position.x = nameLabel.position.x + nameLabel.size.width / 2 - 20 * scalingFactor
+        versionLabel.position.y = nameLabel.position.y - nameLabel.size.height / 2 - 20 * scalingFactor
+        versionLabel.alpha = 0
+        versionLabel.hidden = true
         
         coinLabel = SKLabelNode(fontNamed: "Minecraft")
         coinLabel.fontSize = 15
@@ -365,6 +381,10 @@ class GameScene: SKScene, EGCDelegate {
             } else if self.nodeAtPoint(location) == self.highScoreLabel {
                 lastSpriteName = self.highScoreLabel.name!
                 labelColorDark()
+            } else if self.nodeAtPoint(location) == self.nameLabel {
+                if secretUnlock.secretUnlocked == true {
+                    lastSpriteName = self.nameLabel.name!
+                }
             }
             for enemy in enemies {
                 if self.nodeAtPoint(location) == enemy {
@@ -401,6 +421,20 @@ class GameScene: SKScene, EGCDelegate {
             
         }
         pulsingPlayButton()
+    }
+    
+    func showVersion() {
+        versionLabel.hidden = false
+        versionLabel.runAction(SKAction.fadeInWithDuration(1.0)){
+            self.timerVersion = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: Selector("updateTimerVersion"), userInfo: nil, repeats: true)
+        }
+    }
+    
+    func updateTimerVersion() {
+        versionLabel.runAction(SKAction.fadeOutWithDuration(1.0)) {
+            self.versionLabel.hidden = true
+            self.timerVersion.invalidate()
+        }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -441,7 +475,15 @@ class GameScene: SKScene, EGCDelegate {
                     labelColorLightAction()
                     self.lastSpriteName = "empty"
                 }
-            }else  {
+            } else if self.nodeAtPoint(location) == self.nameLabel {
+                removeButtonAnim()
+                if secretUnlock.secretUnlocked == true {
+                    if lastSpriteName == nameLabel.name {
+                        self.lastSpriteName = "empty"
+                        self.showVersion()
+                    }
+                }
+            } else {
                 lastSpriteName = "empty"
                 menuHSButton.removeAllActions()
                 menuOptionButton.removeAllActions()

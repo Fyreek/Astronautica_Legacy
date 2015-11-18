@@ -1837,7 +1837,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if bonusItemAlive == false {
                     didOxygenCollide = false
                     didOxygenCollideEnemy = false
-                    addBonusItems("Oxygen")
+                    if boostActive == false {
+                        addBonusItems("Oxygen")
+                    }
                 }
             }
         }
@@ -2109,11 +2111,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		score++
 		scoreLabel.text = String(score)
-    
-        if boostActive == true {
-            score++
-            scoreLabel.text = String(score)
-        }
         
 		if score % 5 == 0 {
 			
@@ -2130,7 +2127,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		}
         
         if score % 10 == 0 {
-            addBonusItems("Speed")
+            if boostActive == false {
+                addBonusItems("Speed")
+            }
         }
 		
 		if score <= 50 {
