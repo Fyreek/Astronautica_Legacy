@@ -188,6 +188,7 @@
 				81E4451C1B8667D900BC86B2 /* Sources */,
 				81E4451D1B8667D900BC86B2 /* Frameworks */,
 				81E4451E1B8667D900BC86B2 /* Resources */,
+				149D00171BFCB544004160FF /* Warning Script */,
 			);
 			buildRules = (
 			);
@@ -291,6 +292,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		149D00171BFCB544004160FF /* Warning Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Warning Script";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|WARNING:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"${SRCROOT}\" \\( -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		81E4451C1B8667D900BC86B2 /* Sources */ = {

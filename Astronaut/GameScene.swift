@@ -46,6 +46,9 @@ class GameScene: SKScene, EGCDelegate {
         showAds()
         loadMusicState()
         
+        // WARNING: Debug Line
+        interScene.coins = 200
+        
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         

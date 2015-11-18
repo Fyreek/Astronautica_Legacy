@@ -35,6 +35,10 @@ struct interScene {
     static var coins:Int = 0
 }
 
+struct price {
+    static var boost:Int = 200
+}
+
 struct secretUnlock {
     static var secretStep1:Bool = false
     static var secretStep2:Bool = false
@@ -96,6 +100,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var bgAnimSpeed:CGFloat = 16
     var ending:Bool = false
     var newHighScore:Bool = false
+    var boostActive:Bool = false
+    var boostStart:Bool = false
+    var boostStop:Bool = false
 	
     var gameOverMenuLoaded = false
     
@@ -140,6 +147,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
     var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
     var gameShare = SKSpriteNode(imageNamed: "ShareButton18")
+    var buyBoost = SKSpriteNode(imageNamed: "BuyBoost32")
     
     var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
@@ -348,6 +356,12 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         menuPause.zPosition = 1.2
         menuPause.texture?.filteringMode = .Nearest
 		
+        buyBoost.setScale(scalingFactor)
+        buyBoost.position.y = -(self.size.height / 2 - buyBoost.size.height / 2 - (20 * scalingFactor))
+        buyBoost.position.x = 0
+        buyBoost.zPosition = 1.2
+        buyBoost.texture?.filteringMode = .Nearest
+        
 		totalScore = SKLabelNode(fontNamed: "Minecraft")
 		totalScore.fontSize = 15
         totalScore.fontColor = UIColor(rgba: "#5F6575")
@@ -364,6 +378,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		addChild(gamePause)
 		addChild(gamePlay)
         addChild(menuPause)
+        addChild(buyBoost)
 		addChild(countDownText)
 		
 		countDownText.hidden = true
@@ -378,6 +393,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         menuPause.name = "menuPause"
         menuPause.hidden = true
         menuPause.alpha = 0
+        
+        buyBoost.name = "buyBoost"
+        buyBoost.hidden = true
+        buyBoost.alpha = 0
         
 		gamePause.name = "gamePause"
 		gamePause.hidden = true
@@ -592,16 +611,52 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         totalSpeedRocketOld = totalSpeedRocket
         totalSpeedBonusItemOld = totalSpeedBonusItem
         
-        gameSpeed = gameSpeed + 10
-        totalSpeedAsteroid = totalSpeedAsteroid + 10
-        totalSpeedRocket = totalSpeedRocket + 10
-        totalSpeedSatellite = totalSpeedSatellite + 10
-        totalSpeedBonusItem = totalSpeedBonusItem + 10
+        gameSpeed = gameSpeed + 20
+        totalSpeedAsteroid = totalSpeedAsteroid + 20
+        totalSpeedRocket = totalSpeedRocket + 20
+        totalSpeedSatellite = totalSpeedSatellite + 20
+        totalSpeedBonusItem = totalSpeedBonusItem + 20
         
         stopBGAnim()
         startBGAnim()
         
         timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerSpeedItem"), userInfo: nil, repeats: true)
+    }
+    
+    func startBoost() {
+        hero.physicsBody = nil
+        gameSpeedOld = CGFloat(gameSpeed)
+        totalSpeedAsteroidOld = totalSpeedAsteroid
+        totalSpeedSatelliteOld = totalSpeedSatellite
+        totalSpeedRocketOld = totalSpeedRocket
+        totalSpeedBonusItemOld = totalSpeedBonusItem
+        
+        gameSpeed = gameSpeed + 50
+        totalSpeedAsteroid = totalSpeedAsteroid + 50
+        totalSpeedRocket = totalSpeedRocket + 50
+        totalSpeedSatellite = totalSpeedSatellite + 50
+        totalSpeedBonusItem = totalSpeedBonusItem + 50
+        
+        stopBGAnim()
+        startBGAnim()
+    }
+    
+    func startBoostEnd() {
+        totalSpeedAsteroid = totalSpeedAsteroidOld
+        totalSpeedRocket = totalSpeedRocketOld
+        totalSpeedSatellite = totalSpeedSatelliteOld
+        totalSpeedBonusItem = totalSpeedBonusItemOld
+        gameSpeed = Float(gameSpeedOld)
+        
+        stopBGAnim()
+        startBGAnim()
+        
+        heroPhysicsBody()
+        hero.physicsBody!.affectedByGravity = false
+        hero.physicsBody!.categoryBitMask = ColliderType.Hero.rawValue
+        hero.physicsBody!.contactTestBitMask = ColliderType.Enemy.rawValue | ColliderType.bonusItem.rawValue
+        hero.physicsBody!.collisionBitMask = 0
+        hero.physicsBody!.allowsRotation = false
     }
     
     func collisionHeroBonusItem(bonusItem: BonusItem) {
@@ -857,6 +912,10 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		}
         
         timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
+        if interScene.coins >= price.boost {
+            buyBoost.hidden = false
+            buyBoost.alpha = 1.0
+        }
 	}
 	
     func startBGAnim() {
@@ -887,6 +946,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             startBGAnim()
 			
             EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_startup", showBannnerIfCompleted: true, addToExisting: false)
+            
+            buyBoost.hidden = true
             
 			countDown = 3
 			countDownText.text = String(countDown)
@@ -946,8 +1007,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         bonusItem.rotationDirection = rotationDirection
         
         bonusItems.append(bonusItem)
-        print(bonusItems)
-        print("_______")
+        
         if bonusItem.name == "Oxygen15" {
             bonusItemAlive = true
         }
@@ -1550,6 +1610,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 if !countDownRunning {
                     self.menuPause.runAction(buttonPressDark)
                 }
+            } else if self.nodeAtPoint(location) == self.buyBoost {
+                lastSpriteName = self.buyBoost.name!
+                self.buyBoost.runAction(buttonPressDark)
             }
         }
     }
@@ -1634,6 +1697,16 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                         }
                     }
                 }
+            } else if self.nodeAtPoint(location) == self.buyBoost {
+                removeButtonAnim()
+                if lastSpriteName == self.buyBoost.name {
+                    self.lastSpriteName = "empty"
+                    self.buyBoost.runAction(buttonPressLight){
+                        self.boostActive = true
+                        interScene.coins = interScene.coins - price.boost
+                        self.buyBoost.hidden = true
+                    }
+                }
             } else {
                 
                 if lastSpriteName == self.menuPause.name {
@@ -1690,6 +1763,20 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         
 		if !gamePaused {
+            if boostActive == true {
+                if score < 50 {
+                    if boostStart == false {
+                        startBoost()
+                        boostStart = true
+                    }
+                } else {
+                    if boostStop == false {
+                        startBoostEnd()
+                        boostStop = true
+                        boostActive = false
+                    }
+                }
+            }
             updateBGPosition()
             updateEnemiesPosition()
             updateBonusItem()
@@ -2022,6 +2109,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 		
 		score++
 		scoreLabel.text = String(score)
+    
+        if boostActive == true {
+            score++
+            scoreLabel.text = String(score)
+        }
         
 		if score % 5 == 0 {
 			
