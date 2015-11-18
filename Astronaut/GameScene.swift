@@ -16,6 +16,7 @@ class GameScene: SKScene, EGCDelegate {
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
 	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardsButton32")
+    var menuShopButton = SKSpriteNode(imageNamed: "Shop15")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
     let bg = SKSpriteNode(imageNamed: "Background188")
     let bg2 = SKSpriteNode(imageNamed: "Background188")
@@ -41,6 +42,7 @@ class GameScene: SKScene, EGCDelegate {
     var coinLabel = SKLabelNode(text: "0")
     var versionLabel = SKLabelNode(text: "0")
     var timerVersion = NSTimer()
+    var versionShown:Bool = false
     
 	override func didMoveToView(view: SKView) {
         
@@ -121,7 +123,7 @@ class GameScene: SKScene, EGCDelegate {
         versionLabel.fontSize = 15
         addChild(versionLabel)
         if let version = NSBundle.mainBundle().infoDictionary?["CFBundleVersion"] as? String {
-            self.versionLabel.text = "b\(version)"
+            self.versionLabel.text = "build \(version)"
         }
         versionLabel.fontColor = UIColor(rgba: "#5F6575")
         versionLabel.zPosition = 1.2
@@ -176,6 +178,15 @@ class GameScene: SKScene, EGCDelegate {
 		menuHSButton.position.x = -(self.size.width / 3)
 		menuHSButton.zPosition = 1.2
         menuHSButton.texture?.filteringMode = .Nearest
+        
+        menuShopButton.setScale(scalingFactor)
+        addChild(menuShopButton)
+        menuShopButton.name = "menuShopButton"
+        menuShopButton.hidden = false
+        menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
+        menuShopButton.position.x = self.size.width / 2 - menuShopButton.size.width / 2 - 20 * scalingFactor
+        menuShopButton.zPosition = 2.0
+        menuShopButton.texture?.filteringMode = .Nearest
         
         switchLsButton()
         
@@ -385,6 +396,9 @@ class GameScene: SKScene, EGCDelegate {
                 if secretUnlock.secretUnlocked == true {
                     lastSpriteName = self.nameLabel.name!
                 }
+            } else if self.nodeAtPoint(location) == self.menuShopButton {
+                lastSpriteName = self.menuShopButton.name!
+                self.menuShopButton.runAction(buttonPressDark)
             }
             for enemy in enemies {
                 if self.nodeAtPoint(location) == enemy {
@@ -424,9 +438,12 @@ class GameScene: SKScene, EGCDelegate {
     }
     
     func showVersion() {
-        versionLabel.hidden = false
-        versionLabel.runAction(SKAction.fadeInWithDuration(1.0)){
-            self.timerVersion = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: Selector("updateTimerVersion"), userInfo: nil, repeats: true)
+        if versionShown == false {
+            versionShown = true
+            versionLabel.hidden = false
+            versionLabel.runAction(SKAction.fadeInWithDuration(1.0)){
+                self.timerVersion = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: Selector("updateTimerVersion"), userInfo: nil, repeats: true)
+            }
         }
     }
     
@@ -434,6 +451,33 @@ class GameScene: SKScene, EGCDelegate {
         versionLabel.runAction(SKAction.fadeOutWithDuration(1.0)) {
             self.versionLabel.hidden = true
             self.timerVersion.invalidate()
+            self.versionShown = false
+        }
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch: AnyObject in touches {
+            let location = touch.locationInNode(self)
+            if lastSpriteName == menuShopButton.name {
+                if location.y > self.size.height / 2 - menuShopButton.size.height / 2 {
+                    menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
+                } else {
+                    menuShopButton.position.y = location.y
+                }
+            }
+        }
+    }
+    
+    func shopButtonMoving() {
+        let scrollPoint:CGFloat = (self.size.height / 2) * (1 / 6)
+        if menuShopButton.position.y > scrollPoint {
+            let time:CGFloat = ((self.size.height / 2) - menuShopButton.position.y) / self.size.height / 2
+            menuShopButton.runAction(SKAction.moveToY(self.size.height / 2 - menuShopButton.size.height / 2, duration: 1 * Double(time)))
+            print(0.3 * time)
+        } else if menuShopButton.position.y <= scrollPoint {
+            let time:CGFloat = ((self.size.height / 2) - menuShopButton.position.y) / self.size.height / 2
+            menuShopButton.runAction(SKAction.moveToY(-(self.size.height / 2 - menuShopButton.size.height / 2), duration: 1 * Double(time)))
+            print(0.3 * time)
         }
     }
     
@@ -482,6 +526,12 @@ class GameScene: SKScene, EGCDelegate {
                         self.lastSpriteName = "empty"
                         self.showVersion()
                     }
+                }
+            } else if self.nodeAtPoint(location) == self.menuShopButton {
+                removeButtonAnim()
+                if lastSpriteName == menuShopButton.name {
+                    self.lastSpriteName = "empty"
+                    self.shopButtonMoving()
                 }
             } else {
                 lastSpriteName = "empty"
