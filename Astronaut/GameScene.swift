@@ -38,6 +38,7 @@ class GameScene: SKScene, EGCDelegate {
     var gameSpeed:Float = 1
     var endOfScreenRight = CGFloat()
     var endOfScreenLeft = CGFloat()
+    var coinLabel = SKLabelNode(text: "0")
     
 	override func didMoveToView(view: SKView) {
         
@@ -110,6 +111,16 @@ class GameScene: SKScene, EGCDelegate {
         nameLabel.texture?.filteringMode = .Nearest
         addChild(nameLabel)
         
+        coinLabel = SKLabelNode(fontNamed: "Minecraft")
+        coinLabel.fontSize = 15
+        addChild(coinLabel)
+        coinLabel.text = String(interScene.coins)
+        coinLabel.fontColor = UIColor(rgba: "#5F6575")
+        coinLabel.zPosition = 1.2
+        coinLabel.position.x = -(self.size.width / 2 - 50 * scalingFactor / 1.5)
+        coinLabel.position.y = self.size.height / 2 - 50 * scalingFactor / 1.5
+        coinLabel.alpha = 1.0
+
         startGameButton.setScale(scalingFactor)
 		addChild(startGameButton)
 		startGameButton.name = "startGameButton"
@@ -236,6 +247,12 @@ class GameScene: SKScene, EGCDelegate {
             interScene.highScoreBefore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
         } else {
             interScene.highScoreBefore = 0
+        }
+        
+        if let _ = NSUserDefaults.standardUserDefaults().objectForKey("coins") {
+            interScene.coins = NSUserDefaults.standardUserDefaults().integerForKey("coins")
+        } else {
+            interScene.coins = 0
         }
         
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("Ads") {

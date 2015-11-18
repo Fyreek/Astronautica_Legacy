@@ -32,6 +32,7 @@ struct interScene {
     static var highScoreBefore:Int = 0
     static var oxygenFail:Int = 0
     static var deaths:Int = 0
+    static var coins:Int = 0
 }
 
 struct secretUnlock {
@@ -482,6 +483,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 }
             }
             
+            interScene.coins = interScene.coins + score
+            
+            NSUserDefaults.standardUserDefaults().setInteger(interScene.coins, forKey: "coins")
+            NSUserDefaults.standardUserDefaults().synchronize()
+            
             if score <= scoreBefore {
                 
                 totalScore.hidden = false
@@ -575,7 +581,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        bonusItemAlive = false
+        //bonusItemAlive = false
         bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
         bonusItem.removeFromParent()
         
