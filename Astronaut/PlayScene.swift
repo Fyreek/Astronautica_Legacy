@@ -37,6 +37,12 @@ struct interScene {
 
 struct price {
     static var boost:Int = 200
+    static var heart:Int = 2000
+}
+
+struct items {
+    static var boostCount:Int = 0
+    static var heartCount:Int = 0
 }
 
 struct secretUnlock {
@@ -103,6 +109,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var boostActive:Bool = false
     var boostStart:Bool = false
     var boostStop:Bool = false
+    var oldTickTime:Int = 0
 	
     var gameOverMenuLoaded = false
     
@@ -600,7 +607,6 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        //bonusItemAlive = false
         bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
         bonusItem.removeFromParent()
         
@@ -630,7 +636,9 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         totalSpeedSatelliteOld = totalSpeedSatellite
         totalSpeedRocketOld = totalSpeedRocket
         totalSpeedBonusItemOld = totalSpeedBonusItem
+        oldTickTime = interScene.tickTime
         
+        interScene.tickTime = 20
         gameSpeed = gameSpeed + 50
         totalSpeedAsteroid = totalSpeedAsteroid + 50
         totalSpeedRocket = totalSpeedRocket + 50
@@ -647,6 +655,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         totalSpeedSatellite = totalSpeedSatelliteOld
         totalSpeedBonusItem = totalSpeedBonusItemOld
         gameSpeed = Float(gameSpeedOld)
+        interScene.tickTime = oldTickTime
         
         stopBGAnim()
         startBGAnim()

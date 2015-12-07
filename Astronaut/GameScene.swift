@@ -16,13 +16,11 @@ class GameScene: SKScene, EGCDelegate {
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
 	var menuHSButton = SKSpriteNode(imageNamed: "LeaderboardsButton32")
-    var menuShopButton = SKSpriteNode(imageNamed: "Shop15")
 	var highScoreLabel = SKLabelNode(text: "Highscore: 0")
     let bg = SKSpriteNode(imageNamed: "Background188")
     let bg2 = SKSpriteNode(imageNamed: "Background188")
     let bg3 = SKSpriteNode(imageNamed: "Background188")
     let shopBg = SKSpriteNode(imageNamed: "ShopBackground188")
-    let shopCloseButton = SKSpriteNode(imageNamed: "Asteroid16")
     let satelliteTexture:SKTexture = SKTexture(imageNamed: "Satellite15")
     var bgAnimSpeed:CGFloat = 4
     var ticks:Int = 0
@@ -46,7 +44,19 @@ class GameScene: SKScene, EGCDelegate {
     var timerVersion = NSTimer()
     var versionShown:Bool = false
     
+    //Shop Scene Variables
+    
     var shopSceneActive = false
+    
+    var shopCloseButton = SKSpriteNode(imageNamed: "Asteroid16")
+    var menuShopButton = SKSpriteNode(imageNamed: "Shop15")
+    
+    var startBoostBtn:SKSpriteNode = SKSpriteNode(imageNamed: "shopStartBoostButton32")
+    var startBoostLbl:SKLabelNode = SKLabelNode(text: "")
+    var startBoostCountLbl:SKLabelNode = SKLabelNode(text: "")
+    var heartBtn:SKSpriteNode = SKSpriteNode(imageNamed: "shopHeartButton32")
+    var heartLbl:SKLabelNode = SKLabelNode(text: "")
+    var heartCountLbl:SKLabelNode = SKLabelNode(text: "")
     
 	override func didMoveToView(view: SKView) {
         
@@ -197,6 +207,64 @@ class GameScene: SKScene, EGCDelegate {
         shopCloseButton.position.y = self.size.height / 2 - shopCloseButton.size.height / 2 - 20 * scalingFactor
         shopCloseButton.zPosition = 2.1
         shopCloseButton.texture?.filteringMode = .Nearest
+        
+        startBoostBtn.setScale(scalingFactor)
+        shopBg.addChild(startBoostBtn)
+        startBoostBtn.name = "shopBoostBtn"
+        startBoostBtn.hidden = false
+        startBoostBtn.position.x = self.size.width / 4
+        startBoostBtn.position.y = self.size.height / 4
+        startBoostBtn.zPosition = 2.1
+        startBoostBtn.texture?.filteringMode = .Nearest
+        
+        startBoostLbl = SKLabelNode(fontNamed: "Minecraft")
+        startBoostLbl.setScale(scalingFactor)
+        shopBg.addChild(startBoostLbl)
+        startBoostLbl.text = String(price.boost)
+        startBoostLbl.fontColor = UIColor(rgba: "#5F6575")
+        startBoostLbl.zPosition = 2.1
+        startBoostLbl.position.x = startBoostBtn.position.x
+        startBoostLbl.position.y = startBoostBtn.position.y - startBoostBtn.size.height / 2 - 30 * scalingFactor
+        startBoostLbl.alpha = 1.0
+        
+        startBoostCountLbl = SKLabelNode(fontNamed: "Minecraft")
+        startBoostCountLbl.setScale(scalingFactor)
+        shopBg.addChild(startBoostCountLbl)
+        startBoostCountLbl.text = String(items.boostCount)
+        startBoostCountLbl.fontColor = UIColor(rgba: "#5F6575")
+        startBoostCountLbl.zPosition = 2.1
+        startBoostCountLbl.position.x = startBoostBtn.position.x - startBoostBtn.size.width / 2 - 20 * scalingFactor
+        startBoostCountLbl.position.y = startBoostBtn.position.y
+        startBoostCountLbl.alpha = 1.0
+        
+        heartBtn.setScale(scalingFactor)
+        shopBg.addChild(heartBtn)
+        heartBtn.name = "shopheartBtn"
+        heartBtn.hidden = false
+        heartBtn.position.x = -(self.size.width / 4)
+        heartBtn.position.y = self.size.height / 4
+        heartBtn.zPosition = 2.1
+        heartBtn.texture?.filteringMode = .Nearest
+        
+        heartLbl = SKLabelNode(fontNamed: "Minecraft")
+        heartLbl.setScale(scalingFactor)
+        shopBg.addChild(heartLbl)
+        heartLbl.text = String(price.heart)
+        heartLbl.fontColor = UIColor(rgba: "#5F6575")
+        heartLbl.zPosition = 2.1
+        heartLbl.position.x = heartBtn.position.x
+        heartLbl.position.y = heartBtn.position.y - heartBtn.size.height / 2 - 30 * scalingFactor
+        heartLbl.alpha = 1.0
+        
+        heartCountLbl = SKLabelNode(fontNamed: "Minecraft")
+        heartCountLbl.setScale(scalingFactor)
+        shopBg.addChild(heartCountLbl)
+        heartCountLbl.text = String(items.heartCount)
+        heartCountLbl.fontColor = UIColor(rgba: "#5F6575")
+        heartCountLbl.zPosition = 2.1
+        heartCountLbl.position.x = heartBtn.position.x - heartBtn.size.width / 2 - 20 * scalingFactor
+        heartCountLbl.position.y = heartBtn.position.y
+        heartCountLbl.alpha = 1.0
         
         menuShopButton.setScale(scalingFactor)
         addChild(menuShopButton)
