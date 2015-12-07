@@ -1508,14 +1508,22 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
 	func heroMovement() {
         
-        if touchLocation > (self.size.height / 2) - (hero.size.height / 2){
-            touchLocation = (self.size.height / 2) - (hero.size.height / 2)
-        } else if touchLocation < -((self.size.height / 2) - (hero.size.height / 2)) {
-            touchLocation = -((self.size.height / 2) - (hero.size.height / 2))
+        if touchLocation != hero.position.y {
+            var duration = 1.0
+            var distance:CGFloat = 0
+            let prePos:CGFloat = hero.position.y
+            
+            if prePos > touchLocation {
+                distance = prePos - touchLocation
+            } else if prePos < touchLocation {
+                distance = touchLocation - prePos
+            }
+            
+            duration = NSTimeInterval(distance / hero.movementSpeed / scalingFactor)
+            
+            hero.runAction(SKAction.moveToY(touchLocation, duration: duration))
+            
         }
-		let duration = (abs(hero.position.y - touchLocation)) / hero.movementSpeed / scalingFactor
-		let moveAction = SKAction.moveToY(touchLocation, duration: NSTimeInterval(duration))
-		hero.runAction(moveAction, withKey: "movingA")
 	}
 	
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -1528,13 +1536,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
 			if !gameOver {
                 for touch: AnyObject in touches {
                     touchLocation = touch.locationInNode(self).y
-                    if heroHeight < touchLocation - 20 {
-                        heroMovement()
-                        heroHeight = touchLocation
-                    } else if heroHeight > touchLocation + 20 {
-                        heroMovement()
-                        heroHeight = touchLocation
-                    }
+                    heroMovement()
                 }
 			}
 		}
