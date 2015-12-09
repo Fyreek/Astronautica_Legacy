@@ -275,9 +275,15 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         let firstActivityItem = "I scored \(interScene.highScore) points in Astronautica. Check it out:\nhttp://bit.ly/1koZQ4e"
         
         let activityViewController : UIActivityViewController = UIActivityViewController(activityItems: [firstActivityItem], applicationActivities: nil)
-        
-        self.presentViewController(activityViewController, animated: true, completion: nil)
 
+        if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
+            self.presentViewController(activityViewController, animated: true, completion: nil)
+        } else if interScene.deviceType == .IPadRetina || interScene.deviceType == .IPad {
+            let popup: UIPopoverController = UIPopoverController(contentViewController: activityViewController)
+            popup.presentPopoverFromRect(CGRectMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2 + 30, 0, 0), inView: self.view, permittedArrowDirections: .Up, animated: true)
+        }
+
+        
     }
     
     func displayAdAlert() {

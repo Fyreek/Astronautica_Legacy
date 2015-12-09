@@ -64,9 +64,6 @@ class GameScene: SGScene, EGCDelegate {
         showAds()
         loadMusicState()
         
-        // WARNING: Debug Line
-        interScene.coins = 200
-        
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         
@@ -154,7 +151,8 @@ class GameScene: SGScene, EGCDelegate {
         
         coinLabel = SKLabelNode(fontNamed: "Minecraft")
         coinLabel.fontSize = 15
-        addChild(coinLabel)
+        // WARNING: Shop System
+        //addChild(coinLabel)
         coinLabel.text = String(interScene.coins)
         coinLabel.fontColor = UIColor(rgba: "#5F6575")
         coinLabel.zPosition = 1.2
@@ -267,7 +265,8 @@ class GameScene: SGScene, EGCDelegate {
         heartCountLbl.alpha = 1.0
         
         menuShopButton.setScale(scalingFactor)
-        addChild(menuShopButton)
+        // WARNING: Shop System
+        //addChild(menuShopButton)
         menuShopButton.name = "menuShopButton"
         menuShopButton.hidden = false
         menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
@@ -377,8 +376,6 @@ class GameScene: SGScene, EGCDelegate {
         } else {
             interScene.adState = true
         }
-        //WARNING: Remove before Push
-        interScene.adState = false
         
         if let _ = NSUserDefaults.standardUserDefaults().objectForKey("secretUnlocked") {
             secretUnlock.secretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")

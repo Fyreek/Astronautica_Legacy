@@ -11,14 +11,22 @@ import iAd
 import AVFoundation
 
 class PlayScene: SGScene, SKPhysicsContactDelegate {
+    
+    enum gameState {
+        
+        case gameOver
+        case gamePaused
+        case gameActive
+        case gameEnded
+    }
+    var currentGameState:gameState = .gameOver
+    
 	var hero = Hero(imageNamed: "Astronaut25")
     var touchLocation = CGFloat()
-	var gameOver = true
 	var enemies:[Enemy] = []
 	var enemiesIndex:[Int] = []
 	var endOfScreenRight = CGFloat()
 	var endOfScreenLeft = CGFloat()
-	var gamePaused = false
 	var enemyCount = 0
     var deathEnemy: Enemy!
     var obtainedSpawnCount:Int = 0
@@ -326,7 +334,8 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 		addChild(gamePause)
 		addChild(gamePlay)
         addChild(menuPause)
-        addChild(buyBoost)
+        // WARNING: Shop System
+        //addChild(buyBoost)
 		addChild(countDownText)
 		
 		countDownText.hidden = true
@@ -407,7 +416,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             ending = true
             interScene.deaths++
             hero.physicsBody = nil
-            gameOver = true
+            currentGameState = .gameEnded
             gamePause.hidden = true
             hero.removeAllActions()
             scoreLabel.hidden = true
@@ -519,7 +528,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             number = self.enemiesIndex.find{ $0 == otherBody.uniqueIndetifier}!
             self.enemies.removeAtIndex(number)
             self.enemiesIndex.removeAtIndex(number)
-            if !self.gameOver {
+            if self.currentGameState == .gameActive {
                 self.addEnemies()
             }
         })
@@ -528,7 +537,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             bonusItem.hidden = true
             bonusItem.removeFromParent()
             self.bonusItems = []
-            if !self.gameOver {
+            if self.currentGameState == .gameActive {
                 if bonusItem.name == "Oxygen15" {
                     self.addBonusItems("Oxygen")
                 }
@@ -768,7 +777,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 number = self.enemiesIndex.find{ $0 == bodyOne?.uniqueIndetifier}!
                 self.enemies.removeAtIndex(number)
                 self.enemiesIndex.removeAtIndex(number)
-                if !self.gameOver {
+                if self.currentGameState == .gameActive {
                     self.addEnemies()
                 }
             })
@@ -780,7 +789,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 number = self.enemiesIndex.find{ $0 == bodyTwo?.uniqueIndetifier}!
                 self.enemies.removeAtIndex(number)
                 self.enemiesIndex.removeAtIndex(number)
-                if !self.gameOver {
+                if self.currentGameState == .gameActive {
                     self.addEnemies()
                 }
             })
@@ -820,7 +829,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         setSpawnPoints()
         oxygen = oxygenMax
         bonusItemAlive = false
-        gamePaused = true
+        currentGameState = .gamePaused
         
         emptyAll()
         
@@ -902,8 +911,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
-			gameOver = false
-            gamePaused = false
+			currentGameState = .gameActive
 			timer.invalidate()
 			countDownRunning = false
 			gamePause.hidden = false
@@ -1374,12 +1382,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
 	func pauseGame() {
 		
-		if !gameOver {
+		if currentGameState == .gameActive {
 			
             showAds()
             stopBGAnim()
             
-			gamePaused = true
+			currentGameState = .gamePaused
 			gamePlay.hidden = false
 			gamePlay.alpha = 1
             gamePlay.zPosition = 1.2
@@ -1398,7 +1406,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 	
 	func resumeGame() {
 		
-		if !gameOver {
+		if currentGameState == .gamePaused {
             
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "gamePaused")
             
@@ -1435,7 +1443,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             countDownText.hidden = true
             timerPause.invalidate()
             countDownRunning = false
-            gamePaused = false
+            currentGameState = .gameActive
             gamePlay.hidden = true
             menuPause.hidden = true
             menuPause.alpha = 0
@@ -1456,7 +1464,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             
             if prePos > touchLocation {
                 distance = prePos - touchLocation
-            } else if prePos < touchLocation {
+            } else if prePos <= touchLocation {
                 distance = touchLocation - prePos
             }
             
@@ -1470,171 +1478,169 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     override func screenInteractionStarted(location: CGPoint) {
         
         touchLocation = location.y
-        if !gamePaused {
-            if gameOver {
-                if self.nodeAtPoint(location) == self.refresh {
-                    lastSpriteName = self.refresh.name!
-                    if !countDownRunning {
-                        self.refresh.runAction(buttonPressDark)
-                        self.refresh.removeActionForKey("pulse")
-                    }
-                } else if self.nodeAtPoint(location) == self.menu {
-                    lastSpriteName = self.menu.name!
-                    if !countDownRunning {
-                        self.menu.runAction(buttonPressDark)
-                    }
-                } else if self.nodeAtPoint(location) == self.gameShare {
-                    lastSpriteName = self.gameShare.name!
-                    if !countDownRunning {
-                        self.gameShare.runAction(buttonPressDark)
-                    }
+        if currentGameState == .gameOver || currentGameState == .gameEnded {
+            if self.nodeAtPoint(location) == self.refresh {
+                lastSpriteName = self.refresh.name!
+                if !countDownRunning {
+                    self.refresh.runAction(buttonPressDark)
+                    self.refresh.removeActionForKey("pulse")
                 }
-            } else if !gameOver {
-                
-                if self.nodeAtPoint(location) == self.gamePause {
-                    lastSpriteName = self.gamePause.name!
-                    self.gamePause.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.menu {
+                lastSpriteName = self.menu.name!
+                if !countDownRunning {
+                    self.menu.runAction(buttonPressDark)
+                }
+            } else if self.nodeAtPoint(location) == self.gameShare {
+                lastSpriteName = self.gameShare.name!
+                if !countDownRunning {
+                    self.gameShare.runAction(buttonPressDark)
+                }
+            }
+        } else if currentGameState == .gameActive {
+            
+            if self.nodeAtPoint(location) == self.gamePause {
+                lastSpriteName = self.gamePause.name!
+                self.gamePause.runAction(buttonPressDark)
+            } else {
+                if lastSpriteName == "empty" {
+                    buttonRemoveAction()
                 } else {
-                    if lastSpriteName == "empty" {
-                        buttonRemoveAction()
-                    } else {
-                        buttonRemoveAction()
-                    }
-                    
+                    buttonRemoveAction()
                 }
+                
             }
-        } else if self.nodeAtPoint(location) == self.gamePlay {
-            lastSpriteName = self.gamePlay.name!
-            if !countDownRunning {
-                self.gamePlay.runAction(buttonPressDark)
+        } else if currentGameState == .gamePaused {
+            if self.nodeAtPoint(location) == self.gamePlay {
+                lastSpriteName = self.gamePlay.name!
+                if !countDownRunning {
+                    self.gamePlay.runAction(buttonPressDark)
+                }
+            } else if self.nodeAtPoint(location) == self.menuPause {
+                lastSpriteName = self.menuPause.name!
+                if !countDownRunning {
+                    self.menuPause.runAction(buttonPressDark)
+                }
+            } else if self.nodeAtPoint(location) == self.buyBoost {
+                lastSpriteName = self.buyBoost.name!
+                self.buyBoost.runAction(buttonPressDark)
             }
-        } else if self.nodeAtPoint(location) == self.menuPause {
-            lastSpriteName = self.menuPause.name!
-            if !countDownRunning {
-                self.menuPause.runAction(buttonPressDark)
-            }
-        } else if self.nodeAtPoint(location) == self.buyBoost {
-            lastSpriteName = self.buyBoost.name!
-            self.buyBoost.runAction(buttonPressDark)
         }
     }
     
     override func screenInteractionMoved(location: CGPoint) {
         
-        if !gamePaused {
-            if !gameOver {
-                touchLocation = location.y
-                heroMovement()
-            }
+        if currentGameState == .gameActive {
+            touchLocation = location.y
+            heroMovement()
         }
     }
     
     override func screenInteractionEnded(location: CGPoint) {
         
         touchLocation = location.y
-        if !gamePaused {
-            if gameOver {
-                if self.nodeAtPoint(location) == self.refresh {
-                    if !countDownRunning {
-                        removeButtonAnim()
-                        if lastSpriteName == self.refresh.name {
-                            self.lastSpriteName = "empty"
-                            self.refresh.runAction(buttonPressLight){
-                                self.showPlayScene()
-                            }
-                        }
-                    }
-                } else if self.nodeAtPoint(location) == self.menu {
-                    if !countDownRunning {
-                        removeButtonAnim()
-                        if lastSpriteName == self.menu.name {
-                            self.lastSpriteName = "empty"
-                            self.menu.runAction(buttonPressLight){
-                                self.showMenu()
-                            }
-                        }
-                    }
-                } else if self.nodeAtPoint(location) == self.gameShare {
-                    if !countDownRunning {
-                        if lastSpriteName == self.gameShare.name {
-                            self.lastSpriteName = "empty"
-                            self.gameShare.runAction(buttonPressLight){
-                                self.showShareMenu()
-                            }
-                        }
-                    }
-                } else {
-                    if gameOverMenuLoaded {
-                        buttonRemoveAction()
-                    }
-                }
-            } else if !gameOver {
-                if self.nodeAtPoint(location) == self.gamePause {
+        if currentGameState == .gameOver || currentGameState == .gameEnded {
+            if self.nodeAtPoint(location) == self.refresh {
+                if !countDownRunning {
                     removeButtonAnim()
-                    if lastSpriteName == self.gamePause.name {
+                    if lastSpriteName == self.refresh.name {
                         self.lastSpriteName = "empty"
-                        self.gamePause.runAction(buttonPressLight){
-                            self.pauseGame()
+                        self.refresh.runAction(buttonPressLight){
+                            self.showPlayScene()
                         }
                     }
-                } else {
-                    if lastSpriteName == "empty" {
-                        buttonRemoveAction()
-                        self.heroMovement()
-                    } else {
-                        buttonRemoveAction()
+                }
+            } else if self.nodeAtPoint(location) == self.menu {
+                if !countDownRunning {
+                    removeButtonAnim()
+                    if lastSpriteName == self.menu.name {
                         self.lastSpriteName = "empty"
+                        self.menu.runAction(buttonPressLight){
+                            self.showMenu()
+                        }
                     }
                 }
+            } else if self.nodeAtPoint(location) == self.gameShare {
+                if !countDownRunning {
+                    if lastSpriteName == self.gameShare.name {
+                        self.lastSpriteName = "empty"
+                        self.gameShare.runAction(buttonPressLight){
+                            self.showShareMenu()
+                        }
+                    }
+                }
+            } else {
+                if gameOverMenuLoaded {
+                    buttonRemoveAction()
+                }
             }
-        } else if self.nodeAtPoint(location) == self.gamePlay {
-            if !countDownRunning {
+        } else if currentGameState == .gameActive {
+            if self.nodeAtPoint(location) == self.gamePause {
                 removeButtonAnim()
-                if lastSpriteName == self.gamePlay.name {
+                if lastSpriteName == self.gamePause.name {
                     self.lastSpriteName = "empty"
-                    self.gamePlay.runAction(buttonPressLight){
-                        self.resumeGame()
+                    self.gamePause.runAction(buttonPressLight){
+                        self.pauseGame()
                     }
                 }
+            } else {
+                if lastSpriteName == "empty" {
+                    buttonRemoveAction()
+                    self.heroMovement()
+                } else {
+                    buttonRemoveAction()
+                    self.lastSpriteName = "empty"
+                }
             }
-        } else if self.nodeAtPoint(location) == self.menuPause {
-            if !countDownRunning {
+        } else if currentGameState == .gamePaused {
+            if self.nodeAtPoint(location) == self.gamePlay {
+                if !countDownRunning {
+                    removeButtonAnim()
+                    if lastSpriteName == self.gamePlay.name {
+                        self.lastSpriteName = "empty"
+                        self.gamePlay.runAction(buttonPressLight){
+                            self.resumeGame()
+                        }
+                    }
+                }
+            } else if self.nodeAtPoint(location) == self.menuPause {
+                if !countDownRunning {
+                    removeButtonAnim()
+                    if lastSpriteName == self.menuPause.name {
+                        self.lastSpriteName = "empty"
+                        self.menuPause.runAction(buttonPressLight){
+                            self.showMenu()
+                        }
+                    }
+                }
+            } else if self.nodeAtPoint(location) == self.buyBoost {
                 removeButtonAnim()
-                if lastSpriteName == self.menuPause.name {
+                if lastSpriteName == self.buyBoost.name {
                     self.lastSpriteName = "empty"
-                    self.menuPause.runAction(buttonPressLight){
-                        self.showMenu()
+                    self.buyBoost.runAction(buttonPressLight){
+                        self.boostActive = true
+                        interScene.coins = interScene.coins - price.boost
+                        self.buyBoost.hidden = true
                     }
-                }
-            }
-        } else if self.nodeAtPoint(location) == self.buyBoost {
-            removeButtonAnim()
-            if lastSpriteName == self.buyBoost.name {
-                self.lastSpriteName = "empty"
-                self.buyBoost.runAction(buttonPressLight){
-                    self.boostActive = true
-                    interScene.coins = interScene.coins - price.boost
-                    self.buyBoost.hidden = true
                 }
             }
         } else {
-            
+        
             if lastSpriteName == self.menuPause.name {
-                
+        
                 menuPause.removeAllActions()
                 menuPause.runAction(buttonPressLight)
-                
+        
             } else if lastSpriteName == self.gamePlay.name {
-                
+        
                 gamePlay.removeAllActions()
                 gamePlay.runAction(buttonPressLight)
-                
+        
             } else {
-                
+        
                 if gameOverMenuLoaded == true {
                     buttonRemoveAction()
                 }
-                
+        
             }
         }
     }
@@ -1693,12 +1699,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
         if NSUserDefaults.standardUserDefaults().boolForKey("gamePaused").boolValue == true {
-            if !gameOver {
+            if currentGameState == .gameActive {
                 pauseGame()
             }
         }
         
-		if !gamePaused {
+        if currentGameState == .gameActive || currentGameState == .gameEnded {
             if boostActive == true {
                 if score < 50 {
                     if boostStart == false {
@@ -1751,7 +1757,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     }
     
     func updateBonusItem() {
-        if !gameOver {
+        if currentGameState == .gameActive {
             if updateBonusTick > 0 {
                 updateBonusTick--
             } else {
@@ -1803,7 +1809,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                             bonusItems.removeAtIndex(bonusItems.indexOf(bonusItem)!)
                             bonusItem.removeFromParent()
                             achievementOxygenCount = 0
-                            if !gameOver {
+                            if currentGameState == .gameActive {
                                 addBonusItems("Oxygen")
                             }
                         } else if bonusItem.name == "Speed15" {
@@ -1965,7 +1971,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                             }
                             
                         } else {
-                            if !gameOver {
+                            if currentGameState == .gameActive {
                                 if enemy.name == "Asteroid16" {
                                     enemy.speed = totalSpeedAsteroid
                                 } else if enemy.name == "Satellite15" {
@@ -2062,9 +2068,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             
 		}
         
-        if score % 10 == 0 {
+        if score % 3 == 0 {
             if boostActive == false {
-                addBonusItems("Speed")
+                let rnd:Int = Int(arc4random_uniform(20))
+                if rnd == 1 {
+                    self.addBonusItems("Speed")
+                }
             }
         }
 		
@@ -2099,13 +2108,13 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     }
     
     func oxygenIntro() {
-        if !gameOver {
+        if currentGameState == .gameActive {
             
             interScene.oxygenFail = 0
             interScene.introDisplayed = true
             stopBGAnim()
             
-            gamePaused = true
+            currentGameState = .gamePaused
             gamePlay.hidden = false
             gamePlay.alpha = 1
             gamePlay.position.x = 0
@@ -2120,16 +2129,5 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         }
 
         
-    }
-}
-
-extension Array {
-    func find(includedElement: Element -> Bool) -> Int?{
-        for (idx, element) in self.enumerate() {
-            if includedElement(element) {
-                return idx
-            }
-        }
-        return nil
     }
 }
