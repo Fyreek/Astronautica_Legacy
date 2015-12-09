@@ -10,7 +10,7 @@ import SpriteKit
 import iAd
 import AVFoundation
 
-class GameScene: SKScene, EGCDelegate {
+class GameScene: SGScene, EGCDelegate {
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
@@ -462,48 +462,139 @@ class GameScene: SKScene, EGCDelegate {
         }
     }
     
-	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func screenInteractionStarted(location: CGPoint) {
         
-        for touch: AnyObject in touches {
-			let location = touch.locationInNode(self)
-            if shopSceneActive == false {
-                if self.nodeAtPoint(location) == self.startGameButton {
-                    lastSpriteName = self.startGameButton.name!
-                    self.startGameButton.runAction(buttonPressDark)
-                    self.startGameButton.removeActionForKey("pulse")
-                } else if self.nodeAtPoint(location) == self.menuHSButton {
-                    if interScene.connectedToGC == true {
-                        lastSpriteName = self.menuHSButton.name!
-                        self.menuHSButton.runAction(buttonPressDark)
-                    }
-                } else if self.nodeAtPoint(location) == self.menuOptionButton {
-                    lastSpriteName = self.menuOptionButton.name!
-                    self.menuOptionButton.runAction(buttonPressDark)
-                } else if self.nodeAtPoint(location) == self.highScoreLabel {
-                    lastSpriteName = self.highScoreLabel.name!
-                    labelColorDark()
-                } else if self.nodeAtPoint(location) == self.nameLabel {
-                    if secretUnlock.secretUnlocked == true {
-                        lastSpriteName = self.nameLabel.name!
-                    }
-                } else if self.nodeAtPoint(location) == self.menuShopButton {
-                    lastSpriteName = self.menuShopButton.name!
-                    self.menuShopButton.runAction(buttonPressDark)
+        if shopSceneActive == false {
+            if self.nodeAtPoint(location) == self.startGameButton {
+                lastSpriteName = self.startGameButton.name!
+                self.startGameButton.runAction(buttonPressDark)
+                self.startGameButton.removeActionForKey("pulse")
+            } else if self.nodeAtPoint(location) == self.menuHSButton {
+                if interScene.connectedToGC == true {
+                    lastSpriteName = self.menuHSButton.name!
+                    self.menuHSButton.runAction(buttonPressDark)
                 }
-                for enemy in enemies {
-                    if self.nodeAtPoint(location) == enemy {
-                        enemy.moving = false
-                        explosionEmit(enemy)
-                    }
+            } else if self.nodeAtPoint(location) == self.menuOptionButton {
+                lastSpriteName = self.menuOptionButton.name!
+                self.menuOptionButton.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.highScoreLabel {
+                lastSpriteName = self.highScoreLabel.name!
+                labelColorDark()
+            } else if self.nodeAtPoint(location) == self.nameLabel {
+                if secretUnlock.secretUnlocked == true {
+                    lastSpriteName = self.nameLabel.name!
                 }
-            } else if shopSceneActive == true {
-                if self.nodeAtPoint(location) == self.shopCloseButton {
-                    lastSpriteName = self.shopCloseButton.name!
-                    self.shopCloseButton.runAction(buttonPressDark)
+            } else if self.nodeAtPoint(location) == self.menuShopButton {
+                lastSpriteName = self.menuShopButton.name!
+                self.menuShopButton.runAction(buttonPressDark)
+            }
+            for enemy in enemies {
+                if self.nodeAtPoint(location) == enemy {
+                    enemy.moving = false
+                    explosionEmit(enemy)
+                }
+            }
+        } else if shopSceneActive == true {
+            if self.nodeAtPoint(location) == self.shopCloseButton {
+                lastSpriteName = self.shopCloseButton.name!
+                self.shopCloseButton.runAction(buttonPressDark)
+            }
+        }
+    }
+    
+    override func screenInteractionMoved(location: CGPoint) {
+        if shopSceneActive == false {
+            if lastSpriteName == menuShopButton.name {
+                if location.y > self.size.height / 2 - menuShopButton.size.height / 2 {
+                    menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
+                    shopBg.position.y = shopBg.size.height
+                } else {
+                    menuShopButton.position.y = location.y
+                    shopBg.position.y = menuShopButton.position.y + menuShopButton.size.height / 2 + shopBg.size.height / 2
                 }
             }
         }
-	}
+    }
+    
+    override func screenInteractionEnded(location: CGPoint) {
+        if shopSceneActive == false {
+            if self.nodeAtPoint(location) == self.startGameButton {
+                removeButtonAnim()
+                if lastSpriteName == startGameButton.name {
+                    self.startGameButton.runAction(buttonPressLight){
+                        self.resetSecret()
+                        self.showPlayScene()
+                        self.lastSpriteName = "empty"
+                    }
+                }
+            } else if self.nodeAtPoint(location) == self.menuHSButton {
+                removeButtonAnim()
+                if lastSpriteName == menuHSButton.name {
+                    if interScene.connectedToGC == true {
+                        self.menuHSButton.runAction(buttonPressLight){
+                            self.resetSecret()
+                            EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                            self.lastSpriteName = "empty"
+                        }
+                    }
+                }
+            } else if self.nodeAtPoint(location) == self.menuOptionButton {
+                removeButtonAnim()
+                if lastSpriteName == menuOptionButton.name {
+                    self.menuOptionButton.runAction(buttonPressLight) {
+                        self.showOptionScene()
+                        self.lastSpriteName = "empty"
+                    }
+                }
+            } else if self.nodeAtPoint(location) == self.highScoreLabel {
+                removeButtonAnim()
+                if lastSpriteName == highScoreLabel.name {
+                    labelColorLightAction()
+                    self.lastSpriteName = "empty"
+                }
+            } else if self.nodeAtPoint(location) == self.nameLabel {
+                removeButtonAnim()
+                if secretUnlock.secretUnlocked == true {
+                    if lastSpriteName == nameLabel.name {
+                        self.lastSpriteName = "empty"
+                        self.showVersion()
+                    }
+                }
+            } else if self.nodeAtPoint(location) == self.menuShopButton {
+                removeButtonAnim()
+                if lastSpriteName == menuShopButton.name {
+                    self.menuShopButton.runAction(buttonPressLight) {
+                        self.lastSpriteName = "empty"
+                        self.shopButtonMoving()
+                    }
+                }
+            } else {
+                shopButtonMoving()
+                lastSpriteName = "empty"
+                menuHSButton.removeAllActions()
+                menuOptionButton.removeAllActions()
+                startGameButton.removeAllActions()
+                highScoreLabel.removeAllActions()
+                
+                self.menuHSButton.runAction(buttonPressLight)
+                self.menuOptionButton.runAction(buttonPressLight)
+                self.startGameButton.runAction(buttonPressLight)
+                labelColorLight()
+                pulsingPlayButton()
+                
+            }
+        } else if shopSceneActive == true {
+            if self.nodeAtPoint(location) == self.shopCloseButton {
+                removeButtonAnim()
+                if lastSpriteName == shopCloseButton.name {
+                    self.shopCloseButton.runAction(buttonPressLight) {
+                        self.lastSpriteName = "empty"
+                        self.shopClose()
+                    }
+                }
+            }
+        }
+    }
     
     func removeButtonAnim() {
     
@@ -551,23 +642,6 @@ class GameScene: SKScene, EGCDelegate {
         }
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            if shopSceneActive == false {
-                if lastSpriteName == menuShopButton.name {
-                    if location.y > self.size.height / 2 - menuShopButton.size.height / 2 {
-                        menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
-                        shopBg.position.y = shopBg.size.height
-                    } else {
-                        menuShopButton.position.y = location.y
-                        shopBg.position.y = menuShopButton.position.y + menuShopButton.size.height / 2 + shopBg.size.height / 2
-                    }
-                }
-            }
-        }
-    }
-    
     func shopButtonMoving() {
         let scrollPoint:CGFloat = (self.size.height / 2) * (1 / 6)
         if menuShopButton.position.y > scrollPoint {
@@ -583,90 +657,6 @@ class GameScene: SKScene, EGCDelegate {
             shopBg.runAction(SKAction.moveToY(0, duration: 1 * Double(time)))
             shopSceneActive = true
         
-        }
-    }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            if shopSceneActive == false {
-                if self.nodeAtPoint(location) == self.startGameButton {
-                    removeButtonAnim()
-                    if lastSpriteName == startGameButton.name {
-                        self.startGameButton.runAction(buttonPressLight){
-                            self.resetSecret()
-                            self.showPlayScene()
-                            self.lastSpriteName = "empty"
-                        }
-                    }
-                } else if self.nodeAtPoint(location) == self.menuHSButton {
-                    removeButtonAnim()
-                    if lastSpriteName == menuHSButton.name {
-                        if interScene.connectedToGC == true {
-                            self.menuHSButton.runAction(buttonPressLight){
-                                self.resetSecret()
-                                EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
-                                self.lastSpriteName = "empty"
-                            }
-                        }
-                    }
-                } else if self.nodeAtPoint(location) == self.menuOptionButton {
-                    removeButtonAnim()
-                    if lastSpriteName == menuOptionButton.name {
-                        self.menuOptionButton.runAction(buttonPressLight) {
-                            self.showOptionScene()
-                            self.lastSpriteName = "empty"
-                        }
-                    }
-                } else if self.nodeAtPoint(location) == self.highScoreLabel {
-                    removeButtonAnim()
-                    if lastSpriteName == highScoreLabel.name {
-                        labelColorLightAction()
-                        self.lastSpriteName = "empty"
-                    }
-                } else if self.nodeAtPoint(location) == self.nameLabel {
-                    removeButtonAnim()
-                    if secretUnlock.secretUnlocked == true {
-                        if lastSpriteName == nameLabel.name {
-                            self.lastSpriteName = "empty"
-                            self.showVersion()
-                        }
-                    }
-                } else if self.nodeAtPoint(location) == self.menuShopButton {
-                    removeButtonAnim()
-                    if lastSpriteName == menuShopButton.name {
-                        self.menuShopButton.runAction(buttonPressLight) {
-                            self.lastSpriteName = "empty"
-                            self.shopButtonMoving()
-                        }
-                    }
-                } else {
-                    shopButtonMoving()
-                    lastSpriteName = "empty"
-                    menuHSButton.removeAllActions()
-                    menuOptionButton.removeAllActions()
-                    startGameButton.removeAllActions()
-                    highScoreLabel.removeAllActions()
-                    
-                    self.menuHSButton.runAction(buttonPressLight)
-                    self.menuOptionButton.runAction(buttonPressLight)
-                    self.startGameButton.runAction(buttonPressLight)
-                    labelColorLight()
-                    pulsingPlayButton()
-                    
-                }
-            } else if shopSceneActive == true {
-                if self.nodeAtPoint(location) == self.shopCloseButton {
-                    removeButtonAnim()
-                    if lastSpriteName == shopCloseButton.name {
-                        self.shopCloseButton.runAction(buttonPressLight) {
-                            self.lastSpriteName = "empty"
-                            self.shopClose()
-                        }
-                    }
-                }
-            }
         }
     }
     

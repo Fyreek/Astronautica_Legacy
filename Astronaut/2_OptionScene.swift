@@ -8,8 +8,7 @@
 
 import SpriteKit
 
-
-class OptionScene: SKScene {
+class OptionScene: SGScene {
     
     var redSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var greenSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
@@ -455,111 +454,103 @@ class OptionScene: SKScene {
         NSUserDefaults.standardUserDefaults().synchronize()
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            if self.nodeAtPoint(location) == self.backSprite {
-                lastSpriteName = self.backSprite.name!
-                self.backSprite.runAction(buttonPressDark)
-            } else if self.nodeAtPoint(location) == self.menuColorSprite {
-                lastSpriteName = self.menuColorSprite.name!
-                self.menuColorSprite.runAction(buttonPressDark)
-            } else if self.nodeAtPoint(location) == self.menuSoundSprite {
-                lastSpriteName = self.menuSoundSprite.name!
-                self.menuSoundSprite.runAction(buttonPressDark)
-            } else if self.nodeAtPoint(location) == self.menuThemeSprite {
-                lastSpriteName = self.menuThemeSprite.name!
-                self.menuThemeSprite.runAction(buttonPressDark)
-            } else if self.nodeAtPoint(location) == self.noAdSprite {
-                if interScene.adState == true {
-                    lastSpriteName = self.noAdSprite.name!
-                    self.noAdSprite.runAction(buttonPressDark)
-                }
-            } else if self.nodeAtPoint(location) == self.soundSprite {
-                lastSpriteName = self.soundSprite.name!
-                self.soundSprite.runAction(buttonPressDark)
-            } else if self.nodeAtPoint(location) == self.musicSprite {
-                lastSpriteName = self.musicSprite.name!
-                self.musicSprite.runAction(buttonPressDark)
+    override func screenInteractionStarted(location: CGPoint) {
+        if self.nodeAtPoint(location) == self.backSprite {
+            lastSpriteName = self.backSprite.name!
+            self.backSprite.runAction(buttonPressDark)
+        } else if self.nodeAtPoint(location) == self.menuColorSprite {
+            lastSpriteName = self.menuColorSprite.name!
+            self.menuColorSprite.runAction(buttonPressDark)
+        } else if self.nodeAtPoint(location) == self.menuSoundSprite {
+            lastSpriteName = self.menuSoundSprite.name!
+            self.menuSoundSprite.runAction(buttonPressDark)
+        } else if self.nodeAtPoint(location) == self.menuThemeSprite {
+            lastSpriteName = self.menuThemeSprite.name!
+            self.menuThemeSprite.runAction(buttonPressDark)
+        } else if self.nodeAtPoint(location) == self.noAdSprite {
+            if interScene.adState == true {
+                lastSpriteName = self.noAdSprite.name!
+                self.noAdSprite.runAction(buttonPressDark)
             }
+        } else if self.nodeAtPoint(location) == self.soundSprite {
+            lastSpriteName = self.soundSprite.name!
+            self.soundSprite.runAction(buttonPressDark)
+        } else if self.nodeAtPoint(location) == self.musicSprite {
+            lastSpriteName = self.musicSprite.name!
+            self.musicSprite.runAction(buttonPressDark)
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-        for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            if self.nodeAtPoint(location) == self.backSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.backSprite.name {
-                    self.backSprite.runAction(buttonPressLight){
-                        self.showMenu()
-                    }
+    override func screenInteractionEnded(location: CGPoint) {
+        if self.nodeAtPoint(location) == self.backSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.backSprite.name {
+                self.backSprite.runAction(buttonPressLight){
+                    self.showMenu()
                 }
-            } else if self.nodeAtPoint(location) == self.menuColorSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.menuColorSprite.name {
-                    self.menuColorSprite.runAction(buttonPressLight){
-                        self.showHeroColorMenu()
-                    }
-                }
-            } else if self.nodeAtPoint(location) == self.menuThemeSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.menuThemeSprite.name {
-                    self.menuThemeSprite.runAction(buttonPressLight) {
-                        self.showThemeMenu()
-                    }
-                }
-            } else if self.nodeAtPoint(location) == self.menuSoundSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.menuSoundSprite.name {
-                    self.menuSoundSprite.runAction(buttonPressLight) {
-                        self.showSoundMenu()
-                    }
-                }
-            } else if self.nodeAtPoint(location) == self.noAdSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.noAdSprite.name {
-                    if interScene.adState == true {
-                        self.noAdSprite.runAction(buttonPressLight){
-                            self.hideAds()
-                        }
-                    }
-                }
-            } else if self.nodeAtPoint(location) == self.soundSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.soundSprite.name {
-                    self.soundSprite.runAction(buttonPressLight){
-                        self.soundManagment()
-                    }
-                }
-            } else if self.nodeAtPoint(location) == self.musicSprite {
-                removeButtonAnim()
-                if lastSpriteName == self.musicSprite.name {
-                    self.musicSprite.runAction(buttonPressLight){
-                        self.musicManagement()
-                    }
-                }
-            } else {
-                resetSecret()
-                backSprite.removeAllActions()
-                menuColorSprite.removeAllActions()
-                menuThemeSprite.removeAllActions()
-                menuSoundSprite.removeAllActions()
-                noAdSprite.removeAllActions()
-                musicSprite.removeAllActions()
-                soundSprite.removeAllActions()
-                self.backSprite.runAction(buttonPressLight)
-                self.menuColorSprite.runAction(buttonPressLight)
-                self.menuThemeSprite.runAction(buttonPressLight)
-                self.menuSoundSprite.runAction(buttonPressLight)
-                if interScene.adState == true {
-                    self.noAdSprite.runAction(buttonPressLight)
-                }
-                self.musicSprite.runAction(buttonPressLight)
-                self.soundSprite.runAction(buttonPressLight)
             }
+        } else if self.nodeAtPoint(location) == self.menuColorSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.menuColorSprite.name {
+                self.menuColorSprite.runAction(buttonPressLight){
+                    self.showHeroColorMenu()
+                }
+            }
+        } else if self.nodeAtPoint(location) == self.menuThemeSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.menuThemeSprite.name {
+                self.menuThemeSprite.runAction(buttonPressLight) {
+                    self.showThemeMenu()
+                }
+            }
+        } else if self.nodeAtPoint(location) == self.menuSoundSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.menuSoundSprite.name {
+                self.menuSoundSprite.runAction(buttonPressLight) {
+                    self.showSoundMenu()
+                }
+            }
+        } else if self.nodeAtPoint(location) == self.noAdSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.noAdSprite.name {
+                if interScene.adState == true {
+                    self.noAdSprite.runAction(buttonPressLight){
+                        self.hideAds()
+                    }
+                }
+            }
+        } else if self.nodeAtPoint(location) == self.soundSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.soundSprite.name {
+                self.soundSprite.runAction(buttonPressLight){
+                    self.soundManagment()
+                }
+            }
+        } else if self.nodeAtPoint(location) == self.musicSprite {
+            removeButtonAnim()
+            if lastSpriteName == self.musicSprite.name {
+                self.musicSprite.runAction(buttonPressLight){
+                    self.musicManagement()
+                }
+            }
+        } else {
+            resetSecret()
+            backSprite.removeAllActions()
+            menuColorSprite.removeAllActions()
+            menuThemeSprite.removeAllActions()
+            menuSoundSprite.removeAllActions()
+            noAdSprite.removeAllActions()
+            musicSprite.removeAllActions()
+            soundSprite.removeAllActions()
+            self.backSprite.runAction(buttonPressLight)
+            self.menuColorSprite.runAction(buttonPressLight)
+            self.menuThemeSprite.runAction(buttonPressLight)
+            self.menuSoundSprite.runAction(buttonPressLight)
+            if interScene.adState == true {
+                self.noAdSprite.runAction(buttonPressLight)
+            }
+            self.musicSprite.runAction(buttonPressLight)
+            self.soundSprite.runAction(buttonPressLight)
         }
     }
     
