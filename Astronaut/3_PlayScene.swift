@@ -105,6 +105,10 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     var gameShare = SKSpriteNode(imageNamed: "ShareButton18")
     var buyBoost = SKSpriteNode(imageNamed: "BuyBoost32")
     
+    //TODO: JetPack
+    let jetPackNode1 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
+    let jetPackNode2 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
+    
     var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
     
@@ -419,6 +423,9 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             currentGameState = .gameEnded
             gamePause.hidden = true
             hero.removeAllActions()
+            //TODO: Jetpack
+            jetPackNode1.removeFromParent()
+            jetPackNode2.removeFromParent()
             scoreLabel.hidden = true
             oxygenBar.hidden = true
             
@@ -573,6 +580,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         totalSpeedSatellite = totalSpeedSatellite + 20
         totalSpeedBonusItem = totalSpeedBonusItem + 20
         
+        //TODO: Jetpack
+        jetPackNode1.particleBirthRate = 2000
+        jetPackNode1.particleLifetime = 0.2
+        jetPackNode2.particleBirthRate = 2000
+        jetPackNode2.particleLifetime = 0.2
+        
         stopBGAnim()
         startBGAnim()
         
@@ -673,6 +686,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             totalSpeedSatellite = totalSpeedSatelliteOld
             totalSpeedBonusItem = totalSpeedBonusItemOld
             gameSpeed = Float(gameSpeedOld)
+            
+            //TODO: Jetpack
+            jetPackNode1.particleBirthRate = 1000
+            jetPackNode1.particleLifetime = 0.02
+            jetPackNode2.particleBirthRate = 1000
+            jetPackNode2.particleLifetime = 0.02
             
             stopBGAnim()
             startBGAnim()
@@ -908,6 +927,18 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             
             buyBoost.hidden = true
             
+            //TODO: Jetpack
+            
+            hero.addChild(jetPackNode1)
+            hero.addChild(jetPackNode2)
+            
+            jetPackNode1.zPosition = 1.1
+            jetPackNode2.zPosition = 1.1
+            jetPackNode1.setScale(0.2)
+            jetPackNode2.setScale(0.2)
+            jetPackNode1.position = CGPoint(x: -(hero.size.width / 2), y: hero.size.height / 8)
+            jetPackNode2.position = CGPoint(x: -(hero.size.width / 2), y: -(hero.size.height / 8))
+            
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -926,6 +957,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         hero.zPosition = 1.1
 		hero.texture?.filteringMode = .Nearest
 		addChild(hero)
+        
 	}
 	
     func achievementOxygenItem() {
@@ -1388,7 +1420,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             stopBGAnim()
             
 			currentGameState = .gamePaused
-			gamePlay.hidden = false
+            gamePlay.hidden = false
 			gamePlay.alpha = 1
             gamePlay.zPosition = 1.2
             menuPause.hidden = false
@@ -1461,6 +1493,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             var duration = 1.0
             var distance:CGFloat = 0
             let prePos:CGFloat = hero.position.y
+            
+            if touchLocation > self.size.height / 2 - hero.size.height / 2 {
+                touchLocation = self.size.height - hero.size.height / 2
+            } else if touchLocation < -(self.size.height / 2 - hero.size.height / 2) {
+                touchLocation = -(self.size.height / 2 - hero.size.height / 2)
+            }
             
             if prePos > touchLocation {
                 distance = prePos - touchLocation

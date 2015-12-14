@@ -12,6 +12,8 @@
 		1420562E1C17B24B00D1EAD4 /* SGScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1420562D1C17B24B00D1EAD4 /* SGScene.swift */; };
 		142056301C17BA9F00D1EAD4 /* SGExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1420562F1C17BA9F00D1EAD4 /* SGExtensions.swift */; };
 		14E9A15C1BD4DF80009E358B /* BonusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9A15B1BD4DF80009E358B /* BonusItem.swift */; };
+		14F050E11C1EE6670087BE9C /* JetPack.sks in Resources */ = {isa = PBXBuildFile; fileRef = 14F050DF1C1EE6670087BE9C /* JetPack.sks */; };
+		14F050E21C1EE6670087BE9C /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F050E01C1EE6670087BE9C /* spark.png */; };
 		14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 14F702A31BD692C6004ADE9A /* oxygenBar.atlas */; };
 		812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 812FED241B905B2900A2A8C3 /* Minecraft.ttf */; };
 		812FED271B9063E800A2A8C3 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812FED261B9063E800A2A8C3 /* HexColor.swift */; };
@@ -55,6 +57,8 @@
 		1420562D1C17B24B00D1EAD4 /* SGScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SGScene.swift; sourceTree = "<group>"; };
 		1420562F1C17BA9F00D1EAD4 /* SGExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SGExtensions.swift; sourceTree = "<group>"; };
 		14E9A15B1BD4DF80009E358B /* BonusItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusItem.swift; sourceTree = "<group>"; };
+		14F050DF1C1EE6670087BE9C /* JetPack.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = JetPack.sks; sourceTree = "<group>"; };
+		14F050E01C1EE6670087BE9C /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		14F702A31BD692C6004ADE9A /* oxygenBar.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = oxygenBar.atlas; sourceTree = "<group>"; };
 		812FED241B905B2900A2A8C3 /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Minecraft.ttf; sourceTree = "<group>"; };
 		812FED261B9063E800A2A8C3 /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
@@ -254,6 +258,8 @@
 				142056211C17ADCF00D1EAD4 /* Images */,
 				142056201C17ADC400D1EAD4 /* Sounds */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
+				14F050DF1C1EE6670087BE9C /* JetPack.sks */,
+				14F050E01C1EE6670087BE9C /* spark.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -368,6 +374,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				81E445521B866B0500BC86B2 /* Images.xcassets in Resources */,
+				14F050E21C1EE6670087BE9C /* spark.png in Resources */,
+				14F050E11C1EE6670087BE9C /* JetPack.sks in Resources */,
 				A1C8F0611BDD81FE006B1678 /* explosion.caf in Resources */,
 				14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */,
 				812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */,
