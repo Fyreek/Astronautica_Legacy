@@ -80,6 +80,8 @@ class GameScene: SGScene, EGCDelegate {
         interScene.scalingfactoriPad = (self.size.height * 2) / 768 //iPad Mini Height
         interScene.scalingfactoriPhone = (self.size.height * 2) / 640 //iPhone 5 Height, so iPhone 5 has original scaled sprites.
         
+        interScene.screenSize = CGSize(width: self.size.width, height: self.size.height)
+        
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
             interScene.scalingfactorSpeed = self.size.width * 2 / 1136

@@ -32,6 +32,7 @@ struct interScene {
     static var oxygenFail:Int = 0
     static var deaths:Int = 0
     static var coins:Int = 0
+    static var screenSize:CGSize = CGSize(width: 0, height: 0)
     //TODO: Jetpack
     static var jetpackPath = NSBundle.mainBundle().pathForResource("JetPack", ofType: "sks")
 }

@@ -59,6 +59,10 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     var boostStart:Bool = false
     var boostStop:Bool = false
     var oldTickTime:Int = 0
+
+    //Layer
+    let layerPause = LayerPause()
+    let layerEndScreen = LayerEndScreen()
 	
     var gameOverMenuLoaded = false
     
@@ -95,14 +99,8 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     var score = 0
 	var scoreLabel = SKLabelNode()
-	var refresh = SKSpriteNode(imageNamed: "PlayButton32")
-	var totalScore = SKLabelNode(text: "")
-	var menu = SKSpriteNode(imageNamed: "MenuButton32")
 	
 	var gamePause = SKSpriteNode(imageNamed: "PauseButton32")
-	var gamePlay = SKSpriteNode(imageNamed: "PlayButton32")
-    var menuPause = SKSpriteNode(imageNamed: "MenuButton32")
-    var gameShare = SKSpriteNode(imageNamed: "ShareButton18")
     var buyBoost = SKSpriteNode(imageNamed: "BuyBoost32")
     
     //TODO: JetPack
@@ -138,7 +136,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         
 		self.physicsWorld.contactDelegate = self
 		countDownText = SKLabelNode(text: String(countDown))
-        totalScore = SKLabelNode(text: String(score))
+        //totalScore = SKLabelNode(text: String(score))
         
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
@@ -275,24 +273,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         countDownText.zPosition = 1.2
         countDownText.fontColor = UIColor(rgba: "#5F6575")
 		
-        refresh.setScale(scalingFactor)
-		refresh.position.y = -(self.size.height / 4.5)
-		refresh.position.x = -(self.size.width / 8)
-        refresh.zPosition = 1.2
-        refresh.texture?.filteringMode = .Nearest
-		
-        menu.setScale(scalingFactor)
-		menu.position.y = -(self.size.height / 4.5)
-		menu.position.x = (self.size.width / 8)
-        menu.zPosition = 1.2
-        menu.texture?.filteringMode = .Nearest
-        
-        gameShare.setScale(scalingFactor)
-        gameShare.position.y = 0
-        gameShare.position.x = 0
-        gameShare.zPosition = 1.2
-        gameShare.texture?.filteringMode = .Nearest
-		
         gamePause.setScale(scalingFactor)
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             gamePause.position.y = -(self.size.height / 2) + gamePause.size.width / 2 + 10
@@ -304,56 +284,19 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         gamePause.zPosition = 1.2
         gamePause.texture?.filteringMode = .Nearest
 		
-        gamePlay.setScale(scalingFactor)
-		gamePlay.position.y = 0
-		gamePlay.position.x = -(self.size.width / 8)
-        gamePlay.zPosition = 1.2
-        gamePlay.texture?.filteringMode = .Nearest
-        
-        menuPause.setScale(scalingFactor)
-        menuPause.position.y = 0
-        menuPause.position.x = self.size.width / 8
-        menuPause.zPosition = 1.2
-        menuPause.texture?.filteringMode = .Nearest
-		
         buyBoost.setScale(scalingFactor)
         buyBoost.position.y = -(self.size.height / 2 - buyBoost.size.height / 2 - (20 * scalingFactor))
         buyBoost.position.x = 0
         buyBoost.zPosition = 1.2
         buyBoost.texture?.filteringMode = .Nearest
-        
-		totalScore = SKLabelNode(fontNamed: "Minecraft")
-		totalScore.fontSize = 15
-        totalScore.fontColor = UIColor(rgba: "#5F6575")
-		totalScore.position.x = 0
-		totalScore.position.y = self.size.height / 8
-        totalScore.zPosition = 1.2
-        totalScore.setScale(scalingFactor)
 		
-		addChild(totalScore)
 		addChild(scoreLabel)
-		addChild(refresh)
-		addChild(menu)
-        addChild(gameShare)
 		addChild(gamePause)
-		addChild(gamePlay)
-        addChild(menuPause)
         // WARNING: Shop System
         //addChild(buyBoost)
 		addChild(countDownText)
 		
 		countDownText.hidden = true
-		refresh.name = "refresh"
-		refresh.hidden = true
-		refresh.alpha = 0
-		
-		gamePlay.name = "gamePlay"
-		gamePlay.hidden = true
-		gamePlay.alpha = 0
-		
-        menuPause.name = "menuPause"
-        menuPause.hidden = true
-        menuPause.alpha = 0
         
         buyBoost.name = "buyBoost"
         buyBoost.hidden = true
@@ -362,18 +305,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 		gamePause.name = "gamePause"
 		gamePause.hidden = true
 		gamePause.alpha = 0
-		
-		totalScore.name = "totalScore"
-		totalScore.hidden = true
-		totalScore.alpha = 0
-		
-		menu.name = "menu"
-		menu.hidden = true
-		menu.alpha = 0
-        
-        gameShare.name = "share"
-        gameShare.hidden = true
-        gameShare.alpha = 0
         
         GameViewController.prepareInterstitialAds()
         
@@ -395,21 +326,15 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             showFSAd()
         }
         
-        refresh.hidden = false
-        refresh.runAction(SKAction.fadeInWithDuration(1.0)){
+        addChild(layerEndScreen)
+        layerEndScreen.gameShare.hidden = true
+        layerEndScreen.runAction(SKAction.fadeInWithDuration(1)){
             self.gameOverMenuLoaded = true
             self.pulsingPlayButton()
         }
-        refresh.zPosition = 1.2
-        menu.zPosition = 1.2
-        gamePlay.zPosition = 0.9
-        menuPause.zPosition = 0.9
-        menu.hidden = false
-        menu.runAction(SKAction.fadeInWithDuration(1.0))
         if newHighScore == true {
-            gameShare.zPosition = 1.2
-            gameShare.hidden = false
-            gameShare.runAction(SKAction.fadeInWithDuration(1.0))
+            layerEndScreen.gameShare.hidden = false
+            layerEndScreen.gameShare.runAction(SKAction.fadeInWithDuration(1.0))
         }
     }
     
@@ -473,9 +398,8 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             
             if score <= scoreBefore {
                 
-                totalScore.hidden = false
-                totalScore.text = ("You reached ") + String(score) + (" points!")
-                totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+                layerEndScreen.totalScore.text = ("You reached ") + String(score) + (" points!")
+                //totalScore.runAction(SKAction.fadeInWithDuration(1.0))
                 
             } else if score > scoreBefore {
                 
@@ -487,9 +411,8 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 interScene.highScore = score
                 EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
                 
-                totalScore.hidden = false
-                totalScore.text = ("New Highscore: ") + String(score) + (" points!")
-                totalScore.runAction(SKAction.fadeInWithDuration(1.0))
+                layerEndScreen.totalScore.text = ("New Highscore: ") + String(score) + (" points!")
+                //totalScore.runAction(SKAction.fadeInWithDuration(1.0))
             }
         }
 	}
@@ -507,7 +430,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         let pulseDown = SKAction.scaleTo(scalingFactor - 0.02, duration: 1.0)
         let pulse = SKAction.sequence([pulseUp, pulseDown])
         let repeatPulse = SKAction.repeatActionForever(pulse)
-        self.refresh.runAction(repeatPulse, withKey: "pulse")
+        layerEndScreen.refresh.runAction(repeatPulse, withKey: "pulse")
     }
     
     func collisionEnemyBonusItem(otherBody: Enemy, bonusItem: BonusItem) {
@@ -868,14 +791,9 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         
         gameOverMenuLoaded = false
         
-        refresh.zPosition = 0.9
-        menu.zPosition = 0.9
 		hero.position.y = 0
 		hero.position.x = -(self.size.width/2)/3
 		
-		refresh.runAction(SKAction.fadeOutWithDuration(1.0))
-        menu.runAction(SKAction.fadeOutWithDuration(1.0))
-		totalScore.runAction(SKAction.fadeOutWithDuration(1.0))
 		score = 0
 		scoreLabel.text = "0"
 		totalSpeedAsteroid = normalSpeedAsteroid
@@ -1419,20 +1337,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             showAds()
             stopBGAnim()
             
+            self.addChild(layerPause)
+            layerPause.runAction(SKAction.fadeInWithDuration(1))
+            
 			currentGameState = .gamePaused
-            gamePlay.hidden = false
-			gamePlay.alpha = 1
-            gamePlay.zPosition = 1.2
-            menuPause.hidden = false
-            menuPause.alpha = 1
-            menuPause.zPosition = 1.2
 			gamePause.hidden = true
 			hero.paused = true
-            gamePlay.position.y = 0
-            gamePlay.position.x = -(self.size.width / 8)
-            
-            
-			
 		}
 	}
 	
@@ -1444,12 +1354,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             
             hideAds()
             hero.removeAllActions()
-            totalScore.hidden = true
             countDownText.hidden = false
-            gamePlay.hidden = true
-            gamePlay.zPosition = 0.9
-            menuPause.zPosition = 0.9
-            menuPause.hidden = true
             countDownRunning = true
             timerPause = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
 
@@ -1476,10 +1381,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             timerPause.invalidate()
             countDownRunning = false
             currentGameState = .gameActive
-            gamePlay.hidden = true
-            menuPause.hidden = true
-            menuPause.alpha = 0
-            gamePlay.alpha = 0
             gamePause.hidden = false
             hero.paused = false
             
@@ -1495,7 +1396,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             let prePos:CGFloat = hero.position.y
             
             if touchLocation > self.size.height / 2 - hero.size.height / 2 {
-                touchLocation = self.size.height - hero.size.height / 2
+                touchLocation = self.size.height / 2 - hero.size.height / 2
             } else if touchLocation < -(self.size.height / 2 - hero.size.height / 2) {
                 touchLocation = -(self.size.height / 2 - hero.size.height / 2)
             }
@@ -1517,21 +1418,21 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         
         touchLocation = location.y
         if currentGameState == .gameOver || currentGameState == .gameEnded {
-            if self.nodeAtPoint(location) == self.refresh {
-                lastSpriteName = self.refresh.name!
+            if self.nodeAtPoint(location) == layerEndScreen.refresh {
+                lastSpriteName = layerEndScreen.refresh.name!
                 if !countDownRunning {
-                    self.refresh.runAction(buttonPressDark)
-                    self.refresh.removeActionForKey("pulse")
+                    layerEndScreen.refresh.runAction(buttonPressDark)
+                    layerEndScreen.refresh.removeActionForKey("pulse")
                 }
-            } else if self.nodeAtPoint(location) == self.menu {
-                lastSpriteName = self.menu.name!
+            } else if self.nodeAtPoint(location) == layerEndScreen.menu {
+                lastSpriteName = layerEndScreen.menu.name!
                 if !countDownRunning {
-                    self.menu.runAction(buttonPressDark)
+                    layerEndScreen.menu.runAction(buttonPressDark)
                 }
-            } else if self.nodeAtPoint(location) == self.gameShare {
-                lastSpriteName = self.gameShare.name!
+            } else if self.nodeAtPoint(location) == layerEndScreen.gameShare {
+                lastSpriteName = layerEndScreen.gameShare.name!
                 if !countDownRunning {
-                    self.gameShare.runAction(buttonPressDark)
+                    layerEndScreen.gameShare.runAction(buttonPressDark)
                 }
             }
         } else if currentGameState == .gameActive {
@@ -1542,21 +1443,22 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             } else {
                 if lastSpriteName == "empty" {
                     buttonRemoveAction()
+                    hero.removeAllActions()
                 } else {
                     buttonRemoveAction()
                 }
                 
             }
         } else if currentGameState == .gamePaused {
-            if self.nodeAtPoint(location) == self.gamePlay {
-                lastSpriteName = self.gamePlay.name!
+            if self.nodeAtPoint(location) == layerPause.gamePlay {
+                lastSpriteName = layerPause.gamePlay.name!
                 if !countDownRunning {
-                    self.gamePlay.runAction(buttonPressDark)
+                    layerPause.gamePlay.runAction(buttonPressDark)
                 }
-            } else if self.nodeAtPoint(location) == self.menuPause {
-                lastSpriteName = self.menuPause.name!
+            } else if self.nodeAtPoint(location) == layerPause.menuPause {
+                lastSpriteName = layerPause.menuPause.name!
                 if !countDownRunning {
-                    self.menuPause.runAction(buttonPressDark)
+                    layerPause.menuPause.runAction(buttonPressDark)
                 }
             } else if self.nodeAtPoint(location) == self.buyBoost {
                 lastSpriteName = self.buyBoost.name!
@@ -1577,31 +1479,37 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         
         touchLocation = location.y
         if currentGameState == .gameOver || currentGameState == .gameEnded {
-            if self.nodeAtPoint(location) == self.refresh {
+            if self.nodeAtPoint(location) == layerEndScreen.refresh {
                 if !countDownRunning {
                     removeButtonAnim()
-                    if lastSpriteName == self.refresh.name {
+                    if lastSpriteName == layerEndScreen.refresh.name {
                         self.lastSpriteName = "empty"
-                        self.refresh.runAction(buttonPressLight){
+                        layerEndScreen.refresh.runAction(buttonPressLight){
+                            self.layerEndScreen.runAction(SKAction.fadeOutWithDuration(1)){
+                                self.layerEndScreen.removeFromParent()
+                            }
                             self.showPlayScene()
                         }
                     }
                 }
-            } else if self.nodeAtPoint(location) == self.menu {
+            } else if self.nodeAtPoint(location) == layerEndScreen.menu {
                 if !countDownRunning {
                     removeButtonAnim()
-                    if lastSpriteName == self.menu.name {
+                    if lastSpriteName == layerEndScreen.menu.name {
                         self.lastSpriteName = "empty"
-                        self.menu.runAction(buttonPressLight){
+                        layerEndScreen.menu.runAction(buttonPressLight){
+                            self.layerEndScreen.runAction(SKAction.fadeOutWithDuration(1)){
+                                self.layerEndScreen.removeFromParent()
+                            }
                             self.showMenu()
                         }
                     }
                 }
-            } else if self.nodeAtPoint(location) == self.gameShare {
+            } else if self.nodeAtPoint(location) == layerEndScreen.gameShare {
                 if !countDownRunning {
-                    if lastSpriteName == self.gameShare.name {
+                    if lastSpriteName == layerEndScreen.gameShare.name {
                         self.lastSpriteName = "empty"
-                        self.gameShare.runAction(buttonPressLight){
+                        layerEndScreen.gameShare.runAction(buttonPressLight){
                             self.showShareMenu()
                         }
                     }
@@ -1630,22 +1538,28 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 }
             }
         } else if currentGameState == .gamePaused {
-            if self.nodeAtPoint(location) == self.gamePlay {
+            if self.nodeAtPoint(location) == layerPause.gamePlay {
                 if !countDownRunning {
                     removeButtonAnim()
-                    if lastSpriteName == self.gamePlay.name {
+                    if lastSpriteName == layerPause.gamePlay.name {
                         self.lastSpriteName = "empty"
-                        self.gamePlay.runAction(buttonPressLight){
+                        layerPause.gamePlay.runAction(buttonPressLight){
+                            self.layerPause.runAction(SKAction.fadeOutWithDuration(1)){
+                                self.layerPause.removeFromParent()
+                            }
                             self.resumeGame()
                         }
                     }
                 }
-            } else if self.nodeAtPoint(location) == self.menuPause {
+            } else if self.nodeAtPoint(location) == layerPause.menuPause {
                 if !countDownRunning {
                     removeButtonAnim()
-                    if lastSpriteName == self.menuPause.name {
+                    if lastSpriteName == layerPause.menuPause.name {
                         self.lastSpriteName = "empty"
-                        self.menuPause.runAction(buttonPressLight){
+                        layerPause.menuPause.runAction(buttonPressLight){
+                            self.layerPause.runAction(SKAction.fadeOutWithDuration(1)){
+                                self.layerPause.removeFromParent()
+                            }
                             self.showMenu()
                         }
                     }
@@ -1663,15 +1577,15 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             }
         } else {
         
-            if lastSpriteName == self.menuPause.name {
+            if lastSpriteName == layerPause.menuPause.name {
         
-                menuPause.removeAllActions()
-                menuPause.runAction(buttonPressLight)
+                layerPause.menuPause.removeAllActions()
+                layerPause.menuPause.runAction(buttonPressLight)
         
-            } else if lastSpriteName == self.gamePlay.name {
+            } else if lastSpriteName == layerPause.gamePlay.name {
         
-                gamePlay.removeAllActions()
-                gamePlay.runAction(buttonPressLight)
+                layerPause.gamePlay.removeAllActions()
+                layerPause.gamePlay.runAction(buttonPressLight)
         
             } else {
         
@@ -1685,48 +1599,48 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func removeButtonAnim() {
     
-        if lastSpriteName == self.refresh.name {
+        if lastSpriteName == layerEndScreen.refresh.name {
         
-            refresh.removeAllActions()
-            refresh.runAction(buttonPressLight)
+            layerEndScreen.refresh.removeAllActions()
+            layerEndScreen.refresh.runAction(buttonPressLight)
         
-        } else if lastSpriteName == self.menu.name {
+        } else if lastSpriteName == layerEndScreen.menu.name {
         
-            menu.removeAllActions()
-            menu.runAction(buttonPressLight)
+            layerEndScreen.menu.removeAllActions()
+            layerEndScreen.menu.runAction(buttonPressLight)
         
         } else if lastSpriteName == self.gamePause.name {
         
             gamePause.removeAllActions()
             gamePause.runAction(buttonPressLight)
         
-        } else if lastSpriteName == self.gamePlay.name {
+        } else if lastSpriteName == layerPause.gamePlay.name {
         
-            gamePlay.removeAllActions()
-            gamePlay.runAction(buttonPressLight)
+            layerPause.removeAllActions()
+            layerPause.runAction(buttonPressLight)
         
-        } else if lastSpriteName == self.menuPause.name {
+        } else if lastSpriteName == layerPause.menuPause.name {
         
-            menuPause.removeAllActions()
-            menuPause.runAction(buttonPressLight)
+            layerPause.removeAllActions()
+            layerPause.runAction(buttonPressLight)
             
         }
     
     }
     
     func buttonRemoveAction() {
-        menuPause.removeAllActions()
-        menu.removeAllActions()
-        refresh.removeAllActions()
-        gamePlay.removeAllActions()
+        layerPause.menuPause.removeAllActions()
+        layerEndScreen.menu.removeAllActions()
+        layerEndScreen.refresh.removeAllActions()
+        layerPause.gamePlay.removeAllActions()
         gamePause.removeAllActions()
-        gameShare.removeAllActions()
-        self.menuPause.runAction(buttonPressLight)
-        self.menu.runAction(buttonPressLight)
-        self.refresh.runAction(buttonPressLight)
-        self.gamePlay.runAction(buttonPressLight)
+        layerEndScreen.gameShare.removeAllActions()
+        layerPause.menuPause.runAction(buttonPressLight)
+        layerEndScreen.menu.runAction(buttonPressLight)
+        layerEndScreen.refresh.runAction(buttonPressLight)
+        layerPause.gamePlay.runAction(buttonPressLight)
         self.gamePause.runAction(buttonPressLight)
-        self.gameShare.runAction(buttonPressLight)
+        layerEndScreen.gameShare.runAction(buttonPressLight)
         pulsingPlayButton()
     }
     
@@ -2153,16 +2067,17 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             stopBGAnim()
             
             currentGameState = .gamePaused
-            gamePlay.hidden = false
-            gamePlay.alpha = 1
-            gamePlay.position.x = 0
-            gamePlay.position.y = -(self.size.height / 8)
-            gamePlay.zPosition = 1.2
+            addChild(layerPause)
+            layerPause.menuPause.hidden = true
+            layerPause.gamePlay.hidden = false
+            layerPause.gamePlay.alpha = 1
             hero.paused = true
-            totalScore.hidden = false
-            totalScore.text = ("Collect the oxygen!")
-            totalScore.runAction(SKAction.fadeInWithDuration(NSTimeInterval(gameSpeed)))
-            gamePlay.runAction(SKAction.fadeInWithDuration(NSTimeInterval(gameSpeed)))
+            addChild(layerEndScreen)
+            layerEndScreen.gameShare.hidden = true
+            layerEndScreen.refresh.hidden = true
+            layerEndScreen.menu.hidden = true
+            layerEndScreen.totalScore.text = ("Collect the oxygen!")
+            layerEndScreen.totalScore.runAction(SKAction.fadeInWithDuration(NSTimeInterval(gameSpeed)))
 
         }
 
