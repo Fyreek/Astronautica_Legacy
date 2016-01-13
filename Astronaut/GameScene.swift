@@ -119,8 +119,9 @@ class GameScene: SGScene, EGCDelegate {
         shopBg.zPosition = 2.0
         shopBg.setScale(scalingFactor)
         shopBg.texture?.filteringMode = .Nearest
-        shopBg.position.y = shopBg.size.height
-        addChild(shopBg)
+        shopBg.position.y = shopBg.size.height / 2
+        // WARNING: Shop System
+        //addChild(shopBg)
         
 		nameLabel.position.x = 0
 		nameLabel.position.y = (self.size.height / 4.5)
@@ -153,8 +154,10 @@ class GameScene: SGScene, EGCDelegate {
         
         coinLabel = SKLabelNode(fontNamed: "Minecraft")
         coinLabel.fontSize = 15
+        
         // WARNING: Shop System
         //addChild(coinLabel)
+        
         coinLabel.text = String(interScene.coins)
         coinLabel.fontColor = UIColor(rgba: "#5F6575")
         coinLabel.zPosition = 1.2
@@ -267,12 +270,17 @@ class GameScene: SGScene, EGCDelegate {
         heartCountLbl.alpha = 1.0
         
         menuShopButton.setScale(scalingFactor)
+        
         // WARNING: Shop System
-        //addChild(menuShopButton)
+        //shopBg.addChild(menuShopButton)
+        
         menuShopButton.name = "menuShopButton"
         menuShopButton.hidden = false
-        menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
-        menuShopButton.position.x = self.size.width / 2 - menuShopButton.size.width / 2 - 20 * scalingFactor
+        //menuShopButton.position.y = self.size.height / 2 - menuShopButton.size.height / 2
+        //menuShopButton.position.x = self.size.width / 2 - menuShopButton.size.width / 2 - 20 * scalingFactor
+        //menuShopButton.position.y = -((shopBg.size.height / scalingFactor) / 2 + (menuShopButton.size.height / scalingFactor) / 2)
+        //menuShopButton.position.x = self.size.width / 2 - menuShopButton.size.width - 20 * scalingFactorX
+        menuShopButton.position.y = -(shopBg.size.height / 2) - (menuShopButton.size.height / 2) / scalingFactor
         menuShopButton.zPosition = 2.1
         menuShopButton.texture?.filteringMode = .Nearest
         

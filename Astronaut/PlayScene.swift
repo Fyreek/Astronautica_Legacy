@@ -292,8 +292,10 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 		
 		addChild(scoreLabel)
 		addChild(gamePause)
+        
         // WARNING: Shop System
-        //addChild(buyBoost)
+        addChild(buyBoost)
+        
 		addChild(countDownText)
 		
 		countDownText.hidden = true
@@ -846,9 +848,10 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             buyBoost.hidden = true
             
             //TODO: Jetpack
-            
-            hero.addChild(jetPackNode1)
-            hero.addChild(jetPackNode2)
+            if interScene.jetPack == true {
+                hero.addChild(jetPackNode1)
+                hero.addChild(jetPackNode2)
+            }
             
             jetPackNode1.zPosition = 1.1
             jetPackNode2.zPosition = 1.1

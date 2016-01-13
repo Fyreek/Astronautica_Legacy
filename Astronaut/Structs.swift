@@ -35,6 +35,7 @@ struct interScene {
     static var screenSize:CGSize = CGSize(width: 0, height: 0)
     //TODO: Jetpack
     static var jetpackPath = NSBundle.mainBundle().pathForResource("JetPack", ofType: "sks")
+    static var jetPack:Bool = true
 }
 
 struct price {
