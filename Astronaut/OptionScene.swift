@@ -53,7 +53,7 @@ class OptionScene: SGScene {
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.respondToSwipeGesture(_:)))
         swipeRight.direction = .Right
         self.view!.addGestureRecognizer(swipeRight)
         
@@ -84,7 +84,7 @@ class OptionScene: SGScene {
         addChild(bg2)
         addChild(bg3)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideAdsSuccess", name: "AdRemoveSuccess", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OptionScene.hideAdsSuccess), name: "AdRemoveSuccess", object: nil)
         
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         
@@ -95,7 +95,7 @@ class OptionScene: SGScene {
         redSlider.continuous = true
         redSlider.tintColor = UIColor.redColor()
         redSlider.value = heroColor.heroColorRed
-        redSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
+        redSlider.addTarget(self, action: #selector(OptionScene.sliderValueDidChange), forControlEvents: .ValueChanged)
         redSlider.alpha = 0
         redSlider.setThumbImage(UIImage(named: "Astronaut25"), forState: UIControlState.Normal)
         redSlider.setMinimumTrackImage(UIImage(named: "RedSlider3"), forState: UIControlState.Normal)
@@ -108,7 +108,7 @@ class OptionScene: SGScene {
         greenSlider.continuous = true
         greenSlider.tintColor = UIColor.greenColor()
         greenSlider.value = heroColor.heroColorGreen
-        greenSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
+        greenSlider.addTarget(self, action: #selector(OptionScene.sliderValueDidChange), forControlEvents: .ValueChanged)
         greenSlider.alpha = 0
         greenSlider.alpha = 0
         greenSlider.setThumbImage(UIImage(named: "Astronaut25"), forState: UIControlState.Normal)
@@ -122,7 +122,7 @@ class OptionScene: SGScene {
         blueSlider.continuous = true
         blueSlider.tintColor = UIColor.blueColor()
         blueSlider.value = heroColor.heroColorBlue
-        blueSlider.addTarget(self, action: "sliderValueDidChange", forControlEvents: .ValueChanged)
+        blueSlider.addTarget(self, action: #selector(OptionScene.sliderValueDidChange), forControlEvents: .ValueChanged)
         blueSlider.alpha = 0
         blueSlider.alpha = 0
         blueSlider.setThumbImage(UIImage(named: "Astronaut25"), forState: UIControlState.Normal)
@@ -306,7 +306,7 @@ class OptionScene: SGScene {
     }
     
     func achievementSecretMenu() {
-        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_secret", showBannnerIfCompleted: true, addToExisting: false)
+        GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_secret", showBannnerIfCompleted: true, addToExisting: false)
     }
     
     func resetSecret() {

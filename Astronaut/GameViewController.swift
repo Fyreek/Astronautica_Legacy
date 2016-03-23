@@ -10,7 +10,7 @@ import UIKit
 import SpriteKit
 import iAd
 
-class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
+class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
     
     var UIiAd: ADBannerView = ADBannerView()
     var gotScore:Bool = false
@@ -39,16 +39,16 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
         UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "hideBannerAd", name: "hideadsID", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showBannerAd", name: "showadsID", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showFsAd", name: "showFSAd", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOn", name: "MusicOn", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "extMusicOff", name: "MusicOff", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "displayAdAlert", name: "displayAdAlert", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "showShareMenu", name: "ShareMenu", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.hideBannerAd), name: "hideadsID", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showBannerAd), name: "showadsID", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showFsAd), name: "showFSAd", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.extMusicOn), name: "MusicOn", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.extMusicOff), name: "MusicOff", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.displayAdAlert), name: "displayAdAlert", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showShareMenu), name: "ShareMenu", object: nil)
         
         UIiAd.delegate = self
-		EGC.sharedInstance(self)
+		GC.sharedInstance(self)
 		
 		let scene = GameScene()
 		let skView = self.originalContentView as! SKView
@@ -126,7 +126,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
     }
     
     func loadHighScore() {
-        EGC.getHighScore(leaderboardIdentifier: "astronautgame_leaderboard") {
+        GC.getHighScore(leaderboardIdentifier: "astronautgame_leaderboard") {
             (tupleHighScore) -> Void in
             if self.gotScore == false {
                 if let tupleIsOk = tupleHighScore {
@@ -143,7 +143,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, EGCDelegate {
                         } else if self.gcScore < NSUserDefaults.standardUserDefaults().integerForKey("highScore") {
                             
                             interScene.highScore = NSUserDefaults.standardUserDefaults().integerForKey("highScore")
-                            EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: NSUserDefaults.standardUserDefaults().integerForKey("highScore"))
+                            GC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: NSUserDefaults.standardUserDefaults().integerForKey("highScore"))
                             
                         }
                         

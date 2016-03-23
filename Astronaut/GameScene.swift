@@ -10,7 +10,7 @@ import SpriteKit
 import iAd
 import AVFoundation
 
-class GameScene: SGScene, EGCDelegate {
+class GameScene: SGScene, GCDelegate {
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
@@ -67,13 +67,13 @@ class GameScene: SGScene, EGCDelegate {
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "switchLsButton", name: "switchLbButton", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameScene.switchLsButton), name: "switchLbButton", object: nil)
         
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.respondToSwipeGesture(_:)))
         swipeRight.direction = .Right
         self.view!.addGestureRecognizer(swipeRight)
         
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: "respondToSwipeGesture:")
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.respondToSwipeGesture(_:)))
         swipeLeft.direction = .Left
         self.view!.addGestureRecognizer(swipeLeft)
         
@@ -289,7 +289,7 @@ class GameScene: SGScene, EGCDelegate {
         let explosionAtlas = SKTextureAtlas(named: "explosion")
         
         let numImagesExplosion = explosionAtlas.textureNames.count
-        for var i=1; i<(numImagesExplosion + 3) / 3; i++ {
+        for i in 1 ..< (numImagesExplosion + 3) / 3 {
             
             let explosionTextureName = "explosion32-\(i)"
             explosionAtlas.textureNamed(explosionTextureName).filteringMode = .Nearest
@@ -325,7 +325,7 @@ class GameScene: SGScene, EGCDelegate {
             switch swipeGesture.direction {
             case UISwipeGestureRecognizerDirection.Right:
                 if lastSpriteName == "empty" {
-                    EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                    GC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                 }
             case UISwipeGestureRecognizerDirection.Down:
                 print("Swiped down")
@@ -540,7 +540,7 @@ class GameScene: SGScene, EGCDelegate {
                     if interScene.connectedToGC == true {
                         self.menuHSButton.runAction(buttonPressLight){
                             self.resetSecret()
-                            EGC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
+                            GC.showGameCenterLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard")
                             self.lastSpriteName = "empty"
                         }
                     }
@@ -636,7 +636,7 @@ class GameScene: SGScene, EGCDelegate {
             versionShown = true
             versionLabel.hidden = false
             versionLabel.runAction(SKAction.fadeInWithDuration(1.0)){
-                self.timerVersion = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: Selector("updateTimerVersion"), userInfo: nil, repeats: true)
+                self.timerVersion = NSTimer.scheduledTimerWithTimeInterval(3.0, target: self, selector: #selector(GameScene.updateTimerVersion), userInfo: nil, repeats: true)
             }
         }
     }
@@ -696,7 +696,7 @@ class GameScene: SGScene, EGCDelegate {
     }
     
     func unlockEwokAchievement() {
-        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_20enemies", showBannnerIfCompleted: true, addToExisting: false)
+        GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_20enemies", showBannnerIfCompleted: true, addToExisting: false)
     }
     
     func explosionEmit(enemy: Enemy) {
@@ -704,7 +704,7 @@ class GameScene: SGScene, EGCDelegate {
         satelliteSoundPlay = false
         if achievementEwokBool == false {
             if achievementEwokCount < 20 {
-                achievementEwokCount++
+                achievementEwokCount += 1
             } else {
                 achievementEwokBool = true
                 achievementEwokCount = 20

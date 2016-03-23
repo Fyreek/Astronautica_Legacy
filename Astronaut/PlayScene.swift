@@ -13,7 +13,6 @@ import AVFoundation
 class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     enum gameState {
-        
         case gameOver
         case gamePaused
         case gameActive
@@ -59,6 +58,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     var boostStart:Bool = false
     var boostStop:Bool = false
     var oldTickTime:Int = 0
+    var speedItemActive:Bool = false
 
     //Layer
     let layerPause = LayerPause()
@@ -104,8 +104,8 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     var buyBoost = SKSpriteNode(imageNamed: "BuyBoost32")
     
     //TODO: JetPack
-    let jetPackNode1 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
-    let jetPackNode2 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
+    //let jetPackNode1 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
+    //let jetPackNode2 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
     
     var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
@@ -230,7 +230,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         let backgroundAtlas = SKTextureAtlas(named: "background")
         
         let numImagesExplosion = explosionAtlas.textureNames.count
-        for var i=1; i<(numImagesExplosion + 3) / 3; i++ {
+        for i in 1 ..< (numImagesExplosion + 3) / 3 {
         
             let explosionTextureName = "explosion32-\(i)"
             explosionAtlas.textureNamed(explosionTextureName).filteringMode = .Nearest
@@ -238,7 +238,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         }
         
         let numImagesOxygenBar = oxygenBarAtlas.textureNames.count
-        for var i=1; i<(numImagesOxygenBar / 3); i++ {
+        for i in 1 ..< (numImagesOxygenBar / 3) {
             
             let oxygenBarTextureName = "OxygenBar8_\(i)"
             oxygenBarAtlas.textureNamed(oxygenBarTextureName).filteringMode = .Nearest
@@ -246,7 +246,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         }
         
         let numImagesBackground = backgroundAtlas.textureNames.count
-        for var i=1; i<(numImagesBackground / 3); i++ {
+        for i in 1 ..< (numImagesBackground / 3) {
         
             let backgroundTextureName = "background107_\(i)"
             backgroundAtlas.textureNamed(backgroundTextureName).filteringMode = .Nearest
@@ -294,7 +294,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 		addChild(gamePause)
         
         // WARNING: Shop System
-        addChild(buyBoost)
+        //addChild(buyBoost)
         
 		addChild(countDownText)
 		
@@ -345,14 +345,14 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         if ending == false {
         
             ending = true
-            interScene.deaths++
+            interScene.deaths += 1
             hero.physicsBody = nil
             currentGameState = .gameEnded
             gamePause.hidden = true
             hero.removeAllActions()
             //TODO: Jetpack
-            jetPackNode1.removeFromParent()
-            jetPackNode2.removeFromParent()
+            //jetPackNode1.removeFromParent()
+            //jetPackNode2.removeFromParent()
             scoreLabel.hidden = true
             oxygenBar.hidden = true
             
@@ -375,7 +375,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 achievementNoob.trigger = true
                 if score < 10 {
                     if achievementNoob.Noob4 == true {
-                        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_earlydeath", showBannnerIfCompleted: true, addToExisting: false)
+                        GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_earlydeath", showBannnerIfCompleted: true, addToExisting: false)
                     } else if achievementNoob.Noob3 == true {
                         achievementNoob.Noob4 = true
                     } else if achievementNoob.Noob2 == true {
@@ -411,7 +411,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 NSUserDefaults.standardUserDefaults().setInteger(score, forKey: "highScore")
                 NSUserDefaults.standardUserDefaults().synchronize()
                 interScene.highScore = score
-                EGC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
+                GC.reportScoreLeaderboard(leaderboardIdentifier: "astronautgame_leaderboard", score: score)
                 
                 layerEndScreen.totalScore.text = ("New Highscore: ") + String(score) + (" points!")
                 //totalScore.runAction(SKAction.fadeInWithDuration(1.0))
@@ -440,7 +440,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         bonusItem.physicsBody = nil
         otherBody.physicsBody = nil
         
-        for var i = 0; i < spawnPointStats.count; i++ {
+        for i in 0 ..< spawnPointStats.count {
             if spawnPoints[i] == bonusItem.spawnHeight {
                 spawnPointStats[i] = true
                 bonusItem.spawnHeight = 9999
@@ -482,7 +482,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         bonusItem.moving = false
         bonusItem.hidden = true
         
-        for var i = 0; i < spawnPointStats.count; i++ {
+        for i in 0 ..< spawnPointStats.count {
             if spawnPoints[i] == bonusItem.spawnHeight {
                 spawnPointStats[i] = true
                 bonusItem.spawnHeight = 9999
@@ -506,15 +506,17 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         totalSpeedBonusItem = totalSpeedBonusItem + 20
         
         //TODO: Jetpack
-        jetPackNode1.particleBirthRate = 2000
-        jetPackNode1.particleLifetime = 0.2
-        jetPackNode2.particleBirthRate = 2000
-        jetPackNode2.particleLifetime = 0.2
+//        jetPackNode1.particleBirthRate = 2000
+//        jetPackNode1.particleLifetime = 0.2
+//        jetPackNode2.particleBirthRate = 2000
+//        jetPackNode2.particleLifetime = 0.2
         
         stopBGAnim()
         startBGAnim()
         
-        timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: Selector("updateTimerSpeedItem"), userInfo: nil, repeats: true)
+        speedItemActive = true
+        
+        timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(PlayScene.updateTimerSpeedItem), userInfo: nil, repeats: true)
     }
     
     func startBoost() {
@@ -562,7 +564,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         bonusItem.moving = false
         bonusItem.hidden = true
         
-        for var i = 0; i < spawnPointStats.count; i++ {
+        for i in 0 ..< spawnPointStats.count {
             if spawnPoints[i] == bonusItem.spawnHeight {
                 spawnPointStats[i] = true
                 bonusItem.spawnHeight = 9999
@@ -581,7 +583,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         interScene.oxygenFail = 0
         
         if achievementOxygenCount < 10 {
-            achievementOxygenCount++
+            achievementOxygenCount += 1
         } else {
             achievementOxygenCount = 10
             achievementOxygenItem()
@@ -602,7 +604,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     func updateTimerSpeedItem() {
     
         if countDownSpeedItem < 3 {
-            countDownSpeedItem++
+            countDownSpeedItem += 1
         } else {
             timerSpeedItem.invalidate()
             countDownSpeedItem = 0
@@ -613,13 +615,15 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             gameSpeed = Float(gameSpeedOld)
             
             //TODO: Jetpack
-            jetPackNode1.particleBirthRate = 1000
-            jetPackNode1.particleLifetime = 0.02
-            jetPackNode2.particleBirthRate = 1000
-            jetPackNode2.particleLifetime = 0.02
+//            jetPackNode1.particleBirthRate = 1000
+//            jetPackNode1.particleLifetime = 0.02
+//            jetPackNode2.particleBirthRate = 1000
+//            jetPackNode2.particleLifetime = 0.02
             
             stopBGAnim()
             startBGAnim()
+            
+            speedItemActive = false
             
             heroPhysicsBody()
             hero.physicsBody!.affectedByGravity = false
@@ -691,13 +695,13 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             let bodyOne = contact.bodyA.node as? Enemy
             let bodyTwo = contact.bodyB.node as? Enemy
             
-            for var i = 0; i < spawnPointStats.count; i++ {
+            for i in 0 ..< spawnPointStats.count {
                 if spawnPoints[i] == bodyOne?.spawnHeight {
                     spawnPointStats[i] = true
                     bodyOne?.spawnHeight = 9999
                 }
             }
-            for var i = 0; i < spawnPointStats.count; i++ {
+            for i in 0 ..< spawnPointStats.count {
                 if spawnPoints[i] == bodyTwo?.spawnHeight {
                     spawnPointStats[i] = true
                     bodyTwo?.spawnHeight = 9999
@@ -805,11 +809,11 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 		
 		addEnemies()
 		
-		for var i = 1; i < startEnemy; i++ {
+		for _ in 1 ..< startEnemy {
 			self.addEnemies()
 		}
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimer"), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: #selector(PlayScene.updateTimer), userInfo: nil, repeats: true)
         if interScene.coins >= price.boost {
             buyBoost.hidden = false
             buyBoost.alpha = 1.0
@@ -836,29 +840,29 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 				hero.position.y = 0
 			}
 			
-			countDown--
+			countDown -= 1
 			countDownText.text = String(countDown)
             
 		} else {
             
             startBGAnim()
 			
-            EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_startup", showBannnerIfCompleted: true, addToExisting: false)
+            GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_startup", showBannnerIfCompleted: true, addToExisting: false)
             
             buyBoost.hidden = true
             
             //TODO: Jetpack
-            if interScene.jetPack == true {
-                hero.addChild(jetPackNode1)
-                hero.addChild(jetPackNode2)
-            }
-            
-            jetPackNode1.zPosition = 1.1
-            jetPackNode2.zPosition = 1.1
-            jetPackNode1.setScale(0.2)
-            jetPackNode2.setScale(0.2)
-            jetPackNode1.position = CGPoint(x: -(hero.size.width / 2), y: hero.size.height / 8)
-            jetPackNode2.position = CGPoint(x: -(hero.size.width / 2), y: -(hero.size.height / 8))
+//            if interScene.jetPack == true {
+//                hero.addChild(jetPackNode1)
+//                hero.addChild(jetPackNode2)
+//            }
+//            
+//            jetPackNode1.zPosition = 1.1
+//            jetPackNode2.zPosition = 1.1
+//            jetPackNode1.setScale(0.2)
+//            jetPackNode2.setScale(0.2)
+//            jetPackNode1.position = CGPoint(x: -(hero.size.width / 2), y: hero.size.height / 8)
+//            jetPackNode2.position = CGPoint(x: -(hero.size.width / 2), y: -(hero.size.height / 8))
             
 			countDown = 3
 			countDownText.text = String(countDown)
@@ -882,15 +886,15 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 	}
 	
     func achievementOxygenItem() {
-        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_10oxygen", showBannnerIfCompleted: true, addToExisting: false)
+        GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_10oxygen", showBannnerIfCompleted: true, addToExisting: false)
     }
     
     func achievement100Points() {
-        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_100points", showBannnerIfCompleted: true, addToExisting: false)
+        GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_100points", showBannnerIfCompleted: true, addToExisting: false)
     }
     
     func achievement150Points() {
-        EGC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_150points", showBannnerIfCompleted: true, addToExisting: false)
+        GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_150points", showBannnerIfCompleted: true, addToExisting: false)
     }
     
     func addBonusItems(itemType: String) {
@@ -927,7 +931,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     }
     
 	func addEnemies() {
-		enemyCount++
+		enemyCount += 1
 		let number:Int = Int(arc4random_uniform(11))
 		let upDown:Int = Int(arc4random_uniform(2))
 		let heightNumber:Int = Int((self.size.height / 2) - (SKSpriteNode(imageNamed: "Asteroid16").size.height / 2))
@@ -1211,7 +1215,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func bonusItemSpawn() {
         for bonusItem in bonusItems {
-            for var i = 0; i < spawnPoints.count; i++ {
+            for i in 0 ..< spawnPoints.count {
                 if bonusItem.spawned == false {
                     if spawnPointStats[i].boolValue == true {
                         bonusItem.position.y = spawnPoints[i]
@@ -1238,7 +1242,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func enemySpawn(enemy: Enemy) {
         if obtainedSpawnCount <= (spawnPoints.count - 1) {
-            for var i = 0; i < spawnPoints.count; i++ {
+            for i in 0 ..< spawnPoints.count {
                 if enemy.spawned == false {
                     if spawnPointStats[i].boolValue == true {
                         enemy.yPos = spawnPoints[i]
@@ -1346,6 +1350,10 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 			currentGameState = .gamePaused
 			gamePause.hidden = true
 			hero.paused = true
+            
+            if speedItemActive == true {
+                timerSpeedItem.invalidate()
+            }
 		}
 	}
 	
@@ -1359,7 +1367,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             hero.removeAllActions()
             countDownText.hidden = false
             countDownRunning = true
-            timerPause = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: Selector("updateTimerPause"), userInfo: nil, repeats: true)
+            timerPause = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: #selector(PlayScene.updateTimerPause), userInfo: nil, repeats: true)
 
 		}
 	}
@@ -1368,7 +1376,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
         if countDown > 0 {
             
-            countDown--
+            countDown -= 1
             countDownText.text = String(countDown)
             
         } else {
@@ -1387,6 +1395,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             gamePause.hidden = false
             hero.paused = false
             
+            timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(PlayScene.updateTimerSpeedItem), userInfo: nil, repeats: true)
         }
         
     }
@@ -1714,12 +1723,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     func updateBonusItem() {
         if currentGameState == .gameActive {
             if updateBonusTick > 0 {
-                updateBonusTick--
+                updateBonusTick -= 1
             } else {
                 updateBonusTick = 15
                 if oxygen > 0 {
                     if upOxygen == false {
-                        oxygen--
+                        oxygen -= 1
                     }
                     renderOxygenBar()
                 } else {
@@ -1727,7 +1736,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                     if interScene.oxygenFail == 5 {
                         interScene.introDisplayed = false
                     }
-                    interScene.oxygenFail++
+                    interScene.oxygenFail += 1
                 }
             }
             if oxygen <= oxygenMax / 2 {
@@ -1775,7 +1784,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                     }
                     if bonusItem.position.x < self.size.width / 2  - 200 {
                         if bonusItem.spawnHeight != 9999 {
-                            for var i = 0; i < spawnPointStats.count; i++ {
+                            for i in 0 ..< spawnPointStats.count {
                                 if spawnPoints[i] == bonusItem.spawnHeight {
                                     spawnPointStats[i] = true
                                     bonusItem.spawnHeight = 9999
@@ -1988,7 +1997,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                         if enemy.position.x < self.size.width / 2  - 200{
                             obtainedSpawnCount = obtainedSpawnCount - 1
                             if enemy.spawnHeight != 9999 {
-                                for var i = 0; i < spawnPointStats.count; i++ {
+                                for i in 0 ..< spawnPointStats.count {
                                     if spawnPoints[i] == enemy.spawnHeight {
                                         spawnPointStats[i] = true
                                         enemy.spawnHeight = 9999
@@ -2006,7 +2015,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
 	func updateScore(){
 		
-		score++
+		score += 1
 		scoreLabel.text = String(score)
         
 		if score % 5 == 0 {
