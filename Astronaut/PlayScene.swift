@@ -101,11 +101,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 	var scoreLabel = SKLabelNode()
 	
 	var gamePause = SKSpriteNode(imageNamed: "PauseButton32")
-    var buyBoost = SKSpriteNode(imageNamed: "BuyBoost32")
-    
-    //TODO: JetPack
-    //let jetPackNode1 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
-    //let jetPackNode2 = NSKeyedUnarchiver.unarchiveObjectWithFile(interScene.jetpackPath!) as! SKEmitterNode
     
     var startEnemy:Int = 5
     var scalingFactor:CGFloat = 1
@@ -284,25 +279,12 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         gamePause.zPosition = 1.2
         gamePause.texture?.filteringMode = .Nearest
 		
-        buyBoost.setScale(scalingFactor)
-        buyBoost.position.y = -(self.size.height / 2 - buyBoost.size.height / 2 - (20 * scalingFactor))
-        buyBoost.position.x = 0
-        buyBoost.zPosition = 1.2
-        buyBoost.texture?.filteringMode = .Nearest
-		
 		addChild(scoreLabel)
 		addChild(gamePause)
         
-        // WARNING: Shop System
-        //addChild(buyBoost)
-        
-		addChild(countDownText)
+        addChild(countDownText)
 		
 		countDownText.hidden = true
-        
-        buyBoost.name = "buyBoost"
-        buyBoost.hidden = true
-        buyBoost.alpha = 0
         
 		gamePause.name = "gamePause"
 		gamePause.hidden = true
@@ -350,9 +332,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             currentGameState = .gameEnded
             gamePause.hidden = true
             hero.removeAllActions()
-            //TODO: Jetpack
-            //jetPackNode1.removeFromParent()
-            //jetPackNode2.removeFromParent()
             scoreLabel.hidden = true
             oxygenBar.hidden = true
             
@@ -392,11 +371,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                     achievementNoob.Noob4 = false
                 }
             }
-            
-            interScene.coins = interScene.coins + score
-            
-            NSUserDefaults.standardUserDefaults().setInteger(interScene.coins, forKey: "coins")
-            NSUserDefaults.standardUserDefaults().synchronize()
             
             if score <= scoreBefore {
                 
@@ -505,12 +479,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         totalSpeedSatellite = totalSpeedSatellite + 20
         totalSpeedBonusItem = totalSpeedBonusItem + 20
         
-        //TODO: Jetpack
-//        jetPackNode1.particleBirthRate = 2000
-//        jetPackNode1.particleLifetime = 0.2
-//        jetPackNode2.particleBirthRate = 2000
-//        jetPackNode2.particleLifetime = 0.2
-        
         stopBGAnim()
         startBGAnim()
         
@@ -613,12 +581,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             totalSpeedSatellite = totalSpeedSatelliteOld
             totalSpeedBonusItem = totalSpeedBonusItemOld
             gameSpeed = Float(gameSpeedOld)
-            
-            //TODO: Jetpack
-//            jetPackNode1.particleBirthRate = 1000
-//            jetPackNode1.particleLifetime = 0.02
-//            jetPackNode2.particleBirthRate = 1000
-//            jetPackNode2.particleLifetime = 0.02
             
             stopBGAnim()
             startBGAnim()
@@ -814,10 +776,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
 		}
         
         timer = NSTimer.scheduledTimerWithTimeInterval(0.8, target: self, selector: #selector(PlayScene.updateTimer), userInfo: nil, repeats: true)
-        if interScene.coins >= price.boost {
-            buyBoost.hidden = false
-            buyBoost.alpha = 1.0
-        }
 	}
 	
     func startBGAnim() {
@@ -848,22 +806,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             startBGAnim()
 			
             GC.reportAchievement(progress: 100.00, achievementIdentifier: "astronautica.achievement_startup", showBannnerIfCompleted: true, addToExisting: false)
-            
-            buyBoost.hidden = true
-            
-            //TODO: Jetpack
-//            if interScene.jetPack == true {
-//                hero.addChild(jetPackNode1)
-//                hero.addChild(jetPackNode2)
-//            }
-//            
-//            jetPackNode1.zPosition = 1.1
-//            jetPackNode2.zPosition = 1.1
-//            jetPackNode1.setScale(0.2)
-//            jetPackNode2.setScale(0.2)
-//            jetPackNode1.position = CGPoint(x: -(hero.size.width / 2), y: hero.size.height / 8)
-//            jetPackNode2.position = CGPoint(x: -(hero.size.width / 2), y: -(hero.size.height / 8))
-            
+        
 			countDown = 3
 			countDownText.text = String(countDown)
 			countDownText.hidden = true
@@ -1472,9 +1415,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                 if !countDownRunning {
                     layerPause.menuPause.runAction(buttonPressDark)
                 }
-            } else if self.nodeAtPoint(location) == self.buyBoost {
-                lastSpriteName = self.buyBoost.name!
-                self.buyBoost.runAction(buttonPressDark)
             }
         }
     }
@@ -1574,16 +1514,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
                             }
                             self.showMenu()
                         }
-                    }
-                }
-            } else if self.nodeAtPoint(location) == self.buyBoost {
-                removeButtonAnim()
-                if lastSpriteName == self.buyBoost.name {
-                    self.lastSpriteName = "empty"
-                    self.buyBoost.runAction(buttonPressLight){
-                        self.boostActive = true
-                        interScene.coins = interScene.coins - price.boost
-                        self.buyBoost.hidden = true
                     }
                 }
             }
@@ -2084,13 +2014,8 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             layerPause.gamePlay.hidden = false
             layerPause.gamePlay.alpha = 1
             hero.paused = true
-            addChild(layerEndScreen)
-            layerEndScreen.gameShare.hidden = true
-            layerEndScreen.refresh.hidden = true
-            layerEndScreen.menu.hidden = true
-            layerEndScreen.totalScore.text = ("Collect the oxygen!")
-            layerEndScreen.totalScore.runAction(SKAction.fadeInWithDuration(NSTimeInterval(gameSpeed)))
-
+            countDownText.text = "Collect the Oxygen!"
+            countDownText.hidden = false
         }
 
         

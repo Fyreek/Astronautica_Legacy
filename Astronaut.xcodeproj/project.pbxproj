@@ -13,8 +13,6 @@
 		14E0DE821C2018A900A2AA8A /* LayerPause.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E0DE811C2018A900A2AA8A /* LayerPause.swift */; };
 		14E0DE841C20256300A2AA8A /* LayerEndScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E0DE831C20256300A2AA8A /* LayerEndScreen.swift */; };
 		14E9A15C1BD4DF80009E358B /* BonusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14E9A15B1BD4DF80009E358B /* BonusItem.swift */; };
-		14F050E11C1EE6670087BE9C /* JetPack.sks in Resources */ = {isa = PBXBuildFile; fileRef = 14F050DF1C1EE6670087BE9C /* JetPack.sks */; };
-		14F050E21C1EE6670087BE9C /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 14F050E01C1EE6670087BE9C /* spark.png */; };
 		14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 14F702A31BD692C6004ADE9A /* oxygenBar.atlas */; };
 		812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 812FED241B905B2900A2A8C3 /* Minecraft.ttf */; };
 		812FED271B9063E800A2A8C3 /* HexColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812FED261B9063E800A2A8C3 /* HexColor.swift */; };
@@ -59,8 +57,6 @@
 		14E0DE811C2018A900A2AA8A /* LayerPause.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerPause.swift; sourceTree = "<group>"; };
 		14E0DE831C20256300A2AA8A /* LayerEndScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerEndScreen.swift; sourceTree = "<group>"; };
 		14E9A15B1BD4DF80009E358B /* BonusItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusItem.swift; sourceTree = "<group>"; };
-		14F050DF1C1EE6670087BE9C /* JetPack.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = JetPack.sks; sourceTree = "<group>"; };
-		14F050E01C1EE6670087BE9C /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		14F702A31BD692C6004ADE9A /* oxygenBar.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = oxygenBar.atlas; sourceTree = "<group>"; };
 		812FED241B905B2900A2A8C3 /* Minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Minecraft.ttf; sourceTree = "<group>"; };
 		812FED261B9063E800A2A8C3 /* HexColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexColor.swift; sourceTree = "<group>"; };
@@ -269,8 +265,6 @@
 				142056211C17ADCF00D1EAD4 /* Images */,
 				142056201C17ADC400D1EAD4 /* Sounds */,
 				81E445241B8667D900BC86B2 /* Info.plist */,
-				14F050DF1C1EE6670087BE9C /* JetPack.sks */,
-				14F050E01C1EE6670087BE9C /* spark.png */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -344,7 +338,7 @@
 				TargetAttributes = {
 					81E4451F1B8667D900BC86B2 = {
 						CreatedOnToolsVersion = 6.4;
-						DevelopmentTeam = 9C545A2GHY;
+						DevelopmentTeam = ZA57B2W688;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
 								enabled = 1;
@@ -385,8 +379,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				81E445521B866B0500BC86B2 /* Images.xcassets in Resources */,
-				14F050E21C1EE6670087BE9C /* spark.png in Resources */,
-				14F050E11C1EE6670087BE9C /* JetPack.sks in Resources */,
 				A1C8F0611BDD81FE006B1678 /* explosion.caf in Resources */,
 				14F702A41BD692C6004ADE9A /* oxygenBar.atlas in Resources */,
 				812FED251B905B2900A2A8C3 /* Minecraft.ttf in Resources */,
@@ -574,7 +566,7 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronautica;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronaut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -594,7 +586,7 @@
 				INFOPLIST_FILE = Astronaut/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronautica;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yalu.Astronaut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";

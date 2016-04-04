@@ -31,21 +31,7 @@ struct interScene {
     static var highScoreBefore:Int = 0
     static var oxygenFail:Int = 0
     static var deaths:Int = 0
-    static var coins:Int = 0
     static var screenSize:CGSize = CGSize(width: 0, height: 0)
-    //TODO: Jetpack
-    static var jetpackPath = NSBundle.mainBundle().pathForResource("JetPack", ofType: "sks")
-    static var jetPack:Bool = true
-}
-
-struct price {
-    static var boost:Int = 200
-    static var heart:Int = 2000
-}
-
-struct items {
-    static var boostCount:Int = 0
-    static var heartCount:Int = 0
 }
 
 struct secretUnlock {
