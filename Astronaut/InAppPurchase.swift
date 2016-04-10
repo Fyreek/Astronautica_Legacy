@@ -78,7 +78,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
                     print("Product Purchased")
                     savePurchasedProductIdentifier(trans.payment.productIdentifier)
                     SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
-                NSNotificationCenter.defaultCenter().postNotificationName("AdRemoveSuccess", object: nil)
+                    interScene.optionScene?.hideAdsSuccess()
                     break
                     
                 case .Failed:
@@ -92,7 +92,7 @@ class InAppPurchase : NSObject, SKProductsRequestDelegate, SKPaymentTransactionO
                     savePurchasedProductIdentifier(trans.payment.productIdentifier)
                     SKPaymentQueue.defaultQueue().finishTransaction(transaction as! SKPaymentTransaction)
                     NSNotificationCenter.defaultCenter().postNotificationName(kInAppProductRestoredNotification, object: nil)
-                NSNotificationCenter.defaultCenter().postNotificationName("AdRemoveSuccess", object: nil)
+                    interScene.optionScene?.hideAdsSuccess()
                     break
                     
                 default:

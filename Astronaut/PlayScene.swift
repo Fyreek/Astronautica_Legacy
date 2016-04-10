@@ -18,6 +18,9 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         case gameActive
         case gameEnded
     }
+    
+    var viewController: GameViewController!
+    
     var currentGameState:gameState = .gameOver
     
 	var hero = Hero(imageNamed: "Astronaut25")
@@ -395,9 +398,9 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func loadSoundState() {
         if interScene.musicState == true {
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+            viewController.extMusicOn()
         } else {
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+            viewController.extMusicOff()
         }
     }
     
@@ -1262,14 +1265,14 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     func showFSAd() {
         if interScene.adState == true {
             interScene.deaths = 0
-            NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
+            viewController.showFsAd()
         }
     }
     
     func showAds(){
         if interScene.adState == true {
             interScene.smallAdLoad = true
-            NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+            viewController.showBannerAd()
         } else {
             hideAds()
         }
@@ -1277,7 +1280,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func hideAds(){
         interScene.smallAdLoad = false
-        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
+        viewController.hideBannerAd()
     }
     
 	func pauseGame() {
@@ -1567,7 +1570,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             layerPause.runAction(buttonPressLight)
             
         }
-    
     }
     
     func buttonRemoveAction() {
@@ -1587,7 +1589,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     }
     
     func showShareMenu() {
-        NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
+        viewController.showShareMenu()
     }
     
 	override func update(currentTime: CFTimeInterval) {

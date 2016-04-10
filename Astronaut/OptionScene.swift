@@ -10,6 +10,8 @@ import SpriteKit
 
 class OptionScene: SGScene {
     
+    var viewController: GameViewController!
+    
     var redSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var greenSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var blueSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
@@ -83,8 +85,6 @@ class OptionScene: SGScene {
         bg3.position.x = self.size.width * 2
         addChild(bg2)
         addChild(bg3)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(OptionScene.hideAdsSuccess), name: "AdRemoveSuccess", object: nil)
         
         isSecretUnlocked = NSUserDefaults.standardUserDefaults().boolForKey("secretUnlocked")
         
@@ -395,14 +395,14 @@ class OptionScene: SGScene {
     func hideAds() {
         if interScene.adState == true {
             resetSecret()
-            NSNotificationCenter.defaultCenter().postNotificationName("displayAdAlert", object: nil)
+            viewController.displayAdAlert()
         }
     }
     
     func hideAdsSuccess() {
         interScene.adState = false
         interScene.smallAdLoad = false
-        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
+        viewController.hideBannerAd()
         NSUserDefaults.standardUserDefaults().setBool(false, forKey: "Ads")
         NSUserDefaults.standardUserDefaults().synchronize()
         adButtonSwitch()
@@ -442,12 +442,12 @@ class OptionScene: SGScene {
             musicOn = false
             musicSprite.texture = SKTexture(imageNamed: "MusicOffButton32")
             interScene.backgroundMusicP.stop()
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+            viewController.extMusicOff()
         } else {
             musicOn = true
             musicSprite.texture = SKTexture(imageNamed: "MusicOnButton32")
             interScene.backgroundMusicP.play()
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+            viewController.extMusicOn()
         }
         interScene.musicState = musicOn
         NSUserDefaults.standardUserDefaults().setBool(musicOn, forKey: "musicBool")
@@ -593,9 +593,9 @@ class OptionScene: SGScene {
     
     func loadSoundState() {
         if interScene.musicState == true {
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+            viewController.extMusicOn()
         } else {
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+            viewController.extMusicOff()
         }
     }
     

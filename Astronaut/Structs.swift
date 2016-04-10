@@ -32,6 +32,8 @@ struct interScene {
     static var oxygenFail:Int = 0
     static var deaths:Int = 0
     static var screenSize:CGSize = CGSize(width: 0, height: 0)
+    static var gameScene = GameScene(fileNamed: "GameScene")
+    static var optionScene = OptionScene(fileNamed: "OptionScene")
 }
 
 struct secretUnlock {

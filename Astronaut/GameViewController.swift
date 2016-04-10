@@ -39,28 +39,20 @@ class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
         UIiAd.translatesAutoresizingMaskIntoConstraints = false
         self.view!.addSubview(UIiAd)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.hideBannerAd), name: "hideadsID", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showBannerAd), name: "showadsID", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showFsAd), name: "showFSAd", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.extMusicOn), name: "MusicOn", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.extMusicOff), name: "MusicOff", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.displayAdAlert), name: "displayAdAlert", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showShareMenu), name: "ShareMenu", object: nil)
-        
         UIiAd.delegate = self
 		GC.sharedInstance(self)
 		
-		let scene = GameScene()
+		interScene.gameScene = GameScene()
 		let skView = self.originalContentView as! SKView
 		skView.showsFPS = false
 		skView.showsNodeCount = false
         skView.showsPhysics = false
 		skView.ignoresSiblingOrder = true
-		scene.scaleMode = .ResizeFill
-		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-		scene.size = skView.bounds.size
+		interScene.gameScene!.scaleMode = .ResizeFill
+		interScene.gameScene!.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+		interScene.gameScene!.size = skView.bounds.size
         
-		skView.presentScene(scene)
+		skView.presentScene(interScene.gameScene)
 	}
     
     func updateSoundState() {
@@ -91,11 +83,11 @@ class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
         }
     }
     
-    func EGCAuthentified(authentified:Bool) {
+    func GCAuthentified(authentified:Bool) {
         if authentified {
             interScene.connectedToGC = true
             loadHighScore()
-            NSNotificationCenter.defaultCenter().postNotificationName("switchLbButton", object: nil)
+            interScene.gameScene?.switchLsButton()
         }
     }
     

@@ -12,6 +12,8 @@ import AVFoundation
 
 class GameScene: SGScene, GCDelegate {
     
+    var viewController: GameViewController!
+    
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
@@ -50,8 +52,6 @@ class GameScene: SGScene, GCDelegate {
         
         endOfScreenLeft = (self.size.width / 2) * CGFloat(-1) - ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
         endOfScreenRight = (self.size.width / 2) + ((SKSpriteNode(texture: satelliteTexture).size.width / 2) * scalingFactor)
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameScene.switchLsButton), name: "switchLbButton", object: nil)
         
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(GameScene.respondToSwipeGesture(_:)))
         swipeRight.direction = .Right
@@ -239,7 +239,7 @@ class GameScene: SGScene, GCDelegate {
             self.highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
             
             }, completion: {(finished: Bool) -> Void in
-                NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
+                self.viewController.showShareMenu()
         })
     }
     
@@ -326,7 +326,7 @@ class GameScene: SGScene, GCDelegate {
     func showAds(){
         if interScene.adState == true {
             interScene.smallAdLoad = true
-            NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
+            viewController.showBannerAd()
         } else {
             hideAds()
         }
@@ -334,14 +334,14 @@ class GameScene: SGScene, GCDelegate {
     
     func hideAds(){
         interScene.smallAdLoad = false
-        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
+        viewController.hideBannerAd()
     }
     
     func loadMusicState() {
         if interScene.musicState == true {
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
+            viewController.extMusicOn()
         } else {
-            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
+            viewController.extMusicOff()
         }
     }
     
@@ -547,14 +547,14 @@ class GameScene: SGScene, GCDelegate {
     func showOptionScene() {
         
         let transition = SKTransition.fadeWithDuration(1)
-        let scene = OptionScene(size: self.size)
+        interScene.optionScene = OptionScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true
-        scene.scaleMode = .ResizeFill
-        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        scene.size = skView.bounds.size
-        scene.optionSceneActive = true
-        skView.presentScene(scene, transition: transition)
+        interScene.optionScene!.scaleMode = .ResizeFill
+        interScene.optionScene!.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        interScene.optionScene!.size = skView.bounds.size
+        interScene.optionScene!.optionSceneActive = true
+        skView.presentScene(interScene.optionScene!, transition: transition)
     }
     
 	func showPlayScene() {
