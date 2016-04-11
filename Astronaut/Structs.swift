@@ -34,6 +34,7 @@ struct interScene {
     static var screenSize:CGSize = CGSize(width: 0, height: 0)
     static var gameScene = GameScene(fileNamed: "GameScene")
     static var optionScene = OptionScene(fileNamed: "OptionScene")
+    static var viewController = GameViewController()
 }
 
 struct secretUnlock {

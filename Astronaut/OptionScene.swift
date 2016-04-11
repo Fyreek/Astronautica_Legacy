@@ -10,7 +10,7 @@ import SpriteKit
 
 class OptionScene: SGScene {
     
-    var viewController: GameViewController!
+    var viewController = interScene.viewController
     
     var redSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))
     var greenSlider: UISlider! = UISlider(frame: CGRectMake(20, 260, 280, 20))

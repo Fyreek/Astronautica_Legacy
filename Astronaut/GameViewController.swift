@@ -242,7 +242,6 @@ class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
     }
     
     func hideBannerAd() {
-        
         UIView.animateWithDuration(0.25, delay: 0.0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
 
             self.UIiAd.alpha = 0.0

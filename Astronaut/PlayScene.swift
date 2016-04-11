@@ -19,7 +19,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         case gameEnded
     }
     
-    var viewController: GameViewController!
+    var viewController = interScene.viewController
     
     var currentGameState:gameState = .gameOver
     

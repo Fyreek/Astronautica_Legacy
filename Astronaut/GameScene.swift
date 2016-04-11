@@ -12,7 +12,7 @@ import AVFoundation
 
 class GameScene: SGScene, GCDelegate {
     
-    var viewController: GameViewController!
+    var viewController = interScene.viewController
     
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
