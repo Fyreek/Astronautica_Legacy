@@ -12,8 +12,6 @@ import AVFoundation
 
 class GameScene: SGScene, GCDelegate {
     
-    var viewController = interScene.viewController
-    
     var startGameButton = SKSpriteNode(imageNamed: "GameButton32")
 	var nameLabel = SKSpriteNode(imageNamed: "Astronautica32")
 	var menuOptionButton = SKSpriteNode(imageNamed: "SettingsButton32")
@@ -239,7 +237,7 @@ class GameScene: SGScene, GCDelegate {
             self.highScoreLabel.fontColor = UIColor(rgba: "#5F6575")
             
             }, completion: {(finished: Bool) -> Void in
-                self.viewController.showShareMenu()
+                NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
         })
     }
     
@@ -326,7 +324,7 @@ class GameScene: SGScene, GCDelegate {
     func showAds(){
         if interScene.adState == true {
             interScene.smallAdLoad = true
-            viewController.showBannerAd()
+            NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
         } else {
             hideAds()
         }
@@ -334,14 +332,14 @@ class GameScene: SGScene, GCDelegate {
     
     func hideAds(){
         interScene.smallAdLoad = false
-        viewController.hideBannerAd()
+        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     }
     
     func loadMusicState() {
         if interScene.musicState == true {
-            viewController.extMusicOn()
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         } else {
-            viewController.extMusicOff()
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         }
     }
     
@@ -547,14 +545,14 @@ class GameScene: SGScene, GCDelegate {
     func showOptionScene() {
         
         let transition = SKTransition.fadeWithDuration(1)
-        interScene.optionScene = OptionScene(size: self.size)
+        let scene = OptionScene(size: self.size)
         let skView = self.view as SKView!
         skView.ignoresSiblingOrder = true
-        interScene.optionScene!.scaleMode = .ResizeFill
-        interScene.optionScene!.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        interScene.optionScene!.size = skView.bounds.size
-        interScene.optionScene!.optionSceneActive = true
-        skView.presentScene(interScene.optionScene!, transition: transition)
+        scene.scaleMode = .ResizeFill
+        scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        scene.size = skView.bounds.size
+        scene.optionSceneActive = true
+        skView.presentScene(scene, transition: transition)
     }
     
 	func showPlayScene() {

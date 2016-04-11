@@ -33,6 +33,14 @@ class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
         interScene.explosionSound = SKAction.playSoundFileNamed("explosion.caf", waitForCompletion: true)
         interScene.oxygenSound = SKAction.playSoundFileNamed("oxygen.caf", waitForCompletion: true)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.hideBannerAd), name: "hideadsID", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showBannerAd), name: "showadsID", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showFsAd), name: "showFSAd", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.extMusicOn), name: "MusicOn", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.extMusicOff), name: "MusicOff", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.displayAdAlert), name: "displayAdAlert", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(GameViewController.showShareMenu), name: "ShareMenu", object: nil)
+        
         self.UIiAd.hidden = true
         self.UIiAd.alpha = 0
         self.UIiAd.backgroundColor = UIColor(rgba: "#1E2124")
@@ -42,17 +50,17 @@ class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
         UIiAd.delegate = self
 		GC.sharedInstance(self)
 		
-		interScene.gameScene = GameScene()
+		let scene = GameScene()
 		let skView = self.originalContentView as! SKView
 		skView.showsFPS = false
 		skView.showsNodeCount = false
         skView.showsPhysics = false
 		skView.ignoresSiblingOrder = true
-		interScene.gameScene!.scaleMode = .ResizeFill
-		interScene.gameScene!.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-		interScene.gameScene!.size = skView.bounds.size
+		scene.scaleMode = .ResizeFill
+		scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+		scene.size = skView.bounds.size
         
-		skView.presentScene(interScene.gameScene)
+		skView.presentScene(scene)
 	}
     
     func updateSoundState() {
@@ -87,7 +95,7 @@ class GameViewController: UIViewController, ADBannerViewDelegate, GCDelegate {
         if authentified {
             interScene.connectedToGC = true
             loadHighScore()
-            interScene.gameScene?.switchLsButton()
+            NSNotificationCenter.defaultCenter().postNotificationName("switchLbButton", object: nil)
         }
     }
     

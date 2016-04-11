@@ -19,8 +19,6 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
         case gameEnded
     }
     
-    var viewController = interScene.viewController
-    
     var currentGameState:gameState = .gameOver
     
 	var hero = Hero(imageNamed: "Astronaut25")
@@ -398,9 +396,9 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func loadSoundState() {
         if interScene.musicState == true {
-            viewController.extMusicOn()
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         } else {
-            viewController.extMusicOff()
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         }
     }
     
@@ -1265,14 +1263,14 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     func showFSAd() {
         if interScene.adState == true {
             interScene.deaths = 0
-            viewController.showFsAd()
+            NSNotificationCenter.defaultCenter().postNotificationName("showFSAd", object: nil)
         }
     }
     
     func showAds(){
         if interScene.adState == true {
             interScene.smallAdLoad = true
-            viewController.showBannerAd()
+            NSNotificationCenter.defaultCenter().postNotificationName("showadsID", object: nil)
         } else {
             hideAds()
         }
@@ -1280,7 +1278,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
     func hideAds(){
         interScene.smallAdLoad = false
-        viewController.hideBannerAd()
+        NSNotificationCenter.defaultCenter().postNotificationName("hideadsID", object: nil)
     }
     
 	func pauseGame() {
@@ -1589,7 +1587,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     }
     
     func showShareMenu() {
-        viewController.showShareMenu()
+        NSNotificationCenter.defaultCenter().postNotificationName("ShareMenu", object: nil)
     }
     
 	override func update(currentTime: CFTimeInterval) {

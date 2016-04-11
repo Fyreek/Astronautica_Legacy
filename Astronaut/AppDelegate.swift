@@ -13,7 +13,6 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	var window: UIWindow?
-    var viewController = interScene.viewController
     
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         return true
@@ -65,9 +64,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         if interScene.musicState == true {
-            viewController.extMusicOn()
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOn", object: nil)
         } else {
-            viewController.extMusicOff()
+            NSNotificationCenter.defaultCenter().postNotificationName("MusicOff", object: nil)
         }
 
     }
