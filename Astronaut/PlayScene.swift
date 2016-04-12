@@ -1338,8 +1338,9 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
             currentGameState = .gameActive
             gamePause.hidden = false
             hero.paused = false
-            
-            timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(PlayScene.updateTimerSpeedItem), userInfo: nil, repeats: true)
+            if speedItemActive == true {
+                timerSpeedItem = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(PlayScene.updateTimerSpeedItem), userInfo: nil, repeats: true)
+            }
         }
         
     }
@@ -1592,6 +1593,7 @@ class PlayScene: SGScene, SKPhysicsContactDelegate {
     
 	override func update(currentTime: CFTimeInterval) {
 		/* Called before each frame is rendered */
+        
         if NSUserDefaults.standardUserDefaults().boolForKey("gamePaused").boolValue == true {
             if currentGameState == .gameActive {
                 pauseGame()

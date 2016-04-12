@@ -64,6 +64,8 @@ class GameScene: SGScene, GCDelegate {
         
         interScene.screenSize = CGSize(width: self.size.width, height: self.size.height)
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.switchLsButton), name: "switchLbButton", object: nil)
+        
         if interScene.deviceType == .IPhone || interScene.deviceType == .IPodTouch {
             scalingFactor = interScene.scalingfactoriPhone
             interScene.scalingfactorSpeed = self.size.width * 2 / 1136
